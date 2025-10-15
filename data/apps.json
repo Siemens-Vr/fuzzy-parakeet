@@ -1,0 +1,20 @@
+[
+    {
+    "slug": "myapp",
+    "name": "My App",
+    "version": "1.2.0",
+    "filename": "myapp-1.2.0.apk",
+    "sizeBytes": 124000000,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "summary": "Short description of the app goes here."
+    },
+    {
+    "slug": "training-sim",
+    "name": "Training Simulator",
+    "version": "0.9.5",
+    "filename": "training-sim-0.9.5.apk",
+    "sizeBytes": 512345678,
+    "sha256": "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+    "summary": "Lightweight simulator build for testing."
+    }
+    ]
