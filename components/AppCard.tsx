@@ -25,6 +25,7 @@ type AppMeta = {
 export default function AppCard({ app }: { app: AppMeta }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // 3D tilt effect
   const x = useMotionValue(0);
@@ -59,6 +60,11 @@ export default function AppCard({ app }: { app: AppMeta }) {
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
+    setIsHovered(false);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
   };
 
   const handleDownload = (e: React.MouseEvent) => {
@@ -84,6 +90,7 @@ export default function AppCard({ app }: { app: AppMeta }) {
         }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onMouseEnter={handleMouseEnter}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
@@ -194,10 +201,30 @@ export default function AppCard({ app }: { app: AppMeta }) {
           </motion.div>
         </div>
 
+        {/* Animated Separator Line */}
+        <motion.div
+          className="card-separator"
+          animate={{
+            scaleY: isHovered ? 0.4 : 1,
+            y: isHovered ? -8 : 0
+          }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut"
+          }}
+        />
+
         {/* Card Content */}
         <motion.div 
           className="card-content"
           style={{ transform: "translateZ(30px)" }}
+          animate={{
+            y: isHovered ? -8 : 0
+          }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut"
+          }}
         >
           <motion.div 
             className="card-title"

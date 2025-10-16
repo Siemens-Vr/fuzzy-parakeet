@@ -9,15 +9,18 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@yume-chan/adb": "^2.1.0",
+    "@yume-chan/adb-credential-web": "^2.1.0",
+    "@yume-chan/adb-daemon-webusb": "^2.1.0",
     "framer-motion": "^11.15.0",
     "next": "14.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "typescript": "5.6.3",
     "@types/node": "20.11.30",
     "@types/react": "18.2.79",
-    "@types/react-dom": "18.2.25"
+    "@types/react-dom": "18.2.25",
+    "typescript": "5.6.3"
   }
-} 
+}
