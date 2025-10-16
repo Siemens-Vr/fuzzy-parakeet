@@ -1,6 +1,6 @@
 'use client';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import apps from '@/data/apps.json';
 import AppCard from '@/components/AppCard';
 
@@ -14,43 +14,51 @@ const categories = [
   'Combat',
   'Custom homes',
   'Early access',
-  'Educational',
-  'Escape room',
-  'Flying',
-  'Fitness',
-  'Hand tracking',
-  'Horror',
-  'Meditation',
-  'Multiplayer',
-  'Music'
+
 ];
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('All apps');
   const [freeOnly, setFreeOnly] = useState(false);
+  const [sortBy, setSortBy] = useState('Hot');
+  const { scrollY } = useScroll();
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const heroScale = useTransform(scrollY, [0, 300], [1, 1.1]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const categoryVariants = {
+    hidden: { opacity: 0, x: -20 },
+    show: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100
       }
     }
   };
 
   return (
     <div>
-      {/* Hero Banner */}
+      {/* Hero Banner with Parallax */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        style={{ opacity: heroOpacity }}
         className="hero-banner"
       >
-        <img 
+        <motion.img 
+          style={{ scale: heroScale }}
           src="/hero-banner.jpg" 
-          alt="Hero Banner"
+          alt="VR Experience"
           onError={(e) => {
             e.currentTarget.style.display = 'none';
           }}
@@ -59,18 +67,25 @@ export default function HomePage() {
 
       {/* Category Filters */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
         className="category-filters"
       >
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <motion.button
             key={category}
-            whileHover={{ scale: 1.05 }}
+            variants={categoryVariants}
+            whileHover={{ 
+              scale: 1.08,
+              transition: { duration: 0.2 }
+            }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedCategory(category)}
             className={`category-pill ${selectedCategory === category ? 'active' : ''}`}
+            style={{
+              animationDelay: `${index * 0.05}s`
+            }}
           >
             {category}
           </motion.button>
@@ -79,61 +94,99 @@ export default function HomePage() {
 
       {/* Page Header */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
         className="page-header"
       >
         <h1 className="page-title">
-          <span style={{ color: 'var(--accent-pink)' }}>Browse EVERYTHING!</span>
-          {' '}<span className="page-subtitle">- from rated hard to hardly rated</span>
+          <motion.span
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            Browse EVERYTHING!
+          </motion.span>
+          {' '}
+          <motion.span 
+            className="page-subtitle"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            - from rated hard to hardly rated
+          </motion.span>
         </h1>
       </motion.div>
 
       {/* Filter Bar */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
         className="filter-bar"
       >
-        <select className="filter-dropdown">
+        <motion.select 
+          className="filter-dropdown"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
           <option>Hot</option>
           <option>New</option>
           <option>Top Rated</option>
           <option>Most Downloaded</option>
-        </select>
+        </motion.select>
         
-        <button className="filter-dropdown">
+        <motion.button 
+          className="filter-dropdown"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
           Advanced Filters
-        </button>
+        </motion.button>
 
-        <label className="filter-toggle">
+        <motion.label 
+          className="filter-toggle"
+          whileHover={{ scale: 1.02 }}
+        >
           <input 
             type="checkbox" 
             checked={freeOnly}
             onChange={(e) => setFreeOnly(e.target.checked)}
-            style={{ accentColor: 'var(--primary)' }}
           />
           Free apps only
-        </label>
+        </motion.label>
 
         <div style={{ marginLeft: 'auto' }}>
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 12px 24px rgba(30, 64, 175, 0.4)"
+            }}
+            whileTap={{ scale: 0.95 }}
             style={{
-              background: 'linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-purple) 100%)',
+              background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
               color: 'white',
-              padding: '0.75rem 1.5rem',
+              padding: '0.875rem 1.75rem',
               borderRadius: 'var(--radius-md)',
               border: 'none',
               cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.875rem'
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              boxShadow: '0 4px 12px rgba(30, 64, 175, 0.3)',
+              position: 'relative',
+              overflow: 'hidden'
             }}
           >
-            Check out THE GOAT VR Games!
+            <motion.span
+              initial={{ x: 0 }}
+              whileHover={{ x: 5 }}
+              style={{ display: 'inline-block' }}
+            >
+              🏆 Check out THE GOAT VR Games!
+            </motion.span>
           </motion.button>
         </div>
       </motion.div>
@@ -145,8 +198,20 @@ export default function HomePage() {
         animate="show"
         className="app-grid"
       >
-        {apps.map((app) => (
-          <AppCard key={app.slug} app={app as any} />
+        {apps.map((app, index) => (
+          <motion.div
+            key={app.slug}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: index * 0.1,
+              duration: 0.5,
+              type: "spring",
+              stiffness: 100
+            }}
+          >
+            <AppCard app={app as any} />
+          </motion.div>
         ))}
       </motion.div>
     </div>
