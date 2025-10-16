@@ -153,6 +153,7 @@ body {
   margin-bottom: 2rem;
   box-shadow: var(--shadow-md);
   animation: gradientShift 15s ease infinite;
+  opacity:1
 }
 
 @keyframes gradientShift {
