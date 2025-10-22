@@ -9,18 +9,35 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.478.0",
+    "@aws-sdk/s3-request-presigner": "^3.478.0",
+    "@prisma/client": "^5.7.0",
     "@yume-chan/adb": "^2.3.1",
     "@yume-chan/adb-credential-web": "^2.1.0",
     "@yume-chan/adb-daemon-webusb": "^2.1.0",
     "@yume-chan/android-bin": "^2.1.0",
     "@yume-chan/stream-extra": "^2.1.0",
+    "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.1",
     "framer-motion": "^11.15.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
     "next": "14.2.5",
+    "nodemailer": "^6.9.7",
+    "prisma": "^5.7.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "18.3.1",
+    "react-dropzone": "^14.2.3",
+    "recharts": "^2.10.3",
+    "stripe": "^14.10.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/multer": "^1.4.11",
     "@types/node": "20.11.30",
+    "@types/nodemailer": "^6.4.14",
     "@types/react": "18.2.79",
     "@types/react-dom": "18.2.25",
     "typescript": "5.6.3"
