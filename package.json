@@ -9,9 +9,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@yume-chan/adb": "^2.1.0",
+    "@yume-chan/adb": "^2.3.1",
     "@yume-chan/adb-credential-web": "^2.1.0",
     "@yume-chan/adb-daemon-webusb": "^2.1.0",
+    "@yume-chan/android-bin": "^2.1.0",
+    "@yume-chan/stream-extra": "^2.1.0",
     "framer-motion": "^11.15.0",
     "next": "14.2.5",
     "react": "18.3.1",

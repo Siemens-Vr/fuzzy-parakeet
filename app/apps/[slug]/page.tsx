@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useRef, useMemo, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import apps from '@/data/apps.json';
 import { notFound } from 'next/navigation';
 import { formatBytes } from '@/components/bytes';
@@ -13,6 +13,7 @@ type AdbLibs = {
   AdbDaemonTransport: any;
   AdbDaemonWebUsbDeviceManager: any;
   AdbWebCredentialStore: any;
+  PackageManager: any;
 };
 
 export default function AppDetail({ params }: { params: { slug: string } }) {
@@ -24,6 +25,8 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
   const [busy, setBusy] = useState(false);
   const [connectedSerial, setConnectedSerial] = useState<string | null>(null);
   const [sideloadLog, setSideloadLog] = useState<string>('');
+  const [deviceConnected, setDeviceConnected] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const adbRef = useRef<any>(null);
   const libsRef = useRef<AdbLibs | null>(null);
@@ -61,33 +64,81 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     return !!(navigator as any).usb;
   }, []);
 
+  // Enhanced browser check for Chrome/Edge
+  const isChromeOrEdge = useMemo(() => {
+    if (typeof navigator === 'undefined') return false;
+    const userAgent = navigator.userAgent;
+    return /chrome|chromium|edg/i.test(userAgent);
+  }, []);
+
   // Lazy-load ADB libs to avoid SSR issues
   const loadLibs = useCallback(async (): Promise<AdbLibs> => {
     if (libsRef.current) return libsRef.current;
 
-    const [
-      { Adb, AdbDaemonTransport },
-      { default: AdbWebCredentialStore },
-      { AdbDaemonWebUsbDeviceManager },
-    ] = await Promise.all([
-      import('@yume-chan/adb'),
-      import('@yume-chan/adb-credential-web'),
-      import('@yume-chan/adb-daemon-webusb'),
-    ]);
+    try {
+      const [
+        { Adb, AdbDaemonTransport },
+        { default: AdbWebCredentialStore },
+        { AdbDaemonWebUsbDeviceManager },
+        { PackageManager },
+      ] = await Promise.all([
+        import('@yume-chan/adb'),
+        import('@yume-chan/adb-credential-web'),
+        import('@yume-chan/adb-daemon-webusb'),
+        import('@yume-chan/android-bin'),
+      ]);
 
-    const bundle: AdbLibs = {
-      Adb,
-      AdbDaemonTransport,
-      AdbWebCredentialStore,
-      AdbDaemonWebUsbDeviceManager,
-    };
-    libsRef.current = bundle;
-    return bundle;
+      const bundle: AdbLibs = {
+        Adb,
+        AdbDaemonTransport,
+        AdbWebCredentialStore,
+        AdbDaemonWebUsbDeviceManager,
+        PackageManager,
+      };
+      libsRef.current = bundle;
+      return bundle;
+    } catch (error) {
+      appendLog('❌ Failed to load ADB libraries. Make sure you are using Chrome/Edge.');
+      throw error;
+    }
   }, []);
 
+  // Check for existing devices on mount
+  useEffect(() => {
+    const checkExistingDevices = async () => {
+      if (!webUsbSupported || !isChromeOrEdge) return;
+
+      try {
+        const { AdbDaemonWebUsbDeviceManager } = await loadLibs();
+        const Manager = AdbDaemonWebUsbDeviceManager.BROWSER;
+        if (!Manager) return;
+
+        const devices = await Manager.getDevices();
+        if (devices.length > 0) {
+          setDeviceConnected(true);
+          appendLog('Found connected Quest device. Ready to sideload.');
+        }
+      } catch {
+        // Silent fail - devices might not be connected yet
+      }
+    };
+
+    checkExistingDevices();
+  }, [webUsbSupported, isChromeOrEdge, loadLibs]);
+
   const connectQuest = useCallback(async () => {
+    // Pre-flight checks
     if (!webUsbSupported) {
-      throw new Error('WebUSB not supported. Use Chrome/Edge over HTTPS (or http://localhost).');
+      throw new Error('WebUSB not supported. Use Chrome or Edge browser.');
+    }
+
+    if (!isChromeOrEdge) {
+      throw new Error('Sideloading only works with Chrome or Edge browsers.');
+    }
+
+    // Ensure we're in a secure context
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      throw new Error('Sideloading requires HTTPS (or http://localhost).');
     }
 
     const {
@@ -98,95 +149,230 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     } = await loadLibs();
 
     const Manager = AdbDaemonWebUsbDeviceManager.BROWSER;
-    if (!Manager) throw new Error('No WebUSB ADB manager (unsupported browser).');
+    if (!Manager) throw new Error('WebUSB ADB not available. Use Chrome/Edge.');
 
-    appendLog('Requesting Quest device…');
-    const device = await Manager.requestDevice(); // user gesture required
+    appendLog('🔌 Requesting Quest device…');
+    appendLog('Make sure your Quest is:\n• Connected via USB cable\n• USB debugging is enabled\n• Allow USB debugging dialog is accepted');
+
+    let device: any;
+    try {
+      device = await Manager.requestDevice();
+    } catch {
+      throw new Error('Failed to request device. Make sure your Quest is connected and USB debugging is enabled.');
+    }
+
     if (!device) throw new Error('No device selected.');
 
-    appendLog('Connecting ADB interface…');
-    const connection = await device.connect();
+    appendLog('📡 Connecting ADB interface…');
+    let connection: any;
+    try {
+      connection = await device.connect();
+    } catch {
+      throw new Error('Failed to connect to device. Try reconnecting the USB cable.');
+    }
 
-    appendLog('Authenticating ADB session…');
-    const credentialStore = new AdbWebCredentialStore('YourSite');
-    const transport = await AdbDaemonTransport.authenticate({
-      serial: device.serial,
-      connection,
-      credentialStore,
-    });
+    appendLog('🔐 Authenticating ADB session…');
+    let transport: any;
+    try {
+      const credentialStore = new AdbWebCredentialStore('QuestSideload');
+      transport = await AdbDaemonTransport.authenticate({
+        serial: device.serial,
+        connection,
+        credentialStore,
+      });
+    } catch {
+      throw new Error('ADB authentication failed. Check if USB debugging is enabled on your Quest.');
+    }
 
     const adb = new Adb(transport);
     adbRef.current = adb;
     setConnectedSerial(device.serial ?? 'Quest');
-    appendLog(`Connected: ${device.serial ?? '(no serial)'}`);
+    setDeviceConnected(true);
+    appendLog(`✅ Connected: ${device.serial ?? '(no serial)'}`);
 
+    // Test ADB connection using shell or none protocol
     try {
-      await adb.subprocess.shellAndWait('echo ADB_OK');
-      appendLog('ADB handshake complete.');
+      if (adb.subprocess.shellProtocol) {
+        const { exitCode, stdout } = await adb.subprocess.shellProtocol.spawnWaitText(['sh', '-c', 'echo ADB_OK']);
+        if (exitCode === 0 && String(stdout).includes('ADB_OK')) appendLog('ADB handshake complete.');
+      } else {
+        const out = await adb.subprocess.noneProtocol.spawnWaitText('echo ADB_OK');
+        if (String(out).includes('ADB_OK')) appendLog('ADB handshake complete (none protocol).');
+      }
     } catch {
       appendLog('ADB shell check skipped.');
     }
 
-    return adb as any;
-  }, [loadLibs, webUsbSupported]);
+    return adb;
+  }, [loadLibs, webUsbSupported, isChromeOrEdge]);
 
-  const pushAndInstallApk = useCallback(async (adb: any, file: File) => {
-    const remote = '/data/local/tmp/app.apk';
+  // Push & install with modern API (PackageManager.installStream)
+  const pushAndInstallApk = useCallback(async (adb: any, response: Response) => {
+    const totalSize = Number(response.headers.get('content-length')) || 0;
+    const filename = (app.apkFileName as string | undefined) || `${app.slug}.apk`;
 
-    appendLog(`Pushing ${file.name} → ${remote} …`);
-    const sync = await adb.sync();
-    if (typeof sync.write === 'function') {
-      await sync.write({ filename: remote, stream: file.stream() });
-    } else if (typeof sync.push === 'function') {
-      await sync.push(file.stream(), remote);
-    } else {
-      throw new Error('ADB sync API not supported by this build.');
+    if (!response.body) {
+      throw new Error('Response body is not available for streaming.');
     }
-    if (typeof sync.dispose === 'function') await sync.dispose();
 
-    appendLog('Installing (pm install -r)…');
-    const result = await adb.subprocess.shellAndWait(`pm install -r "${remote}"`);
-  
+    appendLog(`📦 Installing ${filename} to Quest …`);
+    if (totalSize > 0) appendLog(`📊 File size: ${formatBytes(totalSize)}`);
+    appendLog('⬆️ Uploading & installing (streaming)…');
+
     try {
-      const out = await result.stdout;
-      if (out) appendLog(String(out));
-    } catch { /* ignore */ }
+      const { PackageManager } = await loadLibs();
+      const pm = new PackageManager(adb);
 
-  
-    try { await adb.subprocess.shellAndWait(`rm -f "${remote}"`); } catch { /* ignore */ }
+      // Wrap the stream to report progress
+      const reader = response.body.getReader();
+      let bytesWritten = 0;
+      let lastPercentage = -1;
 
-    appendLog('Done ✅  Check headset: Apps → Unknown Sources.');
-  }, []);
+      const progressStream = new ReadableStream<Uint8Array>({
+        async pull(controller) {
+          const { done, value } = await reader.read();
+          if (done) return controller.close();
+          if (value) {
+            controller.enqueue(value);
+            bytesWritten += value.length;
 
-  const fetchApkFile = useCallback(async (): Promise<File> => {
-    appendLog('Fetching APK…');
-    const res = await fetch(`/api/download/${app.slug}`, { method: 'GET' });
-    if (!res.ok) throw new Error(`Download failed: ${res.status} ${res.statusText}`);
-    const blob = await res.blob();
- 
-    const type = res.headers.get('content-type') ?? 'application/vnd.android.package-archive';
-    const filename =
-      (app.apkFileName as string | undefined) ||
-      `${app.slug}.apk`;
-    return new File([blob], filename, { type });
+            if (totalSize > 0) {
+              const percentage = Math.floor((bytesWritten / totalSize) * 100);
+              setUploadProgress(percentage);
+              if (percentage !== lastPercentage && (percentage % 10 === 0 || percentage === 100)) {
+                appendLog(`📈 Upload progress: ${percentage}% (${formatBytes(bytesWritten)}/${formatBytes(totalSize)})`);
+                lastPercentage = percentage;
+              }
+            }
+          }
+        },
+        cancel(reason) {
+          reader.cancel(reason);
+        },
+      });
+
+      // Install with runtime permissions granted (-g)
+      await pm.installStream(totalSize, progressStream, { grantRuntimePermissions: true });
+
+      appendLog('✅ Installation successful!');
+      appendLog('🎉 App installed on your Quest!');
+      appendLog('📱 Check your headset: Library → Unknown Sources');
+      setUploadProgress(0);
+    } catch (error: any) {
+      // Provide specific guidance
+      const errorMsg = error?.message || String(error);
+      appendLog(`❌ Error: ${errorMsg}`);
+      setUploadProgress(0);
+
+      if (/INSTALL_FAILED_ALREADY_EXISTS/i.test(errorMsg)) {
+        appendLog('⚠️ App already exists. You may need to uninstall the existing version and try again.');
+      } else if (/INSUFFICIENT_STORAGE|NO_SPACE/i.test(errorMsg)) {
+        appendLog('❌ Not enough storage space on Quest. Free up space and try again.');
+      } else if (/INVALID_APK|PARSE_ERROR|bad zip/i.test(errorMsg)) {
+        appendLog('❌ APK appears invalid or corrupted.');
+      } else if (/disconnected|ECONNRESET|broken pipe/i.test(errorMsg)) {
+        appendLog('🔌 USB connection lost. Please reconnect and try again.');
+      }
+
+      throw error;
+    }
   }, [app.slug, app.apkFileName]);
 
-  const handleSideload = useCallback(async () => {
-    setBusy(true);
-    setSideloadLog(''); 
+  // Fetch APK as stream for direct push to Quest
+  const fetchApkFile = useCallback(async (): Promise<Response> => {
+    appendLog('📥 Fetching APK for sideloading…');
     try {
-      const adb = await connectQuest();
-      const file = await fetchApkFile();
-      await pushAndInstallApk(adb, file);
+      const res = await fetch(`/api/download/${app.slug}`, {
+        method: 'GET',
+        headers: { 'Cache-Control': 'no-cache' },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Download failed: ${res.status} ${res.statusText}`);
+      }
+
+      if (!res.body) {
+        throw new Error('APK stream not available from server');
+      }
+
+      appendLog('✅ APK fetched successfully');
+      return res;
+    } catch (error) {
+      appendLog('❌ Failed to fetch APK file');
+      throw error;
+    }
+  }, [app.slug]);
+
+  // Main sideload function
+  const handleSideload = useCallback(async () => {
+    // Pre-flight checks
+    if (!webUsbSupported) {
+      alert('WebUSB not supported. Please use Chrome or Edge browser.');
+      return;
+    }
+
+    if (!isChromeOrEdge) {
+      alert('Sideloading only works with Chrome or Edge browsers.');
+      return;
+    }
+
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      alert('Sideloading requires HTTPS (or http://localhost for development).');
+      return;
+    }
+
+    setBusy(true);
+    setSideloadLog('');
+    setUploadProgress(0);
+
+    try {
+      appendLog('🚀 Starting Quest sideload process...');
+      appendLog('Please ensure your Quest is:');
+      appendLog('• Connected via USB cable');
+      appendLog('• USB debugging is enabled');
+      appendLog('• "Allow USB Debugging" prompt is accepted');
+      appendLog('');
+
+      // Step 1: Connect to Quest (or reuse existing connection)
+      let adb = adbRef.current;
+      if (!adb || !deviceConnected) {
+        appendLog('1. Connecting to Quest...');
+        adb = await connectQuest();
+      } else {
+        appendLog('1. Using existing Quest connection...');
+      }
+
+      // Step 2: Fetch APK stream
+      appendLog('2. Downloading APK...');
+      const response = await fetchApkFile();
+
+      // Step 3: Install directly to Quest (streaming)
+      appendLog('3. Installing to Quest...');
+      await pushAndInstallApk(adb, response);
+
+      appendLog('🎊 Sideloading completed successfully!');
+      appendLog('You can now put on your headset and enjoy the app!');
     } catch (e: any) {
-      appendLog(`❌ ${e?.message || String(e)}`);
+      const errorMessage = e?.message || String(e);
+      appendLog(`💥 Sideload failed: ${errorMessage}`);
       if (typeof window !== 'undefined') {
-        alert(e?.message || 'Sideload failed. See log.');
+        alert(`Sideload failed: ${errorMessage}\n\nCheck the log for details and solutions.`);
       }
     } finally {
       setBusy(false);
     }
-  }, [connectQuest, fetchApkFile, pushAndInstallApk]);
+  }, [connectQuest, fetchApkFile, pushAndInstallApk, webUsbSupported, isChromeOrEdge, deviceConnected]);
+
+  // Browser compatibility warning
+  useEffect(() => {
+    if (!isChromeOrEdge && typeof window !== 'undefined') {
+      appendLog('⚠️ Warning: For sideloading, please use Chrome or Edge browser.');
+    }
+
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      appendLog('⚠️ Warning: Sideloading requires HTTPS (or http://localhost).');
+    }
+  }, [isChromeOrEdge]);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
@@ -363,6 +549,33 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
               ))}
             </ul>
           </motion.div>
+
+          {/* Sideload Instructions */}
+          <motion.div variants={itemVariants} className="detail-section">
+            <motion.h2 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 }}>
+              Quest Sideload Instructions
+            </motion.h2>
+            <div style={{
+              background: 'var(--surface-hover)',
+              padding: '1.5rem',
+              borderRadius: '12px',
+              border: '2px solid var(--border)'
+            }}>
+              <ol style={{ marginLeft: '1.5rem', lineHeight: '1.8' }}>
+                <li>Enable <strong>Developer Mode</strong> on your Quest (in Meta Quest mobile app)</li>
+                <li>Enable <strong>USB Debugging</strong> in Settings → Developer</li>
+                <li>Connect your Quest to computer via USB cable</li>
+                <li>Click <strong>"Sideload to Quest"</strong> button</li>
+                <li>Select your Quest when prompted in browser</li>
+                <li>Accept <strong>"Allow USB Debugging"</strong> on your Quest</li>
+                <li>Wait for installation to complete</li>
+                <li>Find app in <strong>Library → Unknown Sources</strong></li>
+              </ol>
+              <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px' }}>
+                <strong>Browser Requirements:</strong> Chrome or Edge only. HTTPS required (or http://localhost).
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Sidebar */}
@@ -402,7 +615,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                 </motion.span>
               </motion.div>
 
-              {/* Download Button */}
+              {/* Download Button (for computer) */}
               <motion.button
                 onClick={handleDownload}
                 className="btn-download-large"
@@ -411,31 +624,91 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                 transition={{ delay: 0.7 }}
                 whileHover={{ scale: 1.03, boxShadow: '0 16px 32px rgba(30, 64, 175, 0.6)' }}
                 whileTap={{ scale: 0.97 }}
+                style={{ marginBottom: '0.75rem' }}
               >
                 <motion.span animate={{ y: [0, -3, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}>
                   ⬇️
                 </motion.span>{' '}
-                Download Now
+                Download to Computer
               </motion.button>
 
-              {/* Sideload Now Button */}
+              {/* Sideload Now Button (for Quest) */}
               <motion.button
                 onClick={handleSideload}
                 className="btn-download-large"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.75 }}
-                whileHover={{ scale: busy ? 1 : 1.03, boxShadow: busy ? undefined : '0 16px 32px rgba(30, 64, 175, 0.6)' }}
+                whileHover={{
+                  scale: busy ? 1 : 1.03,
+                  boxShadow: busy ? undefined : '0 16px 32px rgba(139, 92, 246, 0.6)'
+                }}
                 whileTap={{ scale: busy ? 1 : 0.97 }}
-                disabled={busy}
-                style={{ opacity: busy ? 0.7 : 1, cursor: busy ? 'not-allowed' : 'pointer' }}
-                title={connectedSerial ? `Connected: ${connectedSerial}` : 'Connect & install via USB'}
+                disabled={busy || !isChromeOrEdge}
+                style={{
+                  opacity: (busy || !isChromeOrEdge) ? 0.7 : 1,
+                  cursor: (busy || !isChromeOrEdge) ? 'not-allowed' : 'pointer',
+                  background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                  marginBottom: '1rem'
+                }}
+                title={!isChromeOrEdge ? 'Requires Chrome or Edge browser' : (deviceConnected ? `Connected: ${connectedSerial}` : 'Connect Quest via USB to sideload')}
               >
                 <motion.span animate={{ y: [0, -3, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}>
-                  🧩
+                  🎯
                 </motion.span>{' '}
-                {busy ? 'Installing…' : 'Sideload Now'}
+                {busy ? 'Sideloading to Quest…' : 'Sideload to Quest'}
               </motion.button>
+
+              {/* Browser Compatibility Warning */}
+              {!isChromeOrEdge && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  style={{
+                    padding: '0.75rem',
+                    borderRadius: '8px',
+                    background: 'rgba(248, 113, 113, 0.1)',
+                    border: '1px solid rgb(248, 113, 113)',
+                    marginBottom: '1rem',
+                    fontSize: '0.875rem'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgb(248, 113, 113)' }}>
+                    ⚠️ Sideloading requires Chrome or Edge
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Connection Status */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  background: deviceConnected ? 'rgba(34, 197, 94, 0.1)' : 'rgba(248, 113, 113, 0.1)',
+                  border: `1px solid ${deviceConnected ? 'rgb(34, 197, 94)' : 'rgb(248, 113, 113)'}`,
+                  marginBottom: '1rem'
+                }}
+              >
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.875rem',
+                  color: deviceConnected ? 'rgb(34, 197, 94)' : 'rgb(248, 113, 113)'
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: deviceConnected ? 'rgb(34, 197, 94)' : 'rgb(248, 113, 113)',
+                    animation: deviceConnected ? 'pulse 2s infinite' : 'none'
+                  }} />
+                  {deviceConnected ? 'Quest Connected' : 'Quest Not Connected'}
+                </div>
+              </motion.div>
 
               {/* App Info */}
               <motion.div className="sidebar-info-item" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} whileHover={{ x: 5 }}>
@@ -455,7 +728,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
 
               <motion.div className="sidebar-info-item" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }} whileHover={{ x: 5 }}>
                 <div className="sidebar-info-label">Compatible with</div>
-                <div className="sidebar-info-value">Quest, Go, Other, Magic_leap, Pico</div>
+                <div className="sidebar-info-value">Quest 2/3/Pro, Android</div>
               </motion.div>
 
               {app.lastUpdated && (
@@ -500,7 +773,27 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                 ))}
               </motion.div>
 
-              {/* Simple sideload log output (optional) */}
+              {/* Progress Bar */}
+              {busy && (
+                <div style={{ marginTop: 8, width: '100%' }}>
+                  <div style={{ height: 8, background: '#1f2937', borderRadius: 999 }}>
+                    <div
+                      style={{
+                        height: 8,
+                        width: `${uploadProgress}%`,
+                        background: 'linear-gradient(90deg,#8b5cf6,#6366f1)',
+                        borderRadius: 999,
+                        transition: 'width .2s ease-out',
+                      }}
+                    />
+                  </div>
+                  <div style={{ marginTop: 6, fontSize: 12, color: '#9ca3af' }}>
+                    Upload: {uploadProgress}%
+                  </div>
+                </div>
+              )}
+
+              {/* Sideload Log */}
               <div
                 style={{
                   marginTop: 16,
@@ -511,12 +804,30 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                   fontSize: 12,
                   whiteSpace: 'pre-wrap',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  border: '1px solid #374151'
                 }}
               >
-                <div style={{ color: '#93c5fd', marginBottom: 6 }}>
-                  Sideload Status: {busy ? 'Working…' : connectedSerial ? `Connected (${connectedSerial})` : 'Idle'}
+                <div style={{
+                  color: deviceConnected ? '#93c5fd' : '#fca5a5',
+                  marginBottom: 6,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span>
+                    Sideload Status: {busy ? 'Working…' : deviceConnected ? `Connected (${connectedSerial || 'Quest'})` : 'Disconnected'}
+                  </span>
+                  {busy && (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      style={{ width: 12, height: 12, border: '2px solid #93c5fd', borderTop: '2px solid transparent', borderRadius: '50%' }}
+                    />
+                  )}
                 </div>
-                {sideloadLog || 'Logs will appear here…'}
+                {sideloadLog || 'Connect your Quest and click "Sideload to Quest" to begin...'}
               </div>
             </div>
           </motion.div>
