@@ -16,8 +16,31 @@ type AdbLibs = {
   PackageManager: any;
 };
 
+type AppRecord = {
+  slug: string;
+  name: string;
+  icon?: string;
+  screenshots?: string[];
+  rating?: number;
+  category?: string;
+  description?: string;
+  summary?: string;
+  version?: string;
+  downloads?: number;
+  sizeBytes?: number;
+  lastUpdated?: string;
+
+  // OPTIONAL: Add one or more of these to enable in-headset install
+  oculusAppId?: string;  // e.g. "5593721234567890"
+  appLabUrl?: string;    // e.g. "https://www.meta.com/experiences/5593721234567890"
+  storeUrl?: string;     // any Meta Store URL for this app
+
+  // for sideloading:
+  apkFileName?: string;
+};
+
 export default function AppDetail({ params }: { params: { slug: string } }) {
-  const app = (apps as any[]).find((a) => a.slug === params.slug);
+  const app = (apps as AppRecord[]).find((a) => a.slug === params.slug);
   const [currentScreenshot, setCurrentScreenshot] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -33,7 +56,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
 
   if (!app) return notFound();
 
-  const allImages = [app.icon, ...(app.screenshots || [])].filter(Boolean);
+  const allImages = [app.icon, ...(app.screenshots || [])].filter(Boolean) as string[];
 
   const handleDownload = () => {
     window.location.href = `/api/download/${app.slug}`;
@@ -55,7 +78,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     }
   };
 
-  // ---------- Sideload helpers ----------
+  // ---------- Helpers ----------
   const appendLog = (line: string) =>
     setSideloadLog((p) => (p ? p + '\n' : '') + line);
 
@@ -64,14 +87,53 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     return !!(navigator as any).usb;
   }, []);
 
-  // Enhanced browser check for Chrome/Edge
   const isChromeOrEdge = useMemo(() => {
     if (typeof navigator === 'undefined') return false;
-    const userAgent = navigator.userAgent;
-    return /chrome|chromium|edg/i.test(userAgent);
+    const ua = navigator.userAgent;
+    return /chrome|chromium|edg/i.test(ua);
   }, []);
 
-  // Lazy-load ADB libs to avoid SSR issues
+  // Detect Oculus/Quest Browser (in-headset)
+  const isQuestBrowser = useMemo(() => {
+    if (typeof navigator === 'undefined') return false;
+    return /OculusBrowser/i.test(navigator.userAgent);
+  }, []);
+
+  // Build candidate deep links / URLs for Store/App Lab
+  const storeTargets = useMemo(() => {
+    const urls: string[] = [];
+    if (app.oculusAppId) {
+      // In-headset, the oculus:// scheme should open the Store app directly.
+      urls.push(`oculus://app/${app.oculusAppId}`);
+      // Some headsets/OS builds may prefer a different path; keep an extra attempt:
+      urls.push(`oculus://store/app/${app.oculusAppId}`);
+      // Web fallback that works on desktop/phone too:
+      urls.push(`https://www.meta.com/experiences/${app.oculusAppId}`);
+    }
+    if (app.appLabUrl) urls.push(app.appLabUrl);
+    if (app.storeUrl) urls.push(app.storeUrl);
+    // De-dup while preserving order
+    return Array.from(new Set(urls));
+  }, [app.oculusAppId, app.appLabUrl, app.storeUrl]);
+
+  const canOpenStore = storeTargets.length > 0;
+
+  const handleOpenInStore = useCallback(() => {
+    if (!canOpenStore) {
+      alert('No App Lab/Store link configured for this app.\nAdd "oculusAppId", "appLabUrl", or "storeUrl" in apps.json.');
+      return;
+    }
+    // Try deep link first (in-headset), then fall back to web URL.
+    const [primary, ...fallbacks] = storeTargets;
+    // Navigate to primary
+    window.location.href = primary;
+    // Also open a fallback in a new tab after a short delay (helps on desktop)
+    setTimeout(() => {
+      if (fallbacks[0]) window.open(fallbacks[0], '_blank');
+    }, 1200);
+  }, [canOpenStore, storeTargets]);
+
+  // ---------- Lazy-load ADB libs ----------
   const loadLibs = useCallback(async (): Promise<AdbLibs> => {
     if (libsRef.current) return libsRef.current;
 
@@ -103,7 +165,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     }
   }, []);
 
-  // Check for existing devices on mount
+  // Check for existing devices on mount (desktop USB sideload only)
   useEffect(() => {
     const checkExistingDevices = async () => {
       if (!webUsbSupported || !isChromeOrEdge) return;
@@ -119,7 +181,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
           appendLog('Found connected Quest device. Ready to sideload.');
         }
       } catch {
-        // Silent fail - devices might not be connected yet
+        /* ignore */
       }
     };
 
@@ -127,16 +189,15 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
   }, [webUsbSupported, isChromeOrEdge, loadLibs]);
 
   const connectQuest = useCallback(async () => {
-    // Pre-flight checks
     if (!webUsbSupported) {
       throw new Error('WebUSB not supported. Use Chrome or Edge browser.');
     }
-
     if (!isChromeOrEdge) {
       throw new Error('Sideloading only works with Chrome or Edge browsers.');
     }
-
-    // Ensure we're in a secure context
+    if (isQuestBrowser) {
+      throw new Error('USB sideloading is not available inside the Quest browser.');
+    }
     if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
       throw new Error('Sideloading requires HTTPS (or http://localhost).');
     }
@@ -149,7 +210,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     } = await loadLibs();
 
     const Manager = AdbDaemonWebUsbDeviceManager.BROWSER;
-    if (!Manager) throw new Error('WebUSB ADB not available. Use Chrome/Edge.');
+    if (!Manager) throw new Error('WebUSB ADB not available. Use Chrome/Edge on desktop.');
 
     appendLog('🔌 Requesting Quest device…');
     appendLog('Make sure your Quest is:\n• Connected via USB cable\n• USB debugging is enabled\n• Allow USB debugging dialog is accepted');
@@ -184,13 +245,12 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
       throw new Error('ADB authentication failed. Check if USB debugging is enabled on your Quest.');
     }
 
-    const adb = new Adb(transport);
+    const adb = new libsRef.current!.Adb(transport);
     adbRef.current = adb;
     setConnectedSerial(device.serial ?? 'Quest');
     setDeviceConnected(true);
     appendLog(`✅ Connected: ${device.serial ?? '(no serial)'}`);
 
-    // Test ADB connection using shell or none protocol
     try {
       if (adb.subprocess.shellProtocol) {
         const { exitCode, stdout } = await adb.subprocess.shellProtocol.spawnWaitText(['sh', '-c', 'echo ADB_OK']);
@@ -204,7 +264,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     }
 
     return adb;
-  }, [loadLibs, webUsbSupported, isChromeOrEdge]);
+  }, [loadLibs, webUsbSupported, isChromeOrEdge, isQuestBrowser]);
 
   // Push & install with modern API (PackageManager.installStream)
   const pushAndInstallApk = useCallback(async (adb: any, response: Response) => {
@@ -223,7 +283,6 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
       const { PackageManager } = await loadLibs();
       const pm = new PackageManager(adb);
 
-      // Wrap the stream to report progress
       const reader = response.body.getReader();
       let bytesWritten = 0;
       let lastPercentage = -1;
@@ -251,7 +310,6 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
         },
       });
 
-      // Install with runtime permissions granted (-g)
       await pm.installStream(totalSize, progressStream, { grantRuntimePermissions: true });
 
       appendLog('✅ Installation successful!');
@@ -259,7 +317,6 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
       appendLog('📱 Check your headset: Library → Unknown Sources');
       setUploadProgress(0);
     } catch (error: any) {
-      // Provide specific guidance
       const errorMsg = error?.message || String(error);
       appendLog(`❌ Error: ${errorMsg}`);
       setUploadProgress(0);
@@ -276,9 +333,8 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
 
       throw error;
     }
-  }, [app.slug, app.apkFileName]);
+  }, [app.slug, app.apkFileName, loadLibs]);
 
-  // Fetch APK as stream for direct push to Quest
   const fetchApkFile = useCallback(async (): Promise<Response> => {
     appendLog('📥 Fetching APK for sideloading…');
     try {
@@ -287,13 +343,8 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
         headers: { 'Cache-Control': 'no-cache' },
       });
 
-      if (!res.ok) {
-        throw new Error(`Download failed: ${res.status} ${res.statusText}`);
-      }
-
-      if (!res.body) {
-        throw new Error('APK stream not available from server');
-      }
+      if (!res.ok) throw new Error(`Download failed: ${res.status} ${res.statusText}`);
+      if (!res.body) throw new Error('APK stream not available from server');
 
       appendLog('✅ APK fetched successfully');
       return res;
@@ -303,19 +354,21 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     }
   }, [app.slug]);
 
-  // Main sideload function
+  // Main sideload function (desktop Chrome/Edge only)
   const handleSideload = useCallback(async () => {
-    // Pre-flight checks
+    if (isQuestBrowser) {
+      alert('USB sideloading is not available inside the Quest browser.\nUse a desktop browser with a USB cable, or use the App Lab/Store button to install in-headset.');
+      return;
+    }
+
     if (!webUsbSupported) {
       alert('WebUSB not supported. Please use Chrome or Edge browser.');
       return;
     }
-
     if (!isChromeOrEdge) {
       alert('Sideloading only works with Chrome or Edge browsers.');
       return;
     }
-
     if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
       alert('Sideloading requires HTTPS (or http://localhost for development).');
       return;
@@ -333,7 +386,6 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
       appendLog('• "Allow USB Debugging" prompt is accepted');
       appendLog('');
 
-      // Step 1: Connect to Quest (or reuse existing connection)
       let adb = adbRef.current;
       if (!adb || !deviceConnected) {
         appendLog('1. Connecting to Quest...');
@@ -342,11 +394,9 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
         appendLog('1. Using existing Quest connection...');
       }
 
-      // Step 2: Fetch APK stream
       appendLog('2. Downloading APK...');
       const response = await fetchApkFile();
 
-      // Step 3: Install directly to Quest (streaming)
       appendLog('3. Installing to Quest...');
       await pushAndInstallApk(adb, response);
 
@@ -361,18 +411,20 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
     } finally {
       setBusy(false);
     }
-  }, [connectQuest, fetchApkFile, pushAndInstallApk, webUsbSupported, isChromeOrEdge, deviceConnected]);
+  }, [connectQuest, fetchApkFile, pushAndInstallApk, webUsbSupported, isChromeOrEdge, deviceConnected, isQuestBrowser]);
 
-  // Browser compatibility warning
+  // Browser compatibility warnings
   useEffect(() => {
     if (!isChromeOrEdge && typeof window !== 'undefined') {
-      appendLog('⚠️ Warning: For sideloading, please use Chrome or Edge browser.');
+      appendLog('⚠️ Warning: For USB sideloading, please use Chrome or Edge on desktop.');
     }
-
     if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
       appendLog('⚠️ Warning: Sideloading requires HTTPS (or http://localhost).');
     }
-  }, [isChromeOrEdge]);
+    if (isQuestBrowser) {
+      appendLog('ℹ️ Tip: Inside the Quest browser, use the "Install in Quest (App Lab/Store)" button below.');
+    }
+  }, [isChromeOrEdge, isQuestBrowser]);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
@@ -515,7 +567,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
             </motion.p>
           </motion.div>
 
-          {/* Features */}
+          {/* Features (example content) */}
           <motion.div variants={itemVariants} className="detail-section">
             <motion.h2 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}>
               Features
@@ -564,15 +616,13 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
               <ol style={{ marginLeft: '1.5rem', lineHeight: '1.8' }}>
                 <li>Enable <strong>Developer Mode</strong> on your Quest (in Meta Quest mobile app)</li>
                 <li>Enable <strong>USB Debugging</strong> in Settings → Developer</li>
-                <li>Connect your Quest to computer via USB cable</li>
-                <li>Click <strong>"Sideload to Quest"</strong> button</li>
-                <li>Select your Quest when prompted in browser</li>
-                <li>Accept <strong>"Allow USB Debugging"</strong> on your Quest</li>
-                <li>Wait for installation to complete</li>
-                <li>Find app in <strong>Library → Unknown Sources</strong></li>
+                <li>Use a desktop Chrome/Edge browser and connect your Quest via USB cable</li>
+                <li>Click <strong>"Sideload to Quest"</strong></li>
+                <li>Select your Quest when prompted and accept <strong>"Allow USB Debugging"</strong> in-headset</li>
+                <li>Wait for installation to complete, then check <strong>Library → Unknown Sources</strong></li>
               </ol>
               <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px' }}>
-                <strong>Browser Requirements:</strong> Chrome or Edge only. HTTPS required (or http://localhost).
+                <strong>Note:</strong> Inside the Quest browser, use the <em>Install in Quest (App Lab/Store)</em> button instead.
               </div>
             </div>
           </motion.div>
@@ -588,7 +638,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
           <motion.div className="sidebar-card" whileHover={{ y: -8 }} transition={{ duration: 0.3 }}>
             {/* Sidebar Image */}
             <motion.img
-              src={app.icon || app.screenshots?.[0]}
+              src={app.icon || app.screenshots?.[0] || ''}
               alt={app.name}
               className="sidebar-card-image"
               initial={{ opacity: 0 }}
@@ -615,7 +665,34 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                 </motion.span>
               </motion.div>
 
-              {/* Download Button (for computer) */}
+              {/* NEW: Install in Quest (App Lab / Store) */}
+              {canOpenStore && (
+                <motion.button
+                  onClick={handleOpenInStore}
+                  className="btn-download-large"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.68 }}
+                  whileHover={{ scale: 1.03, boxShadow: '0 16px 32px rgba(16, 185, 129, 0.5)' }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    marginBottom: '0.75rem',
+                    background: 'linear-gradient(135deg, #10b981, #22c55e)'
+                  }}
+                  title={isQuestBrowser ? 'Opens the Meta Store in-headset' : 'Opens App Lab/Store page'}
+                >
+                  🟢 Install in Quest (App Lab/Store)
+                </motion.button>
+              )}
+
+              {/* Optional: show the first store URL for copying */}
+              {canOpenStore && (
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: '0.75rem', wordBreak: 'break-all' }}>
+                  <span style={{ opacity: 0.75 }}>Store link:</span> {storeTargets[storeTargets.length - 1]}
+                </div>
+              )}
+
+              {/* Download APK to computer */}
               <motion.button
                 onClick={handleDownload}
                 className="btn-download-large"
@@ -632,7 +709,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                 Download to Computer
               </motion.button>
 
-              {/* Sideload Now Button (for Quest) */}
+              {/* USB Sideload (desktop only) */}
               <motion.button
                 onClick={handleSideload}
                 className="btn-download-large"
@@ -640,27 +717,31 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.75 }}
                 whileHover={{
-                  scale: busy ? 1 : 1.03,
-                  boxShadow: busy ? undefined : '0 16px 32px rgba(139, 92, 246, 0.6)'
+                  scale: busy || isQuestBrowser ? 1 : 1.03,
+                  boxShadow: busy || isQuestBrowser ? undefined : '0 16px 32px rgba(139, 92, 246, 0.6)'
                 }}
-                whileTap={{ scale: busy ? 1 : 0.97 }}
-                disabled={busy || !isChromeOrEdge}
+                whileTap={{ scale: busy || isQuestBrowser ? 1 : 0.97 }}
+                disabled={busy || !isChromeOrEdge || isQuestBrowser}
                 style={{
-                  opacity: (busy || !isChromeOrEdge) ? 0.7 : 1,
-                  cursor: (busy || !isChromeOrEdge) ? 'not-allowed' : 'pointer',
+                  opacity: (busy || !isChromeOrEdge || isQuestBrowser) ? 0.7 : 1,
+                  cursor: (busy || !isChromeOrEdge || isQuestBrowser) ? 'not-allowed' : 'pointer',
                   background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
                   marginBottom: '1rem'
                 }}
-                title={!isChromeOrEdge ? 'Requires Chrome or Edge browser' : (deviceConnected ? `Connected: ${connectedSerial}` : 'Connect Quest via USB to sideload')}
+                title={
+                  isQuestBrowser
+                    ? 'USB sideloading is not available inside the Quest browser'
+                    : (!isChromeOrEdge ? 'Requires Chrome or Edge browser' : (deviceConnected ? `Connected: ${connectedSerial}` : 'Connect Quest via USB to sideload'))
+                }
               >
                 <motion.span animate={{ y: [0, -3, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}>
                   🎯
                 </motion.span>{' '}
-                {busy ? 'Sideloading to Quest…' : 'Sideload to Quest'}
+                {busy ? 'Sideloading to Quest…' : 'Sideload to Quest (USB)'}
               </motion.button>
 
-              {/* Browser Compatibility Warning */}
-              {!isChromeOrEdge && (
+              {/* Browser Compatibility / Context Tips */}
+              {!isChromeOrEdge && !isQuestBrowser && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -673,9 +754,24 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                     fontSize: '0.875rem'
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgb(248, 113, 113)' }}>
-                    ⚠️ Sideloading requires Chrome or Edge
-                  </div>
+                  ⚠️ USB sideloading requires Chrome or Edge on desktop
+                </motion.div>
+              )}
+
+              {isQuestBrowser && !canOpenStore && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  style={{
+                    padding: '0.75rem',
+                    borderRadius: '8px',
+                    background: 'rgba(59, 130, 246, 0.08)',
+                    border: '1px solid rgba(59, 130, 246, 0.6)',
+                    marginBottom: '1rem',
+                    fontSize: '0.875rem'
+                  }}
+                >
+                  ℹ️ To install in-headset, publish to App Lab or a Release Channel and add its URL or App ID to <code>apps.json</code> (fields: <code>oculusAppId</code>, <code>appLabUrl</code>, or <code>storeUrl</code>).
                 </motion.div>
               )}
 
@@ -754,7 +850,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                 {[
                   { icon: '😊', label: 'Comfort level', value: 'Comfortable' },
                   { icon: '⬇️', label: 'Download clicks', value: app.downloads?.toLocaleString() || '0' },
-                  { icon: '📦', label: 'File Size', value: formatBytes(app.sizeBytes) },
+                  { icon: '📦', label: 'File Size', value: formatBytes(app.sizeBytes || 0) },
                 ].map((stat, index) => (
                   <motion.div
                     key={index}
@@ -827,7 +923,9 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                     />
                   )}
                 </div>
-                {sideloadLog || 'Connect your Quest and click "Sideload to Quest" to begin...'}
+                {sideloadLog || (isQuestBrowser
+                  ? 'Inside the Quest browser: use "Install in Quest (App Lab/Store)". USB sideloading is desktop-only.'
+                  : 'Connect your Quest and click "Sideload to Quest (USB)" to begin...')}
               </div>
             </div>
           </motion.div>
