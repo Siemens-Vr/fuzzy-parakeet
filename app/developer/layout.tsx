@@ -1,20 +1,50 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 import '@/styles/developer.css';
 
-const NAV = [
-  { href: '/developer', label: 'Dashboard', icon: '📊' },
-  { href: '/developer/apps/new', label: 'Submit App', icon: '📤' },
-  { href: '/developer/builds', label: 'Builds', icon: '🔨' },
-  { href: '/developer/payouts', label: 'Payouts', icon: '💳' },
-  { href: '/developer/profile', label: 'Profile', icon: '👤' },
-];
+function DeveloperLayoutInner({ children }: { children: ReactNode }) {
+  const { user, loading, logout } = useAuth();
+  const router = useRouter();
 
-export default function DeveloperLayout({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#f6f8fa'
+      }}>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          style={{
+            width: 50,
+            height: 50,
+            border: '4px solid #e5e7eb',
+            borderTopColor: '#2563eb',
+            borderRadius: '50%'
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="dev-shell">
@@ -23,29 +53,40 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
         <div className="dev-topbar-inner">
           <div className="dev-brand">
             <span className="dev-brand-logo" />
-            <span>Developer Portal</span>
+            <div>
+              <div style={{ fontWeight: 700 }}>Developer Portal</div>
+              <div style={{ fontSize: 11, color: '#64748b' }}>{user.name}</div>
+            </div>
           </div>
-          <div>
-            <Link href="/developer/apps/new" className="btn-primary" style={{marginRight:8}}>New app</Link>
-            <button className="btn-ghost">Logout</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Link href="/developer/apps/new">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="btn-primary"
+              >
+                + New App
+              </motion.button>
+            </Link>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              onClick={logout}
+              className="btn-ghost"
+            >
+              Logout
+            </motion.button>
           </div>
         </div>
       </div>
 
       {/* Sidebar */}
       <aside className="dev-sidebar">
-        <div className="dev-sidebar-header">Meta-style Console</div>
+        <div className="dev-sidebar-header">Navigation</div>
         <nav className="dev-nav">
-          {NAV.map((n) => (
-            <Link
-              key={n.href}
-              href={n.href}
-              className={pathname === n.href ? 'active' : ''}
-            >
-              <span>{n.icon}</span>
-              <span>{n.label}</span>
-            </Link>
-          ))}
+          <Link href="/developer">📊 Dashboard</Link>
+          <Link href="/developer/apps/new">📤 Submit App</Link>
+          <Link href="/developer/builds">🔨 Builds</Link>
+          <Link href="/developer/payouts">💳 Payouts</Link>
+          <Link href="/developer/profile">👤 Profile</Link>
         </nav>
       </aside>
 
@@ -54,5 +95,13 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
         <div className="dev-container">{children}</div>
       </main>
     </div>
+  );
+}
+
+export default function DeveloperLayout({ children }: { children: ReactNode }) {
+  return (
+    <AuthProvider>
+      <DeveloperLayoutInner>{children}</DeveloperLayoutInner>
+    </AuthProvider>
   );
 }
