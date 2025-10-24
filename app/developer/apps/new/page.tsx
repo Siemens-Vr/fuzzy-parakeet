@@ -62,81 +62,7 @@ export default function EnhancedAppSubmission() {
     }));
   };
 
-  // File upload handlers
-  const handleFileUpload = async (file: File, type: 'apk' | 'icon' | 'screenshot' | 'hero' | 'trailer') => {
-    const uploadedFile: UploadedFile = {
-      file,
-      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-      progress: 0,
-      status: 'uploading'
-    };
 
-    // Update state based on type
-    if (type === 'apk') setApkFile(uploadedFile);
-    else if (type === 'icon') setIconFile(uploadedFile);
-    else if (type === 'hero') setHeroImage(uploadedFile);
-    else if (type === 'trailer') setTrailerVideo(uploadedFile);
-    else if (type === 'screenshot') setScreenshots(prev => [...prev, uploadedFile]);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', type);
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const progress = Math.round((e.loaded / e.total) * 100);
-          
-          if (type === 'apk' && apkFile) {
-            setApkFile(prev => prev ? { ...prev, progress } : null);
-          } else if (type === 'icon' && iconFile) {
-            setIconFile(prev => prev ? { ...prev, progress } : null);
-          } else if (type === 'screenshot') {
-            setScreenshots(prev => prev.map((s, i) => 
-              i === prev.length - 1 ? { ...s, progress } : s
-            ));
-          }
-        }
-      });
-
-      xhr.addEventListener('load', () => {
-        if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          
-          if (type === 'apk') {
-            setApkFile(prev => prev ? { ...prev, status: 'completed', url: response.url, progress: 100 } : null);
-          } else if (type === 'icon') {
-            setIconFile(prev => prev ? { ...prev, status: 'completed', url: response.url, progress: 100 } : null);
-          } else if (type === 'screenshot') {
-            setScreenshots(prev => prev.map((s, i) => 
-              i === prev.length - 1 ? { ...s, status: 'completed', url: response.url, progress: 100 } : s
-            ));
-          } else if (type === 'hero') {
-            setHeroImage(prev => prev ? { ...prev, status: 'completed', url: response.url, progress: 100 } : null);
-          } else if (type === 'trailer') {
-            setTrailerVideo(prev => prev ? { ...prev, status: 'completed', url: response.url, progress: 100 } : null);
-          }
-        }
-      });
-
-      xhr.addEventListener('error', () => {
-        if (type === 'apk') setApkFile(prev => prev ? { ...prev, status: 'error' } : null);
-        else if (type === 'icon') setIconFile(prev => prev ? { ...prev, status: 'error' } : null);
-        else if (type === 'screenshot') {
-          setScreenshots(prev => prev.map((s, i) => 
-            i === prev.length - 1 ? { ...s, status: 'error' } : s
-          ));
-        }
-      });
-
-      xhr.open('POST', '/api/upload/asset');
-      xhr.send(formData);
-    } catch (error) {
-      console.error('Upload error:', error);
-    }
-  };
 
   // Drag and drop for APK
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -176,45 +102,113 @@ export default function EnhancedAppSubmission() {
   };
 
   // Submit handler
-  const handleSubmit = async () => {
-    setLoading(true);
+  // Replace the handleSubmit function in app/developer/apps/new/page.tsx
+// Starting around line 184
+
+const handleSubmit = async () => {
+  setLoading(true);
+  
+  try {
+    const submitData = new FormData();
     
-    try {
-      const submitData = new FormData();
-      
-      // Append form data
-      Object.entries(formData).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          submitData.append(key, JSON.stringify(value));
-        } else {
-          submitData.append(key, String(value));
-        }
-      });
+    // Append form data
+    submitData.append('name', formData.name);
+    submitData.append('summary', formData.summary);
+    submitData.append('description', formData.description);
+    submitData.append('category', formData.category);
+    submitData.append('price', formData.price.toString());
+    submitData.append('version', formData.version);
+    submitData.append('minApiLevel', formData.minApiLevel.toString());
+    submitData.append('targetDevices', JSON.stringify(formData.targetDevices));
+    submitData.append('permissions', JSON.stringify(formData.permissions));
+    submitData.append('releaseNotes', formData.releaseNotes);
+    
+    // Optional fields
+    if (formData.websiteUrl) submitData.append('websiteUrl', formData.websiteUrl);
+    if (formData.privacyPolicyUrl) submitData.append('privacyPolicyUrl', formData.privacyPolicyUrl);
+    if (formData.supportEmail) submitData.append('supportEmail', formData.supportEmail);
 
-      // Append file URLs
-      if (apkFile?.url) submitData.append('apkUrl', apkFile.url);
-      if (iconFile?.url) submitData.append('iconUrl', iconFile.url);
-      if (heroImage?.url) submitData.append('heroImageUrl', heroImage.url);
-      if (trailerVideo?.url) submitData.append('trailerUrl', trailerVideo.url);
-      
-      submitData.append('screenshots', JSON.stringify(screenshots.map(s => s.url).filter(Boolean)));
-
-      const response = await fetch('/api/developer/apps', {
-        method: 'POST',
-        body: submitData
-      });
-
-      if (!response.ok) throw new Error('Submission failed');
-
-      const result = await response.json();
-      router.push(`/developer/apps/${result.id}/success`);
-    } catch (error) {
-      console.error('Submission error:', error);
-      alert('Failed to submit app. Please try again.');
-    } finally {
-      setLoading(false);
+    // CRITICAL FIX: Append the actual File objects, not URLs
+    if (apkFile?.file) {
+      submitData.append('apk', apkFile.file);
+    } else {
+      throw new Error('APK file is required');
     }
+
+    if (iconFile?.file) {
+      submitData.append('icon', iconFile.file);
+    } else {
+      throw new Error('Icon file is required');
+    }
+
+    if (screenshots.length < 3) {
+      throw new Error('At least 3 screenshots are required');
+    }
+
+    // Append screenshot files with proper naming
+    screenshots.forEach((screenshot, index) => {
+      if (screenshot.file) {
+        submitData.append(`screenshot_${index}`, screenshot.file);
+      }
+    });
+
+    // Optional files
+    if (heroImage?.file) {
+      submitData.append('heroImage', heroImage.file);
+    }
+    
+    if (trailerVideo?.file) {
+      submitData.append('trailer', trailerVideo.file);
+    }
+
+    console.log('Submitting app with files...');
+    console.log('APK:', apkFile?.file?.name);
+    console.log('Icon:', iconFile?.file?.name);
+    console.log('Screenshots:', screenshots.length);
+
+    const response = await fetch('/api/developer/apps', {
+      method: 'POST',
+      body: submitData,
+      // Don't set Content-Type header - let browser set it with boundary
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Submission failed');
+    }
+
+    console.log('App created successfully:', result);
+
+    // Show success message and redirect
+    alert('App submitted successfully! Redirecting to dashboard...');
+    router.push('/developer');
+
+  } catch (error: any) {
+    console.error('Submission error:', error);
+    alert(`Failed to submit app: ${error.message}\n\nPlease check the console for details.`);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// SIMPLIFIED FILE HANDLER - No immediate upload
+const handleFileUpload = async (file: File, type: 'apk' | 'icon' | 'screenshot' | 'hero' | 'trailer') => {
+  const uploadedFile: UploadedFile = {
+    file,
+    preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+    progress: 100, // Mark as complete since we're not uploading yet
+    status: 'completed'
   };
+
+  // Update state based on type
+  if (type === 'apk') setApkFile(uploadedFile);
+  else if (type === 'icon') setIconFile(uploadedFile);
+  else if (type === 'hero') setHeroImage(uploadedFile);
+  else if (type === 'trailer') setTrailerVideo(uploadedFile);
+  else if (type === 'screenshot') setScreenshots(prev => [...prev, uploadedFile]);
+};
+  
 
   const steps = [
     { number: 1, label: 'Basic Info', icon: '📝' },
