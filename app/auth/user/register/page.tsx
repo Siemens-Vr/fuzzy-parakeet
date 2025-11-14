@@ -1,55 +1,76 @@
-// app/auth/user/login/page.tsx
+// app/auth/user/register/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function UserLoginPage() {
+export default function UserRegisterPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showSuccess, setShowSuccess] = useState(false);
-  const redirectTo = searchParams.get('redirect') || '/';
 
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
-    rememberMe: false,
+    confirmPassword: '',
+    agreeToTerms: false,
   });
 
-  // Show success message if just registered
-  useEffect(() => {
-    if (searchParams.get('registered') === 'true') {
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 5000);
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.password) {
+      setError('Please fill in all required fields');
+      return false;
     }
-  }, [searchParams]);
+
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return false;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return false;
+    }
+
+    if (!formData.agreeToTerms) {
+      setError('Please agree to the terms and conditions');
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!validateForm()) return;
+
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/user/login', {
+      const response = await fetch('/api/auth/user/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || 'Registration failed');
       }
 
-      // Redirect to original page or home
-      window.location.href = redirectTo;
+      // Redirect to login with success message
+      router.push('/auth/user/login?registered=true');
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -132,36 +153,12 @@ export default function UserLoginPage() {
             🎮
           </motion.div>
           <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 8px 0' }}>
-            Welcome Back!
+            Create Account
           </h1>
           <p style={{ fontSize: 15, opacity: 0.9, margin: 0 }}>
-            Sign in to download VR apps
+            Join us to download amazing VR apps
           </p>
         </div>
-
-        {/* Success Message */}
-        {showSuccess && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            style={{
-              background: '#dcfce7',
-              color: '#166534',
-              padding: 16,
-              margin: 24,
-              borderRadius: 12,
-              fontSize: 14,
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12
-            }}
-          >
-            <span style={{ fontSize: 20 }}>✓</span>
-            Registration successful! Please sign in to continue.
-          </motion.div>
-        )}
 
         {/* Error Message */}
         {error && (
@@ -196,14 +193,14 @@ export default function UserLoginPage() {
               color: '#0f172a',
               marginBottom: 8
             }}>
-              Email Address
+              Full Name *
             </label>
             <input
-              type="email"
+              type="text"
               required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="user@example.com"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="John Doe"
               style={{
                 width: '100%',
                 padding: '14px 16px',
@@ -226,14 +223,14 @@ export default function UserLoginPage() {
               color: '#0f172a',
               marginBottom: 8
             }}>
-              Password
+              Email Address *
             </label>
             <input
-              type="password"
+              type="email"
               required
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              placeholder="Enter your password"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="john@example.com"
               style={{
                 width: '100%',
                 padding: '14px 16px',
@@ -248,29 +245,89 @@ export default function UserLoginPage() {
             />
           </div>
 
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 32
-          }}>
+          <div style={{ marginBottom: 24 }}>
             <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              cursor: 'pointer',
+              display: 'block',
               fontSize: 14,
-              color: '#64748b'
+              fontWeight: 600,
+              color: '#0f172a',
+              marginBottom: 8
             }}>
-              <input
-                type="checkbox"
-                checked={formData.rememberMe}
-                onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
-                style={{ cursor: 'pointer', accentColor: '#0066cc' }}
-              />
-              Remember me
+              Password * (min 8 characters)
             </label>
+            <input
+              type="password"
+              required
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="Enter password"
+              style={{
+                width: '100%',
+                padding: '14px 16px',
+                borderRadius: 12,
+                border: '2px solid #e5e7eb',
+                fontSize: 15,
+                outline: 'none',
+                transition: 'all 0.2s'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#0066cc'}
+              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+            />
           </div>
+
+          <div style={{ marginBottom: 24 }}>
+            <label style={{
+              display: 'block',
+              fontSize: 14,
+              fontWeight: 600,
+              color: '#0f172a',
+              marginBottom: 8
+            }}>
+              Confirm Password *
+            </label>
+            <input
+              type="password"
+              required
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              placeholder="Confirm password"
+              style={{
+                width: '100%',
+                padding: '14px 16px',
+                borderRadius: 12,
+                border: '2px solid #e5e7eb',
+                fontSize: 15,
+                outline: 'none',
+                transition: 'all 0.2s'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#0066cc'}
+              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+            />
+            {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+              <div style={{ color: '#ef4444', fontSize: 13, marginTop: 6 }}>
+                Passwords do not match
+              </div>
+            )}
+          </div>
+
+          <label style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 12,
+            marginBottom: 32,
+            cursor: 'pointer'
+          }}>
+            <input
+              type="checkbox"
+              checked={formData.agreeToTerms}
+              onChange={(e) => setFormData({ ...formData, agreeToTerms: e.target.checked })}
+              style={{ marginTop: 4, cursor: 'pointer', accentColor: '#0066cc' }}
+            />
+            <span style={{ fontSize: 14, color: '#64748b', lineHeight: 1.6 }}>
+              I agree to the <strong style={{ color: '#0066cc' }}>Terms of Service</strong> and{' '}
+              <strong style={{ color: '#0066cc' }}>Privacy Policy</strong>
+            </span>
+          </label>
 
           <motion.button
             whileHover={{ scale: loading ? 1 : 1.02 }}
@@ -307,12 +364,12 @@ export default function UserLoginPage() {
                     borderRadius: '50%'
                   }}
                 />
-                Signing in...
+                Creating account...
               </>
             ) : (
               <>
-                Sign In
-                <span style={{ fontSize: 20 }}>→</span>
+                Create Account
+                <span style={{ fontSize: 20 }}>✓</span>
               </>
             )}
           </motion.button>
@@ -323,13 +380,13 @@ export default function UserLoginPage() {
             fontSize: 14,
             color: '#64748b'
           }}>
-            Don't have an account?{' '}
-            <Link href="/auth/user/register" style={{
+            Already have an account?{' '}
+            <Link href="/auth/user/login" style={{
               color: '#0066cc',
               fontWeight: 600,
               textDecoration: 'none'
             }}>
-              Sign up
+              Sign in
             </Link>
           </div>
 
@@ -340,12 +397,12 @@ export default function UserLoginPage() {
             color: '#64748b'
           }}>
             Are you a developer?{' '}
-            <Link href="/auth/login" style={{
+            <Link href="/auth/register" style={{
               color: '#00b894',
               fontWeight: 600,
               textDecoration: 'none'
             }}>
-              Developer Portal
+              Developer Registration
             </Link>
           </div>
         </form>
