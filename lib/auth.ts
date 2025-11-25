@@ -94,3 +94,31 @@ export async function requireDeveloper(req: NextRequest) {
   
   return { tokenPayload, developerId };
 }
+
+
+export function getAdminFromRequest(request: NextRequest): TokenPayload | null {
+  const token = request.cookies.get('admin_token')?.value;
+  if (!token) return null;
+  return verifyToken(token);
+}
+
+
+
+export async function requireAdmin(req: NextRequest) {
+  const tokenPayload = getAdminFromRequest(req);
+  
+  if (!tokenPayload || tokenPayload.role !== 'ADMIN') {
+    throw new Error('Unauthorized: Admin access required');
+  }
+  
+  // Get reviewer ID if exists
+  const reviewer = await prisma.reviewer.findUnique({
+    where: { userId: tokenPayload.userId },
+    select: { id: true }
+  });
+  
+  return { 
+    tokenPayload, 
+    reviewerId: reviewer?.id || '' 
+  };
+}
