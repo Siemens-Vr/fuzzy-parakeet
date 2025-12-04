@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
 
+
+
+function serializeBigInt(data: any): any {
+  return JSON.parse(JSON.stringify(data, (_, value) =>
+    typeof value === 'bigint' ? Number(value) : value
+  ));
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -50,7 +58,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(app);
+    return NextResponse.json(serializeBigInt(app));
 
   } catch (error: any) {
     console.error('GET /api/admin/apps/[id] error:', error);

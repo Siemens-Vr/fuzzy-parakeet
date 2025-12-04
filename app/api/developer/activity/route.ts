@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Generate activity feed
-    const activities = recentApps.flatMap((app, index) => {
+    const activities = recentApps.flatMap((app: { status: string; id: any; name: any; lastUpdated: { toISOString: () => any; }; downloads: number; }, index: number) => {
       const activities = [];
       
       // Status changes
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
 
     // Sort by timestamp and return most recent
     const sortedActivities = activities
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      .sort((a: { timestamp: string | number | Date; }, b: { timestamp: string | number | Date; }) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       .slice(0, 20);
 
     return NextResponse.json(sortedActivities);

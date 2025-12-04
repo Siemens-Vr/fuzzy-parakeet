@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const rows = apps.map(a => ({
+    const rows = apps.map((a: { id: any; name: any; status: any; downloads: any; revenue: any; rating: any; lastUpdated: { toISOString: () => any; }; version: any; iconUrl: any; }) => ({
       id: a.id,
       name: a.name,
       status: a.status,
@@ -152,7 +152,21 @@ export async function POST(req: NextRequest) {
 
     // ---- Create App + first Build in a transaction
     console.log('Creating app in database...');
-    const app = await prisma.$transaction(async (tx) => {
+    const app = await prisma.$transaction(async (tx: {
+        app: {
+          create: (arg0: {
+            data: {
+              slug: string; name: string; developerId: string; version: string; description: string; summary: string; category: Category; price: number;
+              // Files on App
+              apkUrl: string; iconUrl: string; screenshots: Prisma.JsonArray; heroImageUrl: string | null; trailerUrl: string | null;
+              // Technical
+              sizeBytes: bigint; minApiLevel: number; targetDevices: Prisma.JsonArray; permissions: Prisma.JsonArray;
+              // Status
+              status: "IN_REVIEW";
+            };
+          }) => any;
+        }; appBuild: { create: (arg0: { data: { appId: any; version: string; buildNumber: number; apkUrl: string; channel: "ALPHA"; isActive: boolean; releaseNotes: string; }; }) => any; };
+      }) => {
       const createdApp = await tx.app.create({
         data: {
           slug: slugify(name),

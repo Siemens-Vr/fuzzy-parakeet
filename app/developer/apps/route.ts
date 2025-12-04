@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  const rows = apps.map(a => ({
+  const rows = apps.map((a: { id: any; name: any; status: any; downloads: any; revenue: any; rating: any; lastUpdated: { toISOString: () => any; }; }) => ({
     id: a.id,
     name: a.name,
     status: a.status,                        // AppStatus enum string
@@ -143,7 +143,25 @@ export async function POST(req: NextRequest) {
   // const sha256 = crypto.createHash('sha256').update(apkBuf).digest('hex');
 
   // ---- Create App + first Build in a transaction
-  const app = await prisma.$transaction(async (tx) => {
+  const app = await prisma.$transaction(async (tx: {
+      app: {
+        create: (arg0: {
+          data: {
+            slug: string; name: string; developerId: any; version: string; // keep in App as per your schema
+            description: string; summary: string; category: Category; price: number;
+            // Files on App (optional but nice for store listing)
+            apkUrl: string; // you may keep main APK here too
+            iconUrl: string; screenshots: Prisma.JsonArray; heroImageUrl: string | null; trailerUrl: string | null;
+            // Technical
+            sizeBytes: bigint;
+            // sha256,                // uncomment if computed above
+            minApiLevel: number; targetDevices: Prisma.JsonArray; permissions: Prisma.JsonArray;
+            // Status
+            status: "IN_REVIEW";
+          };
+        }) => any;
+      }; appBuild: { create: (arg0: { data: { appId: any; version: string; buildNumber: number; apkUrl: string; channel: "ALPHA"; isActive: boolean; releaseNotes: string; }; }) => any; };
+    }) => {
     const createdApp = await tx.app.create({
       data: {
         slug: slugify(name),

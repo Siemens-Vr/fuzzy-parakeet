@@ -21,7 +21,7 @@ export async function POST(
     } = body;
 
     // Start transaction to update both review and app status
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: { appReview: { create: (arg0: { data: { appId: string; reviewerId: any; status: ReviewStatus; technicalPass: any; contentPass: any; notes: any; vrcResults: any; }; }) => any; }; app: { update: (arg0: { where: { id: string; }; data: { status: "CHANGES_REQUESTED" | "IN_REVIEW" | "PUBLISHED" | "SUSPENDED"; publishedAt: Date | undefined; }; }) => any; }; }) => {
       // Create review record
       const review = await tx.appReview.create({
         data: {

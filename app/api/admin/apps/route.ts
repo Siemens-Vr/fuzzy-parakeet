@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
 
+// Helper to convert BigInt to Number for JSON serialization
+function serializeBigInt(data: any): any {
+  return JSON.parse(JSON.stringify(data, (_, value) =>
+    typeof value === 'bigint' ? Number(value) : value
+  ));
+}
+
 export async function GET(req: NextRequest) {
   try {
     await requireAdmin(req);
@@ -57,7 +64,7 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: 'desc' }
     });
 
-    return NextResponse.json(apps);
+    return NextResponse.json(serializeBigInt(apps));
   } catch (error: any) {
     console.error('GET /api/admin/apps error:', error);
     return NextResponse.json(

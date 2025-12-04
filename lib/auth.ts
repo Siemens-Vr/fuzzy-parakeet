@@ -1,9 +1,11 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions, Secret } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { NextRequest } from 'next/server';
 import { prisma } from './prisma';
+import crypto from 'crypto';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this';
+const JWT_SECRET: Secret =
+  process.env.JWT_SECRET || 'your-secret-key-change-this';
 
 export interface TokenPayload {
   userId: string;
@@ -12,8 +14,12 @@ export interface TokenPayload {
   developerId?: string;
 }
 
-export function generateToken(payload: TokenPayload, expiresIn = '7d'): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn });
+export function generateToken(
+  payload: TokenPayload,
+  expiresIn: SignOptions['expiresIn'] = '7d'
+): string {
+  const options: SignOptions = { expiresIn };
+  return jwt.sign(payload, JWT_SECRET, options);
 }
 
 export function verifyToken(token: string): TokenPayload | null {
@@ -28,7 +34,10 @@ export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);
 }
 
-export async function comparePassword(password: string, hash: string): Promise<boolean> {
+export async function comparePassword(
+  password: string,
+  hash: string
+): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
 
@@ -38,26 +47,24 @@ export function getUserFromRequest(request: NextRequest): TokenPayload | null {
   return verifyToken(token);
 }
 
+// For email verification tokens (not JWT)
 export function generateVerificationToken(): string {
-  return Math.random().toString(36).substring(2, 15) + 
-         Math.random().toString(36).substring(2, 15);
+  return crypto.randomBytes(32).toString('hex');
 }
 
 /**
- * NEW: Get current developer ID from request
- * Checks token and resolves developer record
+ * Get current developer ID from request
  */
-export async function getCurrentDeveloperId(req: NextRequest): Promise<string | null> {
-  // First try to get from token payload
+export async function getCurrentDeveloperId(
+  req: NextRequest
+): Promise<string | null> {
   const tokenPayload = getUserFromRequest(req);
   if (!tokenPayload) return null;
 
-  // If developerId is in token, return it
   if (tokenPayload.developerId) {
     return tokenPayload.developerId;
   }
 
-  // Otherwise, look up developer by userId
   try {
     const developer = await prisma.developer.findUnique({
       where: { userId: tokenPayload.userId },
@@ -71,7 +78,7 @@ export async function getCurrentDeveloperId(req: NextRequest): Promise<string | 
 }
 
 /**
- * NEW: Require authentication middleware helper
+ * Require authentication middleware helper
  */
 export async function requireAuth(req: NextRequest) {
   const tokenPayload = getUserFromRequest(req);
@@ -82,43 +89,41 @@ export async function requireAuth(req: NextRequest) {
 }
 
 /**
- * NEW: Require developer authentication
+ * Require developer authentication
  */
 export async function requireDeveloper(req: NextRequest) {
   const tokenPayload = await requireAuth(req);
   const developerId = await getCurrentDeveloperId(req);
-  
+
   if (!developerId) {
     throw new Error('Unauthorized: Developer account required');
   }
-  
+
   return { tokenPayload, developerId };
 }
 
-
-export function getAdminFromRequest(request: NextRequest): TokenPayload | null {
+export function getAdminFromRequest(
+  request: NextRequest
+): TokenPayload | null {
   const token = request.cookies.get('admin_token')?.value;
   if (!token) return null;
   return verifyToken(token);
 }
 
-
-
 export async function requireAdmin(req: NextRequest) {
   const tokenPayload = getAdminFromRequest(req);
-  
+
   if (!tokenPayload || tokenPayload.role !== 'ADMIN') {
     throw new Error('Unauthorized: Admin access required');
   }
-  
-  // Get reviewer ID if exists
+
   const reviewer = await prisma.reviewer.findUnique({
     where: { userId: tokenPayload.userId },
     select: { id: true }
   });
-  
-  return { 
-    tokenPayload, 
-    reviewerId: reviewer?.id || '' 
+
+  return {
+    tokenPayload,
+    reviewerId: reviewer?.id || ''
   };
 }
