@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* Modern reset and base styles */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -1027,6 +1026,3 @@ body {
   background: linear-gradient(90deg, var(--surface) 0px, var(--surface-hover) 40px, var(--surface) 80px);
   background-size: 200px 100%;
 }
-
-
-
