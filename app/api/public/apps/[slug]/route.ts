@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
@@ -12,70 +11,114 @@ export async function GET(
     const { slug } = params;
 
     const app = await prisma.app.findUnique({
-      where: { 
-        slug,
-        status: 'PUBLISHED',
-      },
-      select: {
-        id: true,
-        slug: true,
-        name: true,
-        version: true,
-        summary: true,
-        description: true,
-        iconUrl: true,
-        screenshots: true,
-        heroImageUrl: true,
-        trailerUrl: true,
-        category: true,
-        rating: true,
-        downloads: true,
-        sizeBytes: true,
-        minApiLevel: true,
-        targetDevices: true,
-        permissions: true,
-        lastUpdated: true,
-        publishedAt: true,
-        apkUrl: true,
-        developer: {
-          select: {
-            organizationName: true,
-            websiteUrl: true,
-          }
-        }
+      where: { slug },
+      include: {
+        developer: true,
       },
     });
 
-    if (!app) {
+    // Not found or not published → 404
+    if (!app || app.status !== 'PUBLISHED') {
       return NextResponse.json(
         { error: 'App not found' },
         { status: 404 }
       );
     }
 
-    // Format response
+    // Helpers to coerce Json fields into arrays
+    const asArray = (value: any): any[] =>
+      Array.isArray(value) ? value : [];
+
+    const tags = asArray(app.tags);
+    const screenshots = asArray(app.screenshots);
+    const targetDevices = asArray(app.targetDevices);
+    const permissions = asArray(app.permissions);
+    const features = asArray(app.features);
+    const languages = asArray(app.languages);
+    const playerModes = asArray(app.playerModes);
+
     const formattedApp = {
+      id: app.id,
       slug: app.slug,
       name: app.name,
       version: app.version,
       summary: app.summary,
       description: app.description,
-      icon: app.iconUrl,
-      screenshots: Array.isArray(app.screenshots) ? app.screenshots : [],
-      heroImage: app.heroImageUrl,
-      trailer: app.trailerUrl,
-      developer: app.developer.organizationName,
-      developerWebsite: app.developer.websiteUrl,
+
+      developer: {
+        id: app.developer.id,
+        organizationName: app.developer.organizationName,
+        isVerified: app.developer.isVerified,
+      },
+
+      // Categorisation
       category: app.category,
-      rating: app.rating || 0,
-      downloads: app.downloads,
-      sizeBytes: Number(app.sizeBytes),
+      subcategory: app.subcategory ?? null,
+      tags,
+
+      contentRating: app.contentRating,       // e.g. 'EVERYONE'
+      price: app.price,
+      currency: app.currency,
+      salePrice: app.salePrice ?? null,
+      saleEndDate: app.saleEndDate
+        ? app.saleEndDate.toISOString()
+        : null,
+
+      // Media
+      iconUrl: app.iconUrl,
+      screenshots,
+      heroImageUrl: app.heroImageUrl,
+      trailerUrl: app.trailerUrl,
+      promoVideoUrl: app.promoVideoUrl,
+
+      // Technical
+      sizeBytes: Number(app.sizeBytes),       // BigInt → number
       minApiLevel: app.minApiLevel,
-      targetDevices: Array.isArray(app.targetDevices) ? app.targetDevices : [],
-      permissions: Array.isArray(app.permissions) ? app.permissions : [],
+      targetDevices,
+      permissions,
+
+      // Enhanced details
+      features,
+      whatsNew: app.whatsNew ?? null,
+      languages,
+      privacyPolicyUrl: app.privacyPolicyUrl ?? null,
+      supportUrl: app.supportUrl ?? null,
+      supportEmail: app.supportEmail ?? null,
+      discordUrl: app.discordUrl ?? null,
+      twitterUrl: app.twitterUrl ?? null,
+      youtubeUrl: app.youtubeUrl ?? null,
+
+      // Hardware / comfort
+      requiresHandTracking: app.requiresHandTracking,
+      requiresPassthrough: app.requiresPassthrough,
+      requiresControllers: app.requiresControllers,
+      comfortLevel: app.comfortLevel,        // 'COMFORTABLE' | 'MODERATE' | 'INTENSE'
+      playArea: app.playArea,                // 'SEATED' | 'STANDING' | 'ROOMSCALE'
+      playerModes,
+
+      // Extra info
+      estimatedPlayTime: app.estimatedPlayTime ?? null,
+      ageRating: app.ageRating ?? null,
+      containsAds: app.containsAds,
+      hasInAppPurchases: app.hasInAppPurchases,
+      inAppPurchaseInfo: app.inAppPurchaseInfo ?? null,
+      credits: app.credits ?? null,
+      acknowledgments: app.acknowledgments ?? null,
+
+      // Status & dates
+      status: app.status,
+      publishedAt: app.publishedAt
+        ? app.publishedAt.toISOString()
+        : null,
       lastUpdated: app.lastUpdated.toISOString(),
-      releaseDate: app.publishedAt?.toISOString(),
-      apkFileName: app.apkUrl?.split('/').pop() || `${app.slug}.apk`,
+      createdAt: app.createdAt.toISOString(),
+
+      // Metrics
+      rating: app.rating ?? 0,
+      ratingCount: app.ratingCount ?? 0,
+      downloads: app.downloads ?? 0,
+      viewCount: app.viewCount ?? 0,
+      wishlistCount: app.wishlistCount ?? 0,
     };
 
     return NextResponse.json(formattedApp, {

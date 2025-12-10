@@ -315,15 +315,18 @@ export default function AppDetailsPage() {
 
   useEffect(() => {
     // In production, fetch from API
-    // const fetchApp = async () => {
-    //   const res = await fetch(`/api/apps/${params.slug}`);
-    //   const data = await res.json();
-    //   setApp(data);
-    // };
+    const fetchApp = async () => {
+      const res = await fetch(`/api/public/apps/${params.slug}`);
+      const data = await res.json();
+      console.log("app gotten",data)
+      setApp(data);
+    };
+
+    fetchApp()
     
     // Using mock data for demonstration
     setTimeout(() => {
-      setApp(MOCK_APP);
+      setApp(app);
       setReviews(MOCK_REVIEWS);
       setRelatedApps(MOCK_RELATED);
       setLoading(false);
