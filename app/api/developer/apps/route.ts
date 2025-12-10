@@ -1,10 +1,21 @@
+// app/api/developer/apps/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getCurrentDeveloperId, requireDeveloper } from '@/lib/auth';
+import { requireDeveloper } from '@/lib/auth';
 import { promises as fs } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { AppStatus, Category, ReleaseChannel, Prisma } from '@prisma/client';
+import {
+  AppStatus,
+  Category,
+  ReleaseChannel,
+  Prisma,
+  ContentRating,
+  ComfortLevel,
+  PlayArea,
+} from '@prisma/client';
+
+export const dynamic = 'force-dynamic';
 
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -23,10 +34,26 @@ async function saveFile(file: File, folder: string) {
   await fs.mkdir(dirAbs, { recursive: true });
   await fs.writeFile(abs, buf);
 
-  return rel; // public URL path
+  return rel;
 }
 
-/** GET: list current developer's apps for dashboard */
+function parseJsonArray(value: FormDataEntryValue | null): any[] {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(String(value));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function parseBool(value: FormDataEntryValue | null, defaultValue = false) {
+  if (value == null) return defaultValue;
+  const v = String(value).toLowerCase();
+  return v === 'true' || v === '1' || v === 'on' || v === 'yes';
+}
+
+/** GET: current developer's apps (dashboard) */
 export async function GET(req: NextRequest) {
   try {
     const { developerId } = await requireDeveloper(req);
@@ -47,7 +74,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const rows = apps.map((a: { id: any; name: any; status: any; downloads: any; revenue: any; rating: any; lastUpdated: { toISOString: () => any; }; version: any; iconUrl: any; }) => ({
+    const rows = apps.map(a => ({
       id: a.id,
       name: a.name,
       status: a.status,
@@ -63,8 +90,8 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     console.error('GET /api/developer/apps error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch apps' },
-      { status: error.message?.includes('Unauthorized') ? 401 : 500 }
+      { message: error?.message || 'Failed to fetch apps' },
+      { status: error?.message?.includes('Unauthorized') ? 401 : 500 },
     );
   }
 }
@@ -73,47 +100,147 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const { developerId } = await requireDeveloper(req);
-
     const data = await req.formData();
 
-    // ---- Required core fields (per your model)
+    // ---- Required basics
     const name = String(data.get('name') || '').trim();
     const version = String(data.get('version') || '').trim();
     const summary = String(data.get('summary') || '').trim();
     const description = String(data.get('description') || '').trim();
     const categoryStr = String(data.get('category') || '').trim().toUpperCase();
-    const price = parseFloat(String(data.get('price') || '0')) || 0;
-
-    // Validate category enum
-    const validCategories = Object.values(Category);
-    if (!validCategories.includes(categoryStr as Category)) {
-      return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
-    }
 
     if (!name || !version || !summary || !description) {
-      return NextResponse.json({ error: 'Missing required fields: name, version, summary, description' }, { status: 400 });
+      return NextResponse.json(
+        {
+          message:
+            'Missing required fields: name, version, summary, description',
+        },
+        { status: 400 },
+      );
     }
 
-    // ---- Optional / technical JSON fields
+    const validCategories = Object.values(Category);
+    if (!validCategories.includes(categoryStr as Category)) {
+      return NextResponse.json(
+        { message: 'Invalid category' },
+        { status: 400 },
+      );
+    }
+
+    // Pricing
+    const price = parseFloat(String(data.get('price') || '0')) || 0;
+    const salePriceRaw = data.get('salePrice');
+    const salePrice =
+      salePriceRaw && String(salePriceRaw).trim() !== ''
+        ? parseFloat(String(salePriceRaw))
+        : null;
+    const saleEndDateRaw = data.get('saleEndDate');
+    const saleEndDate =
+      saleEndDateRaw && String(saleEndDateRaw).trim() !== ''
+        ? new Date(String(saleEndDateRaw))
+        : null;
+    const currency = String(data.get('currency') || 'USD').toUpperCase();
+
+    // Optional categorisation
+    const subcategory = String(data.get('subcategory') || '').trim() || null;
+
+    // Arrays
+    const tags = parseJsonArray(data.get('tags'));
+    const targetDevices = parseJsonArray(data.get('targetDevices'));
+    const playerModes = parseJsonArray(data.get('playerModes'));
+    const languages = parseJsonArray(data.get('languages'));
+    const features = parseJsonArray(data.get('features'));
+    const permissions = parseJsonArray(data.get('permissions'));
+
+    // Text fields
+    const whatsNew = String(data.get('whatsNew') || '').trim() || null;
+    const privacyPolicyUrl =
+      String(data.get('privacyPolicyUrl') || '').trim() || null;
+    const supportUrl = String(data.get('supportUrl') || '').trim() || null;
+    const supportEmail =
+      String(data.get('supportEmail') || '').trim() || null;
+    const discordUrl = String(data.get('discordUrl') || '').trim() || null;
+    const twitterUrl = String(data.get('twitterUrl') || '').trim() || null;
+    const youtubeUrl = String(data.get('youtubeUrl') || '').trim() || null;
+    const estimatedPlayTime =
+      String(data.get('estimatedPlayTime') || '').trim() || null;
+    const ageRating = String(data.get('ageRating') || '').trim() || null;
+    const inAppPurchaseInfo =
+      String(data.get('inAppPurchaseInfo') || '').trim() || null;
+    const developerNotes =
+      String(data.get('developerNotes') || '').trim() || null;
+    const credits = String(data.get('credits') || '').trim() || null;
+    const acknowledgments =
+      String(data.get('acknowledgments') || '').trim() || null;
+
+    // Booleans
+    const requiresHandTracking = parseBool(
+      data.get('requiresHandTracking'),
+      false,
+    );
+    const requiresPassthrough = parseBool(
+      data.get('requiresPassthrough'),
+      false,
+    );
+    const requiresControllers = parseBool(
+      data.get('requiresControllers'),
+      true,
+    );
+    const containsAds = parseBool(data.get('containsAds'), false);
+    const hasInAppPurchases = parseBool(
+      data.get('hasInAppPurchases'),
+      false,
+    );
+
+    // Technical
     const minApiLevel = parseInt(String(data.get('minApiLevel') || '29'), 10);
-    
-    let targetDevices: string[] = [];
-    try {
-      const td = data.get('targetDevices');
-      if (td) targetDevices = JSON.parse(String(td));
-    } catch {}
+    const targetApiLevelRaw = data.get('targetApiLevel');
+    const targetApiLevel =
+      targetApiLevelRaw && String(targetApiLevelRaw).trim() !== ''
+        ? parseInt(String(targetApiLevelRaw), 10)
+        : null;
 
-    let permissions: string[] = [];
-    try {
-      const p = data.get('permissions');
-      if (p) permissions = JSON.parse(String(p));
-    } catch {}
+    // Enums from form
+    const rawContentRating = String(
+      data.get('contentRating') || ContentRating.EVERYONE,
+    ).toUpperCase();
+    const rawComfortLevel = String(
+      data.get('comfortLevel') || ComfortLevel.COMFORTABLE,
+    ).toUpperCase();
+    const rawPlayArea = String(
+      data.get('playArea') || PlayArea.STANDING,
+    ).toUpperCase();
 
-    // ---- Files (APK required for initial build; icon/screens mandatory for store polish)
-    const apk = data.get('apk') as File | null;
-    const icon = data.get('icon') as File | null;
-    const hero = data.get('heroImage') as File | null;
-    const trailer = data.get('trailer') as File | null;
+    const contentRating = Object.values(ContentRating).includes(
+      rawContentRating as ContentRating,
+    )
+      ? (rawContentRating as ContentRating)
+      : ContentRating.EVERYONE;
+
+    const comfortLevel = Object.values(ComfortLevel).includes(
+      rawComfortLevel as ComfortLevel,
+    )
+      ? (rawComfortLevel as ComfortLevel)
+      : ComfortLevel.COMFORTABLE;
+
+    let playArea: PlayArea;
+    if (rawPlayArea === 'SEATED') {
+      playArea = PlayArea.SEATED;
+    } else if (
+      rawPlayArea === 'ROOMSCALE' ||
+      rawPlayArea === 'ROOM_SCALE' ||
+      rawPlayArea === 'BOTH' ||
+      rawPlayArea === 'STANDING_AND_ROOMSCALE'
+    ) {
+      playArea = PlayArea.ROOMSCALE;
+    } else {
+      playArea = PlayArea.STANDING;
+    }
+
+    // Files
+    const apk = data.get('apkFile') as File | null;
+    const icon = data.get('iconFile') as File | null;
+    const heroImage = data.get('heroImageFile') as File | null;
 
     const screenshots: File[] = [];
     for (const [k, v] of data.entries()) {
@@ -123,72 +250,98 @@ export async function POST(req: NextRequest) {
     }
 
     if (!apk) {
-      return NextResponse.json({ error: 'APK file is required' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'APK file is required' },
+        { status: 400 },
+      );
     }
     if (!icon) {
-      return NextResponse.json({ error: 'Icon is required' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'Icon is required' },
+        { status: 400 },
+      );
     }
     if (screenshots.length < 3) {
-      return NextResponse.json({ error: 'At least 3 screenshots are required' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'At least 3 screenshots are required' },
+        { status: 400 },
+      );
     }
 
-    // ---- Save files
-    console.log('Saving APK file...');
+    // Save files
     const apkUrl = await saveFile(apk, 'apks');
-    
-    console.log('Saving icon file...');
     const iconUrl = await saveFile(icon, 'icons');
-    
-    const heroImageUrl = hero ? await saveFile(hero, 'hero') : null;
-    const trailerUrl = trailer ? await saveFile(trailer, 'trailers') : null;
-    
-    console.log('Saving screenshots...');
+    const heroImageUrl = heroImage ? await saveFile(heroImage, 'hero') : null;
     const screenshotUrls = await Promise.all(
-      screenshots.slice(0, 10).map(f => saveFile(f, 'screens'))
+      screenshots.slice(0, 10).map(file => saveFile(file, 'screens')),
     );
 
-    // ---- Size (BigInt)
     const sizeBytes = BigInt((apk as any).size || 0);
+    const releaseNotes = String(data.get('releaseNotes') || '');
 
-    // ---- Create App + first Build in a transaction
-    console.log('Creating app in database...');
-    const app = await prisma.$transaction(async (tx: {
-        app: {
-          create: (arg0: {
-            data: {
-              slug: string; name: string; developerId: string; version: string; description: string; summary: string; category: Category; price: number;
-              // Files on App
-              apkUrl: string; iconUrl: string; screenshots: Prisma.JsonArray; heroImageUrl: string | null; trailerUrl: string | null;
-              // Technical
-              sizeBytes: bigint; minApiLevel: number; targetDevices: Prisma.JsonArray; permissions: Prisma.JsonArray;
-              // Status
-              status: "IN_REVIEW";
-            };
-          }) => any;
-        }; appBuild: { create: (arg0: { data: { appId: any; version: string; buildNumber: number; apkUrl: string; channel: "ALPHA"; isActive: boolean; releaseNotes: string; }; }) => any; };
-      }) => {
+    // Create app + first build
+    const app = await prisma.$transaction(async tx => {
       const createdApp = await tx.app.create({
         data: {
           slug: slugify(name),
           name,
           developerId,
+
           version,
-          description,
           summary,
+          description,
+
           category: categoryStr as Category,
+          subcategory,
+
+          tags: tags as unknown as Prisma.JsonArray,
+          contentRating,
           price,
-          // Files on App
+          currency,
+          salePrice,
+          saleEndDate,
+
           apkUrl,
           iconUrl,
           screenshots: screenshotUrls as unknown as Prisma.JsonArray,
           heroImageUrl,
-          trailerUrl,
-          // Technical
+          trailerUrl: null,
+          promoVideoUrl: null,
+
           sizeBytes,
+          sha256: null,
           minApiLevel,
+          targetApiLevel,
           targetDevices: targetDevices as unknown as Prisma.JsonArray,
           permissions: permissions as unknown as Prisma.JsonArray,
-          // Status
+
+          features: features as unknown as Prisma.JsonArray,
+          whatsNew,
+          languages: languages as unknown as Prisma.JsonArray,
+          privacyPolicyUrl,
+          supportUrl,
+          supportEmail,
+          discordUrl,
+          twitterUrl,
+          youtubeUrl,
+
+          requiresHandTracking,
+          requiresPassthrough,
+          requiresControllers,
+          comfortLevel,
+          playArea,
+          playerModes: playerModes as unknown as Prisma.JsonArray,
+
+          estimatedPlayTime,
+          ageRating,
+          containsAds,
+          hasInAppPurchases,
+          inAppPurchaseInfo,
+
+          developerNotes,
+          credits,
+          acknowledgments,
+
           status: AppStatus.IN_REVIEW,
         },
       });
@@ -201,26 +354,27 @@ export async function POST(req: NextRequest) {
           apkUrl,
           channel: ReleaseChannel.ALPHA,
           isActive: true,
-          releaseNotes: String(data.get('releaseNotes') || ''),
+          sizeBytes,
+          releaseNotes,
         },
       });
 
       return createdApp;
     });
 
-    console.log('App created successfully:', app.id);
-
-    return NextResponse.json({ 
-      id: app.id,
-      message: 'App submitted successfully',
-      status: 'IN_REVIEW'
-    });
-
+    return NextResponse.json(
+      {
+        id: app.id,
+        message: 'App submitted successfully',
+        status: app.status,
+      },
+      { status: 201 },
+    );
   } catch (error: any) {
     console.error('POST /api/developer/apps error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create app' },
-      { status: error.message?.includes('Unauthorized') ? 401 : 500 }
+      { message: error?.message || 'Failed to create app' },
+      { status: error?.message?.includes('Unauthorized') ? 401 : 500 },
     );
   }
 }

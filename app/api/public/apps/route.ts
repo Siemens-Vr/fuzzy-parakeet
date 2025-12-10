@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     // Build where clause
     const where: any = {
-      status: 'PUBLISHED',
+      // status: 'PUBLISHED',
     };
 
     if (category && category !== 'All apps') {
@@ -69,6 +69,8 @@ export async function GET(req: NextRequest) {
         }
       },
     });
+
+    console.log(apps)
 
     // Format response
    const formattedApps = apps.map(app => ({

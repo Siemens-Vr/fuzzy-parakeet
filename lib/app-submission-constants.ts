@@ -112,7 +112,7 @@ export const COMFORT_LEVELS: SelectOption[] = [
 ];
 
 export const PLAY_AREAS: SelectOption[] = [
-  { value: 'STATIONARY', label: 'Stationary', description: 'Play while seated or standing still' },
+  { value: 'SEATED', label: 'STATIONARY', description: 'Play while seated or standing still' },
   { value: 'ROOMSCALE', label: 'Room-Scale', description: 'Requires space to move around' },
   { value: 'BOTH', label: 'Both Supported', description: 'Works in stationary or room-scale' },
 ];
