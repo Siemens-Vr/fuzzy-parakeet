@@ -1,13 +1,14 @@
 // prisma/schema.prisma - Enhanced with payment integrations and detailed app info
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client"
+
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
+
 
 model User {
   id            String    @id @default(cuid())
@@ -363,23 +364,11 @@ enum ReviewStatus {
 
 enum Category {
   GAMES
-  EDUCATION
-  PRODUCTIVITY
-  ENTERTAINMENT
-  SOCIAL
-  UTILITIES
-  MEDICAL
-  FITNESS
-  ADVENTURE
-  SIMULATION
-  SPORTS
-  MUSIC
-  ART_CREATIVITY
-  TRAVEL
-  NEWS
-  COMMUNICATION
+  APPS
+  EXPERIENCES
   TOOLS
 }
+
 
 enum ContentRating {
   EVERYONE

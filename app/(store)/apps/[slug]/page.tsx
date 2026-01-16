@@ -92,7 +92,7 @@ type AdbLibs = {
 // Icon components
 const StarIcon = ({ filled = false, half = false }: { filled?: boolean; half?: boolean }) => (
   <svg
-    className={`w-5 h-5 ${filled ? 'text-yellow-400' : 'text-gray-300'}`}
+    className={`w-5 h-5 ${filled ? 'text-yellow-500' : 'text-[var(--border)]'}`}
     fill={filled || half ? 'currentColor' : 'none'}
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -146,13 +146,13 @@ const PlayIcon = () => (
 );
 
 const CheckIcon = () => (
-  <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <svg className="w-5 h-5 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
   </svg>
 );
 
 const VerifiedIcon = () => (
-  <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+  <svg className="w-5 h-5 text-[var(--primary)]" fill="currentColor" viewBox="0 0 24 24">
     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 );
@@ -258,8 +258,8 @@ const StarRating = ({ rating, count }: { rating: number; count: number }) => {
   return (
     <div className="flex items-center gap-1">
       <div className="flex">{stars}</div>
-      <span className="text-gray-600 ml-1">{rating?.toFixed(1) || 'N/A'}</span>
-      <span className="text-gray-400">({formatNumber(count)} reviews)</span>
+      <span className="text-[var(--text-secondary)] ml-1">{rating?.toFixed(1) || 'N/A'}</span>
+      <span className="text-[var(--text-tertiary)]">({formatNumber(count)} reviews)</span>
     </div>
   );
 };
@@ -472,18 +472,18 @@ export default function AppDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--primary)]"></div>
       </div>
     );
   }
 
   if (!app) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">App Not Found</h1>
-          <Link href="/apps" className="text-purple-400 hover:text-purple-300">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-4">App Not Found</h1>
+          <Link href="/apps" className="text-[var(--primary)] hover:text-[var(--primary-dark)]">
             Browse all apps →
           </Link>
         </div>
@@ -495,7 +495,7 @@ export default function AppDetailsPage() {
   const discountPercent = hasDiscount ? Math.round((1 - app.salePrice! / app.price) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-[var(--background)]">
       {/* LOGIN MODAL (for download/sideload) */}
       <AnimatePresence>
         {showLoginPrompt && (
@@ -504,25 +504,26 @@ export default function AppDetailsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowLoginPrompt(false)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           >
             <motion.div
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl p-8 max-w-sm text-center shadow-2xl"
+              className="bg-[var(--surface-elevated)] rounded-[var(--radius-xl)] p-8 max-w-sm text-center shadow-[var(--shadow-xl)] border-2 border-[var(--border)]"
             >
               <div className="text-5xl mb-2">🔐</div>
-              <h2 className="text-xl font-extrabold mb-2 text-gray-900">Sign In Required</h2>
-              <p className="text-sm text-slate-500 mb-6">
+              <h2 className="text-xl font-extrabold mb-2 text-[var(--text-primary)]">Sign In Required</h2>
+              <p className="text-sm text-[var(--text-tertiary)] mb-6">
                 You need to sign in to download or sideload apps from our store.
               </p>
               <Link href={`/auth/user/login?redirect=/apps/${params.slug}`}>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600"
+                  className="w-full py-3 px-6 rounded-[var(--radius-md)] font-bold text-white"
+                  style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                 >
                   Sign In
                 </motion.button>
@@ -546,13 +547,16 @@ export default function AppDetailsPage() {
                 : undefined,
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-gray-900/70 via-gray-900/80 to-gray-900" />
+          <div 
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to bottom, rgba(0,102,204,0.7) 0%, rgba(0,102,204,0.85) 50%, var(--background) 100%)' }}
+          />
         </div>
 
         {/* Hero Content */}
         <div className="relative max-w-7xl mx-auto px-4 pt-8 pb-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+          <nav className="flex items-center gap-2 text-sm text-white/70 mb-6">
             <Link href="/" className="hover:text-white">
               Home
             </Link>
@@ -576,7 +580,7 @@ export default function AppDetailsPage() {
             <div className="flex-1">
               <div className="flex items-start gap-6">
                 {/* App Icon */}
-                <div className="w-32 h-32 rounded-2xl bg-gray-800 overflow-hidden shadow-2xl flex-shrink-0 border-2 border-gray-700">
+                <div className="w-32 h-32 rounded-[var(--radius-xl)] bg-[var(--surface-elevated)] overflow-hidden shadow-[var(--shadow-xl)] flex-shrink-0 border-2 border-white/20">
                   {app.iconUrl ? (
                     <img
                       src={app.iconUrl}
@@ -584,7 +588,10 @@ export default function AppDetailsPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-purple-600 to-blue-600">
+                    <div 
+                      className="w-full h-full flex items-center justify-center text-4xl text-white"
+                      style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
+                    >
                       {app.name[0]}
                     </div>
                   )}
@@ -596,7 +603,7 @@ export default function AppDetailsPage() {
                     <span
                       className={`px-2 py-0.5 rounded text-xs font-medium ${
                         CONTENT_RATING_INFO[app.contentRating]?.color ||
-                        'bg-gray-700 text-gray-300'
+                        'bg-white/20 text-white'
                       }`}
                     >
                       {CONTENT_RATING_INFO[app.contentRating]?.label || app.contentRating}
@@ -615,23 +622,38 @@ export default function AppDetailsPage() {
                   <div className="flex items-center gap-3 mb-3">
                     <Link
                       href={`/developer/${app.developer.id}`}
-                      className="flex items-center gap-1 text-purple-400 hover:text-purple-300"
+                      className="flex items-center gap-1 text-white/80 hover:text-white"
                     >
                       {app.developer.organizationName}
                       {app.developer.isVerified && <VerifiedIcon />}
                     </Link>
                   </div>
 
-                  <p className="text-gray-300 text-lg mb-4">{app.summary}</p>
+                  <p className="text-white/90 text-lg mb-4">{app.summary}</p>
 
                   {/* Stats Row */}
                   <div className="flex flex-wrap items-center gap-6 text-sm">
-                    <StarRating rating={app.rating || 0} count={app.ratingCount} />
-                    <div className="flex items-center gap-1 text-gray-400">
+                    <div className="flex items-center gap-1">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <svg
+                            key={i}
+                            className={`w-5 h-5 ${i <= Math.floor(app.rating || 0) ? 'text-yellow-400' : 'text-white/30'}`}
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-white ml-1">{app.rating?.toFixed(1) || 'N/A'}</span>
+                      <span className="text-white/60">({formatNumber(app.ratingCount)} reviews)</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-white/80">
                       <DownloadIcon />
                       <span>{formatNumber(app.downloads)} downloads</span>
                     </div>
-                    <div className="text-gray-400">{formatFileSize(app.sizeBytes)}</div>
+                    <div className="text-white/80">{formatFileSize(app.sizeBytes)}</div>
                   </div>
                 </div>
               </div>
@@ -643,7 +665,7 @@ export default function AppDetailsPage() {
                     <Link
                       key={tag}
                       href={`/apps?tag=${tag}`}
-                      className="px-3 py-1 bg-gray-800/80 hover:bg-gray-700 text-gray-300 text-sm rounded-full transition-colors"
+                      className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white text-sm rounded-full transition-colors"
                     >
                       #{tag}
                     </Link>
@@ -654,25 +676,25 @@ export default function AppDetailsPage() {
 
             {/* Right: Purchase / Download / Sideload Card */}
             <div className="w-full lg:w-80 flex-shrink-0">
-              <div className="bg-gray-800/90 backdrop-blur rounded-2xl p-6 shadow-xl border border-gray-700">
+              <div className="bg-[var(--surface-elevated)] backdrop-blur rounded-[var(--radius-xl)] p-6 shadow-[var(--shadow-xl)] border-2 border-[var(--border)]">
                 {/* Price */}
                 <div className="mb-4">
                   {hasDiscount ? (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-bold text-white">
+                      <span className="text-3xl font-bold text-[var(--text-primary)]">
                         {formatPrice(app.salePrice!, app.currency)}
                       </span>
-                      <span className="text-lg text-gray-500 line-through">
+                      <span className="text-lg text-[var(--text-tertiary)] line-through">
                         {formatPrice(app.price, app.currency)}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-3xl font-bold text-white">
+                    <span className="text-3xl font-bold text-[var(--text-primary)]">
                       {formatPrice(app.price, app.currency)}
                     </span>
                   )}
                   {hasDiscount && app.saleEndDate && (
-                    <p className="text-sm text-green-400 mt-1">
+                    <p className="text-sm text-[var(--accent)] mt-1">
                       Sale ends {formatDate(app.saleEndDate)}
                     </p>
                   )}
@@ -684,7 +706,7 @@ export default function AppDetailsPage() {
                   {isPurchased ? (
                     <button
                       onClick={handleDownload}
-                      className="w-full py-3 px-4 bg-green-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+                      className="w-full py-3 px-4 bg-[var(--accent)] text-white font-semibold rounded-[var(--radius-md)] flex items-center justify-center gap-2"
                     >
                       <DownloadIcon />
                       Install
@@ -693,7 +715,10 @@ export default function AppDetailsPage() {
                     <>
                       {/* BUY NOW only if paid app */}
                       {app.price > 0 && (
-                        <button className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-xl transition-all transform hover:scale-[1.02]">
+                        <button 
+                          className="w-full py-3 px-4 text-white font-semibold rounded-[var(--radius-md)] transition-all transform hover:scale-[1.02] shadow-[var(--shadow-glow)]"
+                          style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
+                        >
                           Buy Now
                         </button>
                       )}
@@ -702,18 +727,19 @@ export default function AppDetailsPage() {
                       <div className="flex gap-3">
                         <button
                           onClick={handleDownload}
-                          className="flex-1 py-2 px-4 rounded-xl flex items-center justify-center gap-2 bg-gray-700 text-gray-100 hover:bg-gray-600 text-sm font-medium"
+                          className="flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 bg-[var(--surface)] text-[var(--text-primary)] hover:bg-[var(--surface-hover)] text-sm font-medium border border-[var(--border)]"
                         >
                           ⬇️ Download now
                         </button>
                         <button
                           onClick={handleSideload}
                           disabled={busy || !isChromeOrEdge}
-                          className={`flex-1 py-2 px-4 rounded-xl flex items-center justify-center gap-2 text-sm font-medium ${
+                          className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 text-sm font-medium ${
                             busy
-                              ? 'bg-purple-900/60 text-gray-200 cursor-wait'
-                              : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
+                              ? 'bg-[var(--primary-dark)] text-white/80 cursor-wait'
+                              : 'text-white hover:opacity-90'
                           } ${!isChromeOrEdge ? 'opacity-60 cursor-not-allowed' : ''}`}
+                          style={{ background: busy ? undefined : 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                         >
                           🎯 {busy ? 'Sideloading…' : 'Sideload now'}
                         </button>
@@ -725,10 +751,10 @@ export default function AppDetailsPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setIsWishlisted(!isWishlisted)}
-                      className={`flex-1 py-2 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors ${
+                      className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 transition-colors border ${
                         isWishlisted
-                          ? 'bg-pink-600 text-white'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          ? 'bg-pink-500 text-white border-pink-500'
+                          : 'bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] border-[var(--border)]'
                       }`}
                     >
                       <HeartIcon filled={isWishlisted} />
@@ -736,31 +762,31 @@ export default function AppDetailsPage() {
                         {isWishlisted ? 'Wishlisted' : 'Wishlist'}
                       </span>
                     </button>
-                    <button className="py-2 px-4 bg-gray-700 text-gray-300 rounded-xl hover:bg-gray-600 transition-colors">
+                    <button className="py-2 px-4 bg-[var(--surface)] text-[var(--text-secondary)] rounded-[var(--radius-md)] hover:bg-[var(--surface-hover)] transition-colors border border-[var(--border)]">
                       <ShareIcon />
                     </button>
                   </div>
                 </div>
 
                 {/* Quick Info */}
-                <div className="mt-6 pt-6 border-t border-gray-700 space-y-3 text-sm">
+                <div className="mt-6 pt-6 border-t border-[var(--border)] space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Version</span>
-                    <span className="text-white">{app.version}</span>
+                    <span className="text-[var(--text-tertiary)]">Version</span>
+                    <span className="text-[var(--text-primary)]">{app.version}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Updated</span>
-                    <span className="text-white">{formatDate(app.lastUpdated)}</span>
+                    <span className="text-[var(--text-tertiary)]">Updated</span>
+                    <span className="text-[var(--text-primary)]">{formatDate(app.lastUpdated)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Size</span>
-                    <span className="text-white">{formatFileSize(app.sizeBytes)}</span>
+                    <span className="text-[var(--text-tertiary)]">Size</span>
+                    <span className="text-[var(--text-primary)]">{formatFileSize(app.sizeBytes)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Comfort</span>
+                    <span className="text-[var(--text-tertiary)]">Comfort</span>
                     <span
                       className={`px-2 py-0.5 rounded text-xs ${
-                        COMFORT_INFO[app.comfortLevel]?.color || 'bg-gray-700'
+                        COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface)]'
                       }`}
                     >
                       {COMFORT_INFO[app.comfortLevel]?.icon}{' '}
@@ -771,14 +797,14 @@ export default function AppDetailsPage() {
 
                 {/* In-app purchases notice */}
                 {app.hasInAppPurchases && (
-                  <div className="mt-4 p-3 bg-yellow-900/30 border border-yellow-700/50 rounded-lg">
-                    <p className="text-yellow-400 text-xs">💰 Contains in-app purchases</p>
+                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-[var(--radius-md)]">
+                    <p className="text-yellow-700 text-xs">💰 Contains in-app purchases</p>
                   </div>
                 )}
 
                 {/* Sideload log (optional debugging info) */}
                 {sideloadLog && (
-                  <pre className="mt-4 max-h-40 overflow-auto text-xs bg-black/60 text-gray-200 rounded-lg p-3 whitespace-pre-wrap">
+                  <pre className="mt-4 max-h-40 overflow-auto text-xs bg-[var(--surface)] text-[var(--text-secondary)] rounded-[var(--radius-md)] p-3 whitespace-pre-wrap border border-[var(--border)]">
                     {sideloadLog}
                   </pre>
                 )}
@@ -793,7 +819,7 @@ export default function AppDetailsPage() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="relative">
             {/* Main Screenshot/Video */}
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-gray-800 mb-4">
+            <div className="relative aspect-video rounded-[var(--radius-xl)] overflow-hidden bg-[var(--surface)] mb-4 border-2 border-[var(--border)] shadow-[var(--shadow-lg)]">
               {showTrailer && app.trailerUrl ? (
                 <iframe
                   src={app.trailerUrl.replace('watch?v=', 'embed/')}
@@ -830,8 +856,8 @@ export default function AppDetailsPage() {
                     setShowTrailer(true);
                     setSelectedScreenshot(0);
                   }}
-                  className={`relative flex-shrink-0 w-32 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                    showTrailer ? 'border-purple-500' : 'border-transparent hover:border-gray-600'
+                  className={`relative flex-shrink-0 w-32 h-20 rounded-[var(--radius-md)] overflow-hidden border-2 transition-all ${
+                    showTrailer ? 'border-[var(--primary)]' : 'border-[var(--border)] hover:border-[var(--border-hover)]'
                   }`}
                 >
                   <img
@@ -855,10 +881,10 @@ export default function AppDetailsPage() {
                     setShowTrailer(false);
                     setSelectedScreenshot(index);
                   }}
-                  className={`flex-shrink-0 w-32 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`flex-shrink-0 w-32 h-20 rounded-[var(--radius-md)] overflow-hidden border-2 transition-all ${
                     !showTrailer && selectedScreenshot === index
-                      ? 'border-purple-500'
-                      : 'border-transparent hover:border-gray-600'
+                      ? 'border-[var(--primary)]'
+                      : 'border-[var(--border)] hover:border-[var(--border-hover)]'
                   }`}
                 >
                   <img
@@ -874,7 +900,7 @@ export default function AppDetailsPage() {
       )}
 
       {/* Tabs Navigation */}
-      <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur border-b border-gray-800">
+      <div className="sticky top-0 z-10 bg-[var(--background)]/95 backdrop-blur border-b border-[var(--border)]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-8">
             {[
@@ -887,8 +913,8 @@ export default function AppDetailsPage() {
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`py-4 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
-                    ? 'border-purple-500 text-purple-400'
-                    : 'border-transparent text-gray-400 hover:text-white'
+                    ? 'border-[var(--primary)] text-[var(--primary)]'
+                    : 'border-transparent text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 {tab.label}
@@ -906,18 +932,18 @@ export default function AppDetailsPage() {
             <div className="lg:col-span-2 space-y-8">
               {/* Description */}
               <section>
-                <h2 className="text-xl font-bold text-white mb-4">About this app</h2>
+                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">About this app</h2>
                 <div
-                  className={`prose prose-invert max-w-none ${
+                  className={`prose max-w-none ${
                     !expandDescription && 'line-clamp-6'
                   }`}
                 >
-                  <p className="text-gray-300 whitespace-pre-wrap">{app.description}</p>
+                  <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{app.description}</p>
                 </div>
                 {app.description.length > 500 && (
                   <button
                     onClick={() => setExpandDescription(!expandDescription)}
-                    className="mt-4 text-purple-400 hover:text-purple-300 text-sm font-medium"
+                    className="mt-4 text-[var(--primary)] hover:text-[var(--primary-dark)] text-sm font-medium"
                   >
                     {expandDescription ? 'Show less' : 'Read more'}
                   </button>
@@ -927,17 +953,20 @@ export default function AppDetailsPage() {
               {/* What's New */}
               {app.whatsNew && (
                 <section>
-                  <h2 className="text-xl font-bold text-white mb-4">What&apos;s New</h2>
-                  <div className="bg-gray-800 rounded-xl p-4">
+                  <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">What&apos;s New</h2>
+                  <div className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 border border-[var(--border)]">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="px-2 py-1 bg-purple-600 text-white text-xs font-bold rounded">
+                      <span 
+                        className="px-2 py-1 text-white text-xs font-bold rounded"
+                        style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
+                      >
                         v{app.version}
                       </span>
-                      <span className="text-gray-400 text-sm">
+                      <span className="text-[var(--text-tertiary)] text-sm">
                         {formatDate(app.lastUpdated)}
                       </span>
                     </div>
-                    <p className="text-gray-300 text-sm whitespace-pre-wrap">{app.whatsNew}</p>
+                    <p className="text-[var(--text-secondary)] text-sm whitespace-pre-wrap">{app.whatsNew}</p>
                   </div>
                 </section>
               )}
@@ -945,10 +974,10 @@ export default function AppDetailsPage() {
               {/* Features */}
               {app.features && app.features.length > 0 && (
                 <section>
-                  <h2 className="text-xl font-bold text-white mb-4">Features</h2>
+                  <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Features</h2>
                   <div className="grid grid-cols-2 gap-3">
                     {app.features.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-2 text-gray-300">
+                      <div key={index} className="flex items-center gap-2 text-[var(--text-secondary)]">
                         <CheckIcon />
                         <span>{feature}</span>
                       </div>
@@ -960,11 +989,11 @@ export default function AppDetailsPage() {
               {/* Credits */}
               {(app.credits || app.acknowledgments) && (
                 <section>
-                  <h2 className="text-xl font-bold text-white mb-4">Credits</h2>
-                  <div className="bg-gray-800 rounded-xl p-4 space-y-3 text-gray-300 text-sm">
+                  <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Credits</h2>
+                  <div className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 space-y-3 text-[var(--text-secondary)] text-sm border border-[var(--border)]">
                     {app.credits && <p>{app.credits}</p>}
                     {app.acknowledgments && (
-                      <p className="text-gray-400">{app.acknowledgments}</p>
+                      <p className="text-[var(--text-tertiary)]">{app.acknowledgments}</p>
                     )}
                   </div>
                 </section>
@@ -974,18 +1003,18 @@ export default function AppDetailsPage() {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Compatibility */}
-              <section className="bg-gray-800 rounded-xl p-5">
-                <h3 className="text-lg font-bold text-white mb-4">Compatibility</h3>
+              <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+                <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Compatibility</h3>
 
                 {/* Devices */}
                 {app.targetDevices && app.targetDevices.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="text-sm font-medium text-gray-400 mb-2">Supported Devices</h4>
+                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Supported Devices</h4>
                     <div className="flex flex-wrap gap-2">
                       {app.targetDevices.map((device) => (
                         <span
                           key={device}
-                          className="px-3 py-1 bg-gray-700 text-white text-sm rounded-full"
+                          className="px-3 py-1 bg-[var(--surface-elevated)] text-[var(--text-primary)] text-sm rounded-full border border-[var(--border)]"
                         >
                           {DEVICE_LABELS[device] || device}
                         </span>
@@ -997,8 +1026,8 @@ export default function AppDetailsPage() {
                 {/* Play Area & Comfort */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <h4 className="text-sm font-medium text-gray-400 mb-2">Play Area</h4>
-                    <div className="flex items-center gap-2 text-white">
+                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Play Area</h4>
+                    <div className="flex items-center gap-2 text-[var(--text-primary)]">
                       <span className="text-xl">
                         {PLAY_AREA_INFO[app.playArea]?.icon || '🎮'}
                       </span>
@@ -1006,10 +1035,10 @@ export default function AppDetailsPage() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-gray-400 mb-2">Comfort</h4>
+                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Comfort</h4>
                     <div
                       className={`inline-flex items-center gap-1 px-2 py-1 rounded text-sm ${
-                        COMFORT_INFO[app.comfortLevel]?.color || 'bg-gray-700'
+                        COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface-elevated)]'
                       }`}
                     >
                       <span>{COMFORT_INFO[app.comfortLevel]?.icon || '😊'}</span>
@@ -1022,33 +1051,33 @@ export default function AppDetailsPage() {
 
                 {/* Hardware Requirements */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-400 mb-2">Requirements</h4>
+                  <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Requirements</h4>
                   <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-gray-300">
+                    <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                       {app.requiresControllers ? (
                         <CheckIcon />
                       ) : (
-                        <span className="w-5 h-5 text-gray-600">✕</span>
+                        <span className="w-5 h-5 text-[var(--text-tertiary)]">✕</span>
                       )}
                       <span>
                         Controllers {app.requiresControllers ? 'Required' : 'Optional'}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-300">
+                    <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                       {app.requiresHandTracking ? (
                         <CheckIcon />
                       ) : (
-                        <span className="w-5 h-5 text-gray-600">✕</span>
+                        <span className="w-5 h-5 text-[var(--text-tertiary)]">✕</span>
                       )}
                       <span>
                         Hand Tracking {app.requiresHandTracking ? 'Required' : 'Supported'}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-300">
+                    <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                       {app.requiresPassthrough ? (
                         <CheckIcon />
                       ) : (
-                        <span className="w-5 h-5 text-gray-600">✕</span>
+                        <span className="w-5 h-5 text-[var(--text-tertiary)]">✕</span>
                       )}
                       <span>
                         Passthrough {app.requiresPassthrough ? 'Required' : 'Not Required'}
@@ -1060,12 +1089,12 @@ export default function AppDetailsPage() {
                 {/* Player Modes */}
                 {app.playerModes && app.playerModes.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-medium text-gray-400 mb-2">Player Modes</h4>
+                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Player Modes</h4>
                     <div className="flex flex-wrap gap-2">
                       {app.playerModes.map((mode) => (
                         <span
                           key={mode}
-                          className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded"
+                          className="px-2 py-1 bg-[var(--surface-elevated)] text-[var(--text-secondary)] text-xs rounded border border-[var(--border)]"
                         >
                           {PLAYER_MODE_LABELS[mode] || mode}
                         </span>
@@ -1077,13 +1106,13 @@ export default function AppDetailsPage() {
 
               {/* Permissions */}
               {app.permissions && app.permissions.length > 0 && (
-                <section className="bg-gray-800 rounded-xl p-5">
-                  <h3 className="text-lg font-bold text-white mb-4">Permissions</h3>
+                <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+                  <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Permissions</h3>
                   <div className="space-y-2">
                     {app.permissions.map((perm) => (
                       <div
                         key={perm}
-                        className="flex items-center gap-2 text-gray-300 text-sm"
+                        className="flex items-center gap-2 text-[var(--text-secondary)] text-sm"
                       >
                         <span>{PERMISSION_LABELS[perm]?.icon || '🔒'}</span>
                         <span>{PERMISSION_LABELS[perm]?.label || perm}</span>
@@ -1095,9 +1124,9 @@ export default function AppDetailsPage() {
 
               {/* Languages */}
               {app.languages && app.languages.length > 0 && (
-                <section className="bg-gray-800 rounded-xl p-5">
-                  <h3 className="text-lg font-bold text-white mb-4">Languages</h3>
-                  <p className="text-gray-300 text-sm">
+                <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+                  <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Languages</h3>
+                  <p className="text-[var(--text-secondary)] text-sm">
                     {app.languages
                       .map((lang) => {
                         const names: Record<string, string> = {
@@ -1109,6 +1138,8 @@ export default function AppDetailsPage() {
                           ko: 'Korean',
                           zh: 'Chinese',
                           pt: 'Portuguese',
+                          it: 'Italian',
+                          ru: 'Russian',
                           ar: 'Arabic',
                           sw: 'Swahili',
                         };
@@ -1120,15 +1151,15 @@ export default function AppDetailsPage() {
               )}
 
               {/* Support Links */}
-              <section className="bg-gray-800 rounded-xl p-5">
-                <h3 className="text-lg font-bold text-white mb-4">Support & Links</h3>
+              <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+                <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Support & Links</h3>
                 <div className="space-y-3">
                   {app.supportUrl && (
                     <a
                       href={app.supportUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm"
+                      className="flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary-dark)] text-sm"
                     >
                       <span>🌐</span> Support Website
                     </a>
@@ -1136,7 +1167,7 @@ export default function AppDetailsPage() {
                   {app.supportEmail && (
                     <a
                       href={`mailto:${app.supportEmail}`}
-                      className="flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm"
+                      className="flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary-dark)] text-sm"
                     >
                       <span>✉️</span> {app.supportEmail}
                     </a>
@@ -1146,7 +1177,7 @@ export default function AppDetailsPage() {
                       href={app.discordUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm"
+                      className="flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary-dark)] text-sm"
                     >
                       <span>💬</span> Discord Community
                     </a>
@@ -1156,7 +1187,7 @@ export default function AppDetailsPage() {
                       href={app.twitterUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm"
+                      className="flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary-dark)] text-sm"
                     >
                       <span>🐦</span> Twitter/X
                     </a>
@@ -1166,7 +1197,7 @@ export default function AppDetailsPage() {
                       href={app.youtubeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm"
+                      className="flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary-dark)] text-sm"
                     >
                       <span>📺</span> YouTube Channel
                     </a>
@@ -1176,7 +1207,7 @@ export default function AppDetailsPage() {
                       href={app.privacyPolicyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-400 hover:text-gray-300 text-sm"
+                      className="flex items-center gap-2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] text-sm"
                     >
                       <span>🔒</span> Privacy Policy
                     </a>
@@ -1185,26 +1216,26 @@ export default function AppDetailsPage() {
               </section>
 
               {/* Additional Info */}
-              <section className="bg-gray-800 rounded-xl p-5">
-                <h3 className="text-lg font-bold text-white mb-4">Additional Information</h3>
+              <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+                <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Additional Information</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Category</span>
-                    <span className="text-white capitalize">
+                    <span className="text-[var(--text-tertiary)]">Category</span>
+                    <span className="text-[var(--text-primary)] capitalize">
                       {app.category.toLowerCase()}
                     </span>
                   </div>
                   {app.subcategory && (
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Subcategory</span>
-                      <span className="text-white">{app.subcategory}</span>
+                      <span className="text-[var(--text-tertiary)]">Subcategory</span>
+                      <span className="text-[var(--text-primary)]">{app.subcategory}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Content Rating</span>
+                    <span className="text-[var(--text-tertiary)]">Content Rating</span>
                     <span
                       className={`px-2 py-0.5 rounded text-xs ${
-                        CONTENT_RATING_INFO[app.contentRating]?.color || 'bg-gray-700'
+                        CONTENT_RATING_INFO[app.contentRating]?.color || 'bg-[var(--surface-elevated)]'
                       }`}
                     >
                       {CONTENT_RATING_INFO[app.contentRating]?.label || app.contentRating}
@@ -1212,17 +1243,17 @@ export default function AppDetailsPage() {
                   </div>
                   {app.estimatedPlayTime && (
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Play Time</span>
-                      <span className="text-white">{app.estimatedPlayTime}</span>
+                      <span className="text-[var(--text-tertiary)]">Play Time</span>
+                      <span className="text-[var(--text-primary)]">{app.estimatedPlayTime}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Min API Level</span>
-                    <span className="text-white">Android {app.minApiLevel}</span>
+                    <span className="text-[var(--text-tertiary)]">Min API Level</span>
+                    <span className="text-[var(--text-primary)]">Android {app.minApiLevel}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Released</span>
-                    <span className="text-white">
+                    <span className="text-[var(--text-tertiary)]">Released</span>
+                    <span className="text-[var(--text-primary)]">
                       {app.publishedAt ? formatDate(app.publishedAt) : 'N/A'}
                     </span>
                   </div>
@@ -1240,16 +1271,16 @@ export default function AppDetailsPage() {
 
         {activeTab === 'related' && (
           <div>
-            <h2 className="text-xl font-bold text-white mb-6">Similar Apps You Might Like</h2>
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Similar Apps You Might Like</h2>
             {relatedApps.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {relatedApps.map((relatedApp) => (
                   <Link
                     key={relatedApp.id}
                     href={`/apps/${relatedApp.slug}`}
-                    className="bg-gray-800 rounded-xl p-4 hover:bg-gray-750 transition-colors group"
+                    className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 hover:bg-[var(--surface-hover)] transition-colors group border border-[var(--border)]"
                   >
-                    <div className="w-full aspect-square rounded-xl bg-gray-700 mb-3 overflow-hidden">
+                    <div className="w-full aspect-square rounded-[var(--radius-md)] bg-[var(--surface-elevated)] mb-3 overflow-hidden border border-[var(--border)]">
                       {relatedApp.iconUrl ? (
                         <img
                           src={relatedApp.iconUrl}
@@ -1257,31 +1288,34 @@ export default function AppDetailsPage() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-purple-600 to-blue-600">
+                        <div 
+                          className="w-full h-full flex items-center justify-center text-4xl text-white"
+                          style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
+                        >
                           {relatedApp.name[0]}
                         </div>
                       )}
                     </div>
-                    <h3 className="font-medium text-white truncate">{relatedApp.name}</h3>
+                    <h3 className="font-medium text-[var(--text-primary)] truncate">{relatedApp.name}</h3>
                     <div className="flex items-center gap-1 text-sm mt-1">
                       <StarIcon filled />
-                      <span className="text-gray-400">
+                      <span className="text-[var(--text-tertiary)]">
                         {relatedApp.rating?.toFixed(1) || 'N/A'}
                       </span>
                     </div>
-                    <div className="text-purple-400 font-medium mt-2">
+                    <div className="text-[var(--primary)] font-medium mt-2">
                       {formatPrice(relatedApp.price, relatedApp.currency)}
                     </div>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-gray-800 rounded-xl">
+              <div className="text-center py-12 bg-[var(--surface)] rounded-[var(--radius-lg)] border border-[var(--border)]">
                 <div className="text-4xl mb-4">🔍</div>
-                <h3 className="text-lg font-medium text-white mb-2">
+                <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
                   No related apps found
                 </h3>
-                <p className="text-gray-400">Check back later for recommendations</p>
+                <p className="text-[var(--text-tertiary)]">Check back later for recommendations</p>
               </div>
             )}
           </div>
@@ -1289,27 +1323,28 @@ export default function AppDetailsPage() {
       </div>
 
       {/* Footer CTA (Mobile sticky) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur border-t border-gray-800 p-4">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[var(--background)]/95 backdrop-blur border-t border-[var(--border)] p-4">
         <div className="flex items-center gap-4">
           <div className="flex-1">
             {hasDiscount ? (
               <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-white">
+                <span className="text-xl font-bold text-[var(--text-primary)]">
                   {formatPrice(app.salePrice!, app.currency)}
                 </span>
-                <span className="text-sm text-gray-500 line-through">
+                <span className="text-sm text-[var(--text-tertiary)] line-through">
                   {formatPrice(app.price, app.currency)}
                 </span>
               </div>
             ) : (
-              <span className="text-xl font-bold text-white">
+              <span className="text-xl font-bold text-[var(--text-primary)]">
                 {formatPrice(app.price, app.currency)}
               </span>
             )}
           </div>
           <button
             onClick={handleDownload}
-            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl"
+            className="px-8 py-3 text-white font-semibold rounded-[var(--radius-md)] shadow-[var(--shadow-glow)]"
+            style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
           >
             {app.price === 0 ? 'Download now' : 'Buy / Download'}
           </button>

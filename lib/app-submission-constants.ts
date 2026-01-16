@@ -70,11 +70,73 @@ export const STEPS: FormStep[] = [
 ];
 
 export const CATEGORIES: CategoryOption[] = [
-  { value: 'games', label: 'Games', subcategories: ['Action', 'Adventure', 'Puzzle', 'Simulation', 'Sports', 'Racing', 'RPG', 'Strategy', 'Horror', 'Casual', 'Rhythm', 'Fighting', 'Shooter'] },
-  { value: 'apps', label: 'Apps', subcategories: ['Productivity', 'Social', 'Education', 'Entertainment', 'Utilities', 'Health & Fitness', 'Media', 'Travel'] },
-  { value: 'experiences', label: 'Experiences', subcategories: ['Exploration', 'Meditation', 'Art', 'Music', 'Nature', 'Space', 'Historical', 'Documentary'] },
-  { value: 'tools', label: 'Tools', subcategories: ['Development', 'Design', 'Utilities', 'File Management', 'System'] },
+  {
+    value: 'GAMES',
+    label: 'Games',
+    subcategories: [
+      'Action',
+      'Adventure',
+      'Shooter',
+      'RPG',
+      'Strategy',
+      'Simulation',
+      'Sports',
+      'Racing',
+      'Puzzle',
+      'Horror',
+      'Fighting',
+      'Rhythm',
+      'Casual',
+    ],
+  },
+  {
+    value: 'APPS',
+    label: 'Apps',
+    subcategories: [
+      'Productivity',
+      'Education',
+      'Health',
+      'Fitness',
+      'Medical',
+      'Social',
+      'Communication',
+      'Media',
+      'Entertainment',
+      'News',
+      'Travel',
+    ],
+  },
+  {
+    value: 'EXPERIENCES',
+    label: 'Experiences',
+    subcategories: [
+      'Exploration',
+      'Adventure',
+      'Meditation',
+      'Art',
+      'Music',
+      'Nature',
+      'Space',
+      'Historical',
+      'Documentary',
+      'Cultural',
+      'Training',
+    ],
+  },
+  {
+    value: 'TOOLS',
+    label: 'Tools',
+    subcategories: [
+      'Development',
+      'Design',
+      'Utilities',
+      'System',
+      'File Management',
+      'Diagnostics',
+    ],
+  },
 ];
+
 
 export const TARGET_DEVICES: DeviceOption[] = [
   { value: 'quest_2', label: 'Meta Quest 2' },

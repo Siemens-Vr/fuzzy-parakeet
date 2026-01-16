@@ -78,6 +78,7 @@ export async function POST(req: NextRequest) {
           amount: data.amount,
           type: 'PURCHASE',
           status: 'COMPLETED',
+          provider: 'FLUTTERWAVE',
         },
       });
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useState } from 'react';
 
-type AppMeta = {
+export type AppMeta = {
   slug: string;
   name: string;
   version: string;

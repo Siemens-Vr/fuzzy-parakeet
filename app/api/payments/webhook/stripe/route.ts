@@ -6,6 +6,8 @@ import { stripeClient, stripe } from '@/lib/stripe';
 import { STRIPE_CONFIG } from '@/lib/payments';
 import Stripe from 'stripe';
 
+export const runtime = 'nodejs';          // Stripe SDK + crypto works best in Node
+export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.text();
@@ -164,6 +166,7 @@ async function handleSuccessfulPayment(session: Stripe.Checkout.Session) {
       amount,
       type: 'PURCHASE',
       status: 'COMPLETED',
+      provider: 'STRIPE',
     },
   });
 
@@ -201,9 +204,3 @@ async function handleRefund(charge: Stripe.Charge) {
   // Update purchase status to REFUNDED
 }
 
-// Disable body parsing for webhook route
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};

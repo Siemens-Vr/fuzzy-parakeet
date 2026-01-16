@@ -57,6 +57,7 @@ export default function RegisterPage() {
         websiteUrl: formData.websiteUrl || undefined,
       });
     } catch (err: any) {
+      console.log(err)
       setError(err.message || 'Registration failed');
     } finally {
       setLoading(false);

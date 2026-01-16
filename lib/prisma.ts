@@ -1,17 +1,26 @@
-import { PrismaClient } from '@prisma/client';
+import { Pool } from 'pg';
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
 
-declare global {
-  // Allow global `var prisma`
-  // This prevents TypeScript errors
-  var prisma: PrismaClient | undefined;
-}
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+// 1. Create a Pool instance (standard for 2026 driver adapters)
+const pool = new Pool({ 
+  connectionString: process.env.DATABASE_URL 
+});
+
+// 2. Initialize the adapter with the pool
+const adapter = new PrismaPg(pool);
 
 export const prisma =
-  global.prisma ||
+  globalForPrisma.prisma ??
   new PrismaClient({
-    log: ['query', 'error', 'warn'], // optional
+    adapter,
+    log: ["error", "warn"],
   });
 
-if (process.env.NODE_ENV !== 'production') {
-  global.prisma = prisma;
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
 }

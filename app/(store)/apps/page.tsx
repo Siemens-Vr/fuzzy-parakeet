@@ -1,14 +1,21 @@
 // app/page.tsx
 'use client';
-import { motion } from 'framer-motion';
+import { motion,  AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import AppCard from '@/components/AppCard';
-import HeroCarousel from '@/components/HeroCarousel';
-import Link from 'next/link';
-
+import Image from 'next/image';
 const categories = [
   'All apps',
   'Games', 
+  'Education',
+  'Entertainment',
+  'Productivity',
+  'Social',
+  'Utilities',
+  'Medical',
+  'Fitness',
+  'Adventure',
+  'Simulation',
   'Education',
   'Entertainment',
   'Productivity',
@@ -37,6 +44,7 @@ type App = {
   sizeBytes?: number;
 };
 
+
 export default function HomePage() {
   const [apps, setApps] = useState<App[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,6 +53,18 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState('downloads');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHoveringLeft, setIsHoveringLeft] = useState(false);
+   const [isHoveringRight, setIsHoveringRight] = useState(false);
+
+
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? categories.length - 1 : prev - 1));
+  };
+  const goToNext = () => setCurrentIndex((prev) => (prev + 1) % categories.length);
+ 
+  
 
   // Check if user is logged in
   useEffect(() => {
@@ -118,16 +138,7 @@ export default function HomePage() {
     }
   };
 
-  const SIDEBAR_ITEMS = [
-  { icon: '🏠', label: 'Home', href: '/', active: true },
-  { icon: '⬇️', label: 'Get VR APP STORE', href: '/download' },
-  { icon: '🎮', label: 'Apps and Games', href: '/apps' },
-  { icon: '👥', label: 'Groups', href: '/groups' },
-  { icon: '⚡', label: 'Indie Alliance', href: '/indie' },
-  { icon: '⭐', label: 'Advertise', href: '/advertise' },
-  { icon: '📰', label: 'Articles', href: '/articles', badge: 'New!' },
-  { icon: '❓', label: 'Help & Support', href: '/support' },
-];
+
 
 const CATEGORIES = [
   'All', 'Games', 'Education', 'Entertainment', 'Productivity', 
@@ -136,89 +147,9 @@ const CATEGORIES = [
 
 
   return (
-    <div className='app-shell'>
-  
-        <aside className="sidebar">
-        <div className="sidebar-header">
-          <Link href="/" className="logo">
-            <div className="logo-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-            </div>
-            <span className="logo-text">VR STORE</span>
-          </Link>
-        </div>
-
-        <div className="search-container">
-          <div className="search-box">
-            <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search VR Store..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <nav className="sidebar-nav">
-          {SIDEBAR_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`nav-item ${item.active ? 'active' : ''}`}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-label">{item.label}</span>
-              {item.badge && <span className="nav-badge">{item.badge}</span>}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="sidebar-footer">
-          <Link href="/developer" className="footer-link">Developer Portal</Link>
-          <Link href="/feedback" className="footer-link">Give us feedback</Link>
-          <Link href="/about" className="footer-link">About VR Store</Link>
-        </div>
-
-        {/* Promo Card */}
-        <div className="promo-card">
-          <p className="promo-text">Looking for some</p>
-          <h3 className="promo-title">Physics fueled<br/>fun with friends?</h3>
-          <div className="promo-image">🤖</div>
-        </div>
-
-        {/* Auth Section */}
-        <div className="auth-section">
-          {isLoggedIn ? (
-            <div className="user-info">
-              <div className="user-avatar">👤</div>
-              <span>My account</span>
-            </div>
-          ) : (
-            <Link href="/auth/user/login" className="login-button">
-              <div className="login-avatar">🎮</div>
-              <div className="login-text">
-                <span className="login-title">Log in or Sign up</span>
-                <span className="login-subtitle">My account</span>
-              </div>
-            </Link>
-          )}
-        </div>
-      </aside>
-     
-      <div className='main-content'>
-          {/* Hero Carousel */}
-          <HeroCarousel />
-
-          {/* Main Content */}
-          <div style={{ padding: '0 2rem' }}>
+      <div >
+         {/* Main Content */}
+          <div style={{  }}>
             {/* Search Bar */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -231,23 +162,7 @@ const CATEGORIES = [
                 alignItems: 'center'
               }}
             >
-              <input
-                type="text"
-                placeholder="🔍 Search apps..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  flex: 1,
-                  padding: '12px 20px',
-                  borderRadius: '12px',
-                  border: '2px solid var(--border)',
-                  fontSize: '15px',
-                  outline: 'none',
-                  transition: 'all 0.2s'
-                }}
-                onFocus={(e) => e.target.style.borderColor = '#0066cc'}
-                onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
-              />
+        
             </motion.div>
 
             {/* Category Filters */}
@@ -276,6 +191,120 @@ const CATEGORIES = [
                 </motion.button>
               ))}
             </motion.div>
+          
+
+       
+
+
+
+            {/* Triple Image Banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.6, ease: 'easeOut' }}
+              whileHover={{ scale: 1.01 }}
+              style={{
+                margin: '1rem 0 1.6rem',
+                height: 'clamp(200px, 22vw, 340px)',
+                borderRadius: '18px',
+                overflow: 'hidden',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                position: 'relative',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              {/* Background image */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `url('/hero/bg.webp')`, 
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  transform: 'scale(1.1)',
+                  zIndex: 0
+                }}
+              />
+
+
+              {/* Image 1 */}
+              <div style={{ position: 'relative' }}>
+                <Image
+                  src="/hero/left.webp"
+                  alt="Featured VR Character Left"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
+              </div>
+
+              {/* Image 2 (center – visual anchor) */}
+              <div style={{ position: 'relative' }}>
+                <Image
+                  src="/hero/center-image.webp"
+                  alt="Featured VR Character Center"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
+              </div>
+
+              {/* Image 3 */}
+              <div style={{ position: 'relative' }}>
+                <Image
+                  src="/hero/right-image.webp"
+                  alt="Featured VR Character Right"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
+              </div>
+
+              {/* Unified cinematic overlay */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background:
+                    'linear-gradient(90deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.65) 100%)',
+                  pointerEvents: 'none'
+                }}
+              />
+
+              {/* Optional text */}
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 'clamp(16px, 2.5vw, 28px)',
+                  bottom: 'clamp(16px, 2.5vw, 28px)',
+                  color: 'white',
+                  maxWidth: '60%'
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 'clamp(1.1rem, 2.4vw, 1.8rem)',
+                    fontWeight: 800,
+                    textShadow: '0 4px 14px rgba(0,0,0,0.9)'
+                  }}
+                >
+                  Legendary Worlds. One Store.
+                </div>
+                <div
+                  style={{
+                    opacity: 0.9,
+                    fontSize: 'clamp(0.85rem, 1.6vw, 1rem)'
+                  }}
+                >
+                  Explore cinematic VR experiences, games and simulations.
+                </div>
+              </div>
+            </motion.div>
+
+
+
+       
 
             {/* Page Header */}
             <motion.div
@@ -304,6 +333,8 @@ const CATEGORIES = [
               </h1>
             </motion.div>
 
+          
+
             {/* Filter Bar */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -318,10 +349,11 @@ const CATEGORIES = [
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
+                <option value="name">Name (A-Z)</option>
                 <option value="downloads">Most Downloaded</option>
                 <option value="rating">Top Rated</option>
                 <option value="newest">Newest</option>
-                <option value="name">Name (A-Z)</option>
+              
               </motion.select>
               
               <motion.label 
@@ -336,25 +368,6 @@ const CATEGORIES = [
                 Free apps only
               </motion.label>
 
-              <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px' }}>
-                <Link href="/auth/login">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    style={{
-                      padding: '0.875rem 1.5rem',
-                      borderRadius: '10px',
-                      border: '2px solid #0066cc',
-                      background: 'white',
-                      color: '#0066cc',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      fontSize: '0.875rem',
-                    }}
-                  >
-                    🚀 Developer Portal
-                  </motion.button>
-                </Link>
-              </div>
             </motion.div>
 
             {/* Loading State */}
@@ -426,7 +439,5 @@ const CATEGORIES = [
             )}
           </div>
       </div>
-    </div>
-    
   );
 }

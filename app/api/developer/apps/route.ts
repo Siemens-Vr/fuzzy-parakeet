@@ -102,6 +102,8 @@ export async function POST(req: NextRequest) {
     const { developerId } = await requireDeveloper(req);
     const data = await req.formData();
 
+    console.log(data)
+
     // ---- Required basics
     const name = String(data.get('name') || '').trim();
     const version = String(data.get('version') || '').trim();

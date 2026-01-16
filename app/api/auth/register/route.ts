@@ -6,7 +6,9 @@ import { generateToken } from '@/lib/utils';
 
 export async function POST(req: NextRequest) {
   try {
+    
     const body = await req.json();
+    console.log(body)
     const { email, password, name, company, organizationName, websiteUrl } = body;
 
     // Validation
