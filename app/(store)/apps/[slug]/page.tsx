@@ -308,6 +308,7 @@ export default function AppDetailsPage() {
     const fetchApp = async () => {
       try {
         const res = await fetch(`/api/public/apps/${params.slug}`);
+        // console.log(res)
         const data = await res.json();
         console.log('app gotten', data);
 
@@ -819,7 +820,7 @@ export default function AppDetailsPage() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="relative">
             {/* Main Screenshot/Video */}
-            <div className="relative aspect-video rounded-[var(--radius-xl)] overflow-hidden bg-[var(--surface)] mb-4 border-2 border-[var(--border)] shadow-[var(--shadow-lg)]">
+            {/* <div className="relative aspect-video rounded-[var(--radius-xl)] overflow-hidden bg-[var(--surface)] mb-4 border-2 border-[var(--border)] shadow-[var(--shadow-lg)]">
               {showTrailer && app.trailerUrl ? (
                 <iframe
                   src={app.trailerUrl.replace('watch?v=', 'embed/')}
@@ -846,7 +847,7 @@ export default function AppDetailsPage() {
                   )}
                 </>
               )}
-            </div>
+            </div> */}
 
             {/* Thumbnail Row */}
             <div className="flex gap-3 overflow-x-auto pb-2">

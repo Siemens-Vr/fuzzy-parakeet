@@ -1,8 +1,9 @@
 // prisma/schema.prisma - Enhanced with payment integrations and detailed app info
 
 generator client {
-  provider        = "prisma-client"
-
+  provider = "prisma-client"
+  output   = "../prisma/generated"
+ 
 }
 
 datasource db {

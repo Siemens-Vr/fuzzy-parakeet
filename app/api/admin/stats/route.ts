@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
-import { AppStatus } from '@prisma/client';
+import { AppStatus } from '@/prisma/generated/enums';
 
 export async function GET(req: NextRequest) {
   try {

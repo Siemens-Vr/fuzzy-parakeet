@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
-import { AppStatus, ReviewStatus } from '@prisma/client';
+import { AppStatus, ReviewStatus } from '@/prisma/generated/enums';
 
 export async function POST(
   req: NextRequest,

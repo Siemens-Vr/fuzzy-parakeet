@@ -3,7 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { promises as fs } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { AppStatus, Category, ReleaseChannel, Prisma } from '@prisma/client';
+import { AppStatus, Category, ReleaseChannel } from '@/prisma/generated/enums';
+import type { Prisma } from '@/prisma/generated/client';
 
 /** Resolve current developerId from headers or session (stub for your auth) */
 async function getCurrentDeveloperId(req: NextRequest) {

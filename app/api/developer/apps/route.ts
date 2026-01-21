@@ -9,11 +9,14 @@ import {
   AppStatus,
   Category,
   ReleaseChannel,
-  Prisma,
   ContentRating,
   ComfortLevel,
   PlayArea,
-} from '@prisma/client';
+} from '@/prisma/generated/enums';
+
+import type { Prisma } from '@/prisma/generated/client';
+
+
 
 export const dynamic = 'force-dynamic';
 
@@ -85,7 +88,7 @@ export async function GET(req: NextRequest) {
       version: a.version,
       iconUrl: a.iconUrl,
     }));
-
+      // console.log(rows)
     return NextResponse.json(rows);
   } catch (error: any) {
     console.error('GET /api/developer/apps error:', error);
@@ -102,7 +105,7 @@ export async function POST(req: NextRequest) {
     const { developerId } = await requireDeveloper(req);
     const data = await req.formData();
 
-    console.log(data)
+    // console.log(data)
 
     // ---- Required basics
     const name = String(data.get('name') || '').trim();
@@ -122,6 +125,7 @@ export async function POST(req: NextRequest) {
     }
 
     const validCategories = Object.values(Category);
+    console.log(validCategories)
     if (!validCategories.includes(categoryStr as Category)) {
       return NextResponse.json(
         { message: 'Invalid category' },

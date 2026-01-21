@@ -90,7 +90,7 @@ export default function DeveloperDashboard() {
           <h1 style={{fontSize:22, fontWeight:800, margin:0}}>Welcome back!</h1>
           <div className="helper">Here’s an overview of your app performance</div>
         </div>
-        <Link href="/developer/apps/new" className="btn-primary">Submit new app</Link>
+        <Link href="/developer/apps/new" className=" btn btn-primary">Submit new app</Link>
       </div>
 
       {stats && (

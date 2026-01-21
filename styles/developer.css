@@ -241,6 +241,7 @@ button {
   padding: 24px;
   box-shadow: var(--shadow-1);
   transition: var(--transition);
+  width:100%;
 }
 
 .card:hover {
@@ -287,7 +288,7 @@ button {
   cursor: not-allowed;
 }
 
-.btn-primary {
+.btn, .btn-primary {
   background: var(--blue-primary);
   color: white;
 }

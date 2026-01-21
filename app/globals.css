@@ -327,7 +327,6 @@ body {
   text-decoration: none;
   transition: var(--transition-base);
 }
-
 .login-button:hover {
   background: var(--surface-hover);
 }
@@ -382,15 +381,19 @@ body {
 /* ============================================
    Main Content Area
    ============================================ */
-.main-content {
-  flex: 1;
-  margin-left: var(--sidebar-width);
-  min-height: 100vh;
-  background: var(--background);
-  position: relative;
-  padding: 0;
-  transition: margin-left var(--transition-base);
-}
+   .main-content{
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--background);
+    position: relative;
+    transition: margin-left var(--transition-base);
+  
+    /* responsiveness helpers */
+    min-width: 0;                /* prevents overflow when content is wide */
+    /* padding: clamp(12px, 2vw, 28px); */
+  }
+  
 
 /* ============================================
    Hero Carousel
@@ -438,6 +441,9 @@ body {
   opacity: 0.4;
   mix-blend-mode: overlay;
 }
+
+
+
 
 /* ============================================
    Category Filters - Scrollable on Mobile
@@ -572,9 +578,12 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(209px, 1fr));
   gap: 1.5rem;
-  padding: 0 1rem 2rem;
+  padding:  2rem;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 20px;
+  background:var(--surface);
+  border-radius: var(--radius-lg);
+
 }
 
 /* ============================================
@@ -589,8 +598,8 @@ body {
   position: relative;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  /* height:209px;
-  width: 225px; */
+  height:209px;
+  width: 225px;
 }
 
 .card:hover {

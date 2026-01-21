@@ -112,14 +112,11 @@ export default function HomePage() {
   };
 
   return (
-    <>
+    <div>
       {/* Hero Carousel */}
       <HeroCarousel />
 
-      {/* Main Content  */}
       <div >
-      
-
         {/* Loading State */}
         {loading && (
           <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
@@ -174,6 +171,6 @@ export default function HomePage() {
       <div>
         <CategoryBrowse selectedCategory={selectedCategory} onCategorySelect={handleCategorySelect} />
       </div>
-    </>
+    </div>
   );
 }

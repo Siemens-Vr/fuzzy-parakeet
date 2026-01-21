@@ -63,7 +63,13 @@ export default function EnhancedDeveloperDashboard() {
       ]);
 
       if (statsRes.ok) setStats(await statsRes.json());
-      if (appsRes.ok) setApps(await appsRes.json());
+      console.log(appsRes)
+      if (appsRes.ok) {
+        const appsData: AppRow[] = await appsRes.json();
+        console.log('appsData from API:', appsData); // ✅ real data
+        setApps(appsData);
+      }
+      
       if (activityRes.ok) setRecentActivity(await activityRes.json());
     } catch (error) {
       console.error('Error fetching dashboard data:', error);

@@ -17,6 +17,8 @@ export async function GET(
       },
     });
 
+    // console.log(app)
+
     // Not found or not published → 404
     if (!app || app.status !== 'PUBLISHED') {
       return NextResponse.json(

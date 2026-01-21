@@ -62,7 +62,7 @@ function DeveloperLayoutInner({ children }: { children: ReactNode }) {
             <Link href="/developer/apps/new">
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                className="btn-primary"
+                className="btn btn-primary"
               >
                 + New App
               </motion.button>
@@ -70,7 +70,7 @@ function DeveloperLayoutInner({ children }: { children: ReactNode }) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               onClick={logout}
-              className="btn-ghost"
+              className="btn btn-ghost"
             >
               Logout
             </motion.button>
