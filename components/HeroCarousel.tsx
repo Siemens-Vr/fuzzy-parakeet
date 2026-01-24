@@ -58,8 +58,13 @@ export default function HeroCarousel() {
     setCurrentIndex((prev) => (prev === 0 ? heroImages.length - 1 : prev - 1));
   };
 
-  const goToNext = () => setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+  const goToNext = () =>
+    setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+
   const goToSlide = (index: number) => setCurrentIndex(index);
+
+  // Responsive hero height for the actual image container + img
+  const HERO_H = 'clamp(260px, 45vh, 520px)';
 
   return (
     <div>
@@ -67,7 +72,7 @@ export default function HeroCarousel() {
         style={{
           position: 'relative',
           width: '100%',
-          height: 'clamp(500px, 72vh, 650px)',
+          height: 'clamp(460px, 72vh, 650px)',
           overflow: 'hidden',
           backgroundColor: '#000'
         }}
@@ -93,7 +98,7 @@ export default function HeroCarousel() {
           />
         </AnimatePresence>
 
-        {/* Texture / angled overlay (BOTTOM-ANCHORED) */}
+        {/* Texture overlay */}
         <div
           aria-hidden="true"
           style={{
@@ -109,8 +114,7 @@ export default function HeroCarousel() {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.9,
-            filter: 'blur(2px)',
-            // filter: 'contrast(1.08) saturate(0.9)'
+            filter: 'blur(2px)'
           }}
         />
 
@@ -126,7 +130,7 @@ export default function HeroCarousel() {
           {/* Top bar spacer */}
           <div
             style={{
-              height: 'clamp(72px, 10vh, 100px)',
+              height: 'clamp(60px, 10vh, 100px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -142,22 +146,21 @@ export default function HeroCarousel() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0 clamp(16px, 6vw, 120px)',
-              paddingBottom: '70px', // space for pinned indicators
-              top: '-10px'
+              padding: '0 clamp(22px, 5vw, 130px)',
+              paddingBottom: '70px'
             }}
           >
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
                 style={{
                   width: '100%',
                   maxWidth: '1800px',
-                  height: '500px',
+                  height: HERO_H,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -169,14 +172,9 @@ export default function HeroCarousel() {
                   alt={heroImages[currentIndex].title}
                   style={{
                     width: '100%',
-                    height: '500px',
+                    height: HERO_H,
                     objectFit: 'cover',
                     borderRadius: '10px'
-                  }}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src =
-                      'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400"%3E%3Cdefs%3E%3ClinearGradient id="grad" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" style="stop-color:%230066cc;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%2300b894;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="800" height="400" fill="url(%23grad)" /%3E%3C/svg%3E';
                   }}
                 />
               </motion.div>
@@ -203,14 +201,11 @@ export default function HeroCarousel() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                fontSize: 'clamp(18px, 2.8vw, 24px)',
                 color: 'white',
                 transition: 'all 0.3s ease',
                 zIndex: 7
               }}
-              whileHover={{
-                borderColor: 'rgba(0, 184, 148, 1)'
-              }}
+              whileHover={{ borderColor: 'rgba(0, 184, 148, 1)' }}
               whileTap={{ scale: 0.95 }}
             >
               <motion.div
@@ -247,14 +242,11 @@ export default function HeroCarousel() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                fontSize: 'clamp(18px, 2.8vw, 24px)',
                 color: 'white',
                 transition: 'all 0.3s ease',
                 zIndex: 7
               }}
-              whileHover={{
-                borderColor: 'rgba(0, 184, 148, 1)'
-              }}
+              whileHover={{ borderColor: 'rgba(0, 184, 148, 1)' }}
               whileTap={{ scale: 0.95 }}
             >
               <motion.div
@@ -270,8 +262,9 @@ export default function HeroCarousel() {
               </motion.div>
             </motion.button>
 
-            {/* App info card ON TOP of hero image */}
+            {/* App info card (hide on laptop and smaller) */}
             <motion.div
+              className="hero-info-card"
               key={`card-${currentIndex}`}
               initial={{ opacity: 0, y: 30, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -279,34 +272,28 @@ export default function HeroCarousel() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               style={{
                 position: 'absolute',
-                left: '82%',
-                top: '100px',
-                transform: 'translateX(-50%)',
-                maxWidth: '250px',
-                height: '250px',
-                width: 'calc(100% - 100px)',
-                padding: 'clamp(16px, 3vw, 28px)',
+                right: 'clamp(12px, 3vw, 30px)',
+                top: 'clamp(60px, 10vh, 120px)',
+                width: 'min(320px, 40vw)',
+                padding: 'clamp(14px, 2vw, 20px)',
                 borderRadius: '16px',
-                background: 'black',
+                background: 'rgba(0,0,0,0.65)',
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
-                border: '1px solid rgba(255,255,255,0.25)',
-                boxShadow: `
-                  0 10px 30px rgba(0,0,0,0.55),
-                  inset 0 0 1px rgba(255,255,255,0.4)
-                `,
-                textAlign: 'center',
+                border: '1px solid rgba(255,255,255,0.18)',
+                boxShadow:
+                  '0 10px 30px rgba(0,0,0,0.55), inset 0 0 1px rgba(255,255,255,0.4)',
+                textAlign: 'left',
                 color: 'white',
                 zIndex: 6
               }}
             >
               <h2
                 style={{
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  marginBottom: '0.5rem',
-                  lineHeight: 1.2,
-                  textShadow: '0 2px 12px rgba(0,0,0,0.9)'
+                  fontSize: 'clamp(14px, 1.3vw, 18px)',
+                  fontWeight: 800,
+                  marginBottom: 8,
+                  lineHeight: 1.2
                 }}
               >
                 {heroImages[currentIndex].title}
@@ -314,17 +301,17 @@ export default function HeroCarousel() {
 
               <p
                 style={{
-                  fontSize: 'clamp(0.95rem, 2.2vw, 1.05rem)',
+                  fontSize: 'clamp(12px, 1.15vw, 14px)',
                   opacity: 0.9,
                   lineHeight: 1.5,
-                  textShadow: '0 2px 10px rgba(0,0,0,0.85)'
+                  margin: 0
                 }}
               >
                 {heroImages[currentIndex].description}
               </p>
             </motion.div>
 
-            {/* Indicators (PINNED bottom so they don't get clipped) */}
+            {/* Indicators */}
             <div
               style={{
                 position: 'absolute',
@@ -344,8 +331,6 @@ export default function HeroCarousel() {
                   alignItems: 'center',
                   padding: '10px 18px',
                   borderRadius: '999px',
-                  // background: 'rgba(0,0,0,0.45)',
-                  // border: '1px solid rgba(255,255,255,0.18)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
                   pointerEvents: 'auto'
@@ -356,7 +341,11 @@ export default function HeroCarousel() {
                     key={index}
                     type="button"
                     onClick={() => goToSlide(index)}
-                    style={currentIndex === index ? activeIndicatorStyle : inactiveIndicatorStyle}
+                    style={
+                      currentIndex === index
+                        ? activeIndicatorStyle
+                        : inactiveIndicatorStyle
+                    }
                     whileHover={{ scale: 1.12 }}
                     whileTap={{ scale: 0.92 }}
                   />
@@ -365,8 +354,14 @@ export default function HeroCarousel() {
             </div>
           </div>
 
-          {/* small-screen refinements */}
           <style jsx>{`
+            /* Hide the app info card on laptop and smaller */
+            @media (max-width: 1024px) {
+              .hero-info-card {
+                display: none !important;
+              }
+            }
+
             @media (max-width: 480px) {
               :global(button) {
                 -webkit-tap-highlight-color: transparent;
