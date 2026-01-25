@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { sendVerificationEmail } from '@/lib/email';
+import { generateToken } from '@/lib/utils';
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,6 +38,7 @@ export async function POST(req: NextRequest) {
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
+    const verifyToken = generateToken();
 
     // Create user with USER role
     const user = await prisma.user.create({
@@ -44,13 +47,27 @@ export async function POST(req: NextRequest) {
         password: hashedPassword,
         name,
         role: 'USER',
-        emailVerified: true, // Auto-verify for regular users
+        emailVerified: false,
+        verifyToken,
       }
     });
 
+    // Send verification email
+    let emailSent = false;
+    try {
+      console.log(`[UserRegister] Attempting to send verification email to: ${email}`);
+      console.log(`[UserRegister] Token: ${verifyToken}`);
+      await sendVerificationEmail(email, verifyToken);
+      console.log(`[UserRegister] Email sent successfully via nodemailer`);
+      emailSent = true;
+    } catch (emailError) {
+      console.error('[UserRegister] Failed to send verification email:', emailError);
+    }
+
     return NextResponse.json({
-      message: 'Registration successful. You can now log in.',
-      userId: user.id
+      message: 'Registration successful. Please check your email.',
+      userId: user.id,
+      emailSent
     });
 
   } catch (error) {

@@ -1,7 +1,8 @@
 import { sendMail } from './mailer';
 
 export async function sendVerificationEmail(to: string, token: string) {
-  const verifyUrl = `${process.env.APP_BASE_URL}/auth/verify-email?token=${token}`;
+  // Fix: Use path parameter to match [token] route structure
+  const verifyUrl = `${process.env.APP_BASE_URL}/auth/verify-email/${token}`;
 
   await sendMail({
     to,
@@ -18,6 +19,14 @@ export async function sendVerificationEmail(to: string, token: string) {
                   font-weight:bold;margin-top:16px;">
           Verify Email
         </a>
+
+        <p style="margin-top:24px;font-size:14px;color:#333;">
+            Or copy and paste this link into your browser:
+            <br/>
+            <a href="${verifyUrl}" style="color:#667eea; word-break: break-all;">
+                ${verifyUrl}
+            </a>
+        </p>
 
         <p style="margin-top:24px;font-size:13px;color:#666;">
           If you did not create this account, you can safely ignore this email.

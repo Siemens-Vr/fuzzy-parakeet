@@ -67,8 +67,11 @@ export default function UserRegisterPage() {
         throw new Error(data.error || 'Registration failed');
       }
 
+      const data = await response.json();
+
+      const emailSent = data.emailSent !== false;
       // Redirect to login with success message
-      router.push('/auth/user/login?registered=true');
+      router.push(`/auth/user/login?registered=true&email_sent=${emailSent}`);
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');
     } finally {

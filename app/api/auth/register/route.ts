@@ -6,7 +6,7 @@ import { generateToken } from '@/lib/utils';
 
 export async function POST(req: NextRequest) {
   try {
-    
+
     const body = await req.json();
     console.log(body)
     const { email, password, name, company, organizationName, websiteUrl } = body;
@@ -56,11 +56,19 @@ export async function POST(req: NextRequest) {
     });
 
     // Send verification email
-    await sendVerificationEmail(email, verifyToken);
+    let emailSent = false;
+    try {
+      await sendVerificationEmail(email, verifyToken);
+      emailSent = true;
+    } catch (emailError) {
+      console.error('Failed to send verification email:', emailError);
+      // We don't fail the request, but we flag it so the frontend knows
+    }
 
     return NextResponse.json({
-      message: 'Registration successful. Please check your email to verify your account.',
-      userId: user.id
+      message: 'Registration successful.',
+      userId: user.id,
+      emailSent
     });
 
   } catch (error) {

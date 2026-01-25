@@ -12,6 +12,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [warning, setWarning] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -27,17 +28,25 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
-  // Show success message if just registered
+  // Show success or warning message if just registered
   useEffect(() => {
-    if (searchParams.get('registered') === 'true') {
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 5000);
+    const registered = searchParams.get('registered') === 'true';
+    const emailSent = searchParams.get('email_sent') !== 'false';
+
+    if (registered) {
+      if (emailSent) {
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 5000);
+      } else {
+        setWarning('Account created, but we could not send the verification email. Please log in and request a new one.');
+      }
     }
   }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setWarning('');
     setLoading(true);
 
     try {
@@ -157,6 +166,30 @@ export default function LoginPage() {
           </motion.div>
         )}
 
+        {/* Warning Message */}
+        {warning && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              background: '#fff7ed',
+              color: '#9a3412',
+              padding: 16,
+              margin: 24,
+              borderRadius: 12,
+              fontSize: 14,
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              border: '1px solid #ffedd5'
+            }}
+          >
+            <span style={{ fontSize: 20 }}>⚠️</span>
+            {warning}
+          </motion.div>
+        )}
+
         {/* Error Message */}
         {error && (
           <motion.div
@@ -175,7 +208,7 @@ export default function LoginPage() {
               gap: 12
             }}
           >
-            <span style={{ fontSize: 20 }}>⚠️</span>
+            <span style={{ fontSize: 20 }}>❌</span>
             {error}
           </motion.div>
         )}

@@ -29,11 +29,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if email is verified
+    if (!user.emailVerified) {
+      return NextResponse.json(
+        { error: 'Please verify your email first', emailNotVerified: true },
+        { status: 403 }
+      );
+    }
+
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        userId: user.id, 
-        email: user.email, 
+      {
+        userId: user.id,
+        email: user.email,
         role: user.role,
       },
       process.env.JWT_SECRET!,
@@ -63,9 +71,10 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
-      { error: 'Login failed',
-        
-       },
+      {
+        error: 'Login failed',
+
+      },
       { status: 500 }
     );
   }

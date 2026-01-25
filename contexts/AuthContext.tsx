@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const data = await response.json();
       setUser(data.user);
-      
+
       // Redirect to developer dashboard
       router.push('/developer');
     } catch (error: any) {
@@ -101,8 +101,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(error.error || 'Registration failed');
       }
 
-      // Redirect to login with success message
-      router.push('/auth/login?registered=true');
+      const responseData = await response.json();
+
+      // Redirect to login with success message, flagging if email was sent
+      const emailSent = responseData.emailSent !== false; // Default to true if missing for backward compat
+      router.push(`/auth/login?registered=true&email_sent=${emailSent}`);
     } catch (error: any) {
       throw new Error(error.message || 'Registration failed');
     }
