@@ -22,7 +22,7 @@ const ALLOWED_MIME_TYPES = {
 
 async function saveFile(file: File, folder: string) {
   const bytes = await file.arrayBuffer();
-  const buf = Buffer.from(bytes);
+  const buf = new Uint8Array(bytes);
   const ext = (file.name.split('.').pop() || 'bin').toLowerCase();
 
   const id = crypto.randomBytes(8).toString('hex');
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
     };
 
     const folder = folderMap[type] || 'misc';
-    
+
     console.log(`Uploading ${type} file: ${file.name} (${file.size} bytes)`);
     const url = await saveFile(file, folder);
     console.log(`File saved to: ${url}`);

@@ -26,7 +26,7 @@ function slugify(s: string) {
 
 async function saveFile(file: File, folder: string) {
   const bytes = await file.arrayBuffer();
-  const buf = Buffer.from(bytes);
+  const buf = new Uint8Array(bytes);
   const ext = (file.name.split('.').pop() || 'bin').toLowerCase();
 
   const id = crypto.randomBytes(8).toString('hex');
@@ -88,7 +88,7 @@ export async function GET(req: NextRequest) {
       version: a.version,
       iconUrl: a.iconUrl,
     }));
-      // console.log(rows)
+    console.log(rows)
     return NextResponse.json(rows);
   } catch (error: any) {
     console.error('GET /api/developer/apps error:', error);

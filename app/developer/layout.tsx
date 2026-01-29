@@ -46,6 +46,110 @@ function DeveloperLayoutInner({ children }: { children: ReactNode }) {
     return null;
   }
 
+  // Check if user has developer profile
+  if (!user.developer) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+        padding: 20
+      }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: 40,
+            maxWidth: 500,
+            textAlign: 'center',
+            border: '1px solid #334155',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+          }}
+        >
+          <div style={{
+            width: 80,
+            height: 80,
+            margin: '0 auto 24px',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 36
+          }}>
+            🚀
+          </div>
+          <h1 style={{
+            color: '#f8fafc',
+            fontSize: 28,
+            fontWeight: 800,
+            marginBottom: 12
+          }}>
+            Become a Developer
+          </h1>
+          <p style={{
+            color: '#94a3b8',
+            fontSize: 16,
+            lineHeight: 1.6,
+            marginBottom: 32
+          }}>
+            Join our developer community and start publishing your VR apps to millions of users worldwide.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <Link href="/developer/join">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                style={{
+                  width: '100%',
+                  padding: '14px 28px',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: '#fff',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                  border: 'none',
+                  borderRadius: 10,
+                  cursor: 'pointer'
+                }}
+              >
+                Get Started
+              </motion.button>
+            </Link>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              onClick={logout}
+              style={{
+                width: '100%',
+                padding: '14px 28px',
+                fontSize: 16,
+                fontWeight: 500,
+                color: '#94a3b8',
+                background: 'transparent',
+                border: '1px solid #334155',
+                borderRadius: 10,
+                cursor: 'pointer'
+              }}
+            >
+              Sign out
+            </motion.button>
+          </div>
+          <p style={{
+            color: '#64748b',
+            fontSize: 13,
+            marginTop: 24
+          }}>
+            Signed in as {user.email}
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="dev-shell">
       {/* Topbar */}

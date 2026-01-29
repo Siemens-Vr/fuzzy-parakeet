@@ -16,16 +16,16 @@ const categories = [
   { id: 'educational', name: 'Educational', image: '/categories/educational.jpg', color: '#3b82f6' },
   { id: 'escape-room', name: 'Escape room', image: '/categories/escape-room.jpg', color: '#14b8a6' },
   { id: 'fitness', name: 'Fitness', image: '/categories/fitness.jpg', color: '#22c55e' },
-//   { id: 'flying', name: 'Flying', image: '/categories/flying.jpg', color: '#0ea5e9' },
-//   { id: 'hand-tracking', name: 'Hand tracking', image: '/categories/hand-tracking.jpg', color: '#06b6d4' },
-//   { id: 'horror', name: 'Horror', image: '/categories/horror.jpg', color: '#991b1b' },
-//   { id: 'meditation', name: 'Meditation', image: '/categories/meditation.jpg', color: '#7c3aed' },
-//   { id: 'multiplayer', name: 'Multiplayer', image: '/categories/multiplayer.jpg', color: '#2563eb' },
-//   { id: 'music', name: 'Music', image: '/categories/music.jpg', color: '#db2777' },
-//   { id: 'puzzle', name: 'Puzzle', image: '/categories/puzzle.jpg', color: '#059669' },
-//   { id: 'shooter', name: 'Shooter', image: '/categories/shooter.jpg', color: '#dc2626' },
-//   { id: 'social', name: 'Social', image: '/categories/social.jpg', color: '#7c3aed' },
-//   { id: 'sports', name: 'Sports', image: '/categories/sports.jpg', color: '#16a34a' },
+  //   { id: 'flying', name: 'Flying', image: '/categories/flying.jpg', color: '#0ea5e9' },
+  //   { id: 'hand-tracking', name: 'Hand tracking', image: '/categories/hand-tracking.jpg', color: '#06b6d4' },
+  //   { id: 'horror', name: 'Horror', image: '/categories/horror.jpg', color: '#991b1b' },
+  //   { id: 'meditation', name: 'Meditation', image: '/categories/meditation.jpg', color: '#7c3aed' },
+  //   { id: 'multiplayer', name: 'Multiplayer', image: '/categories/multiplayer.jpg', color: '#2563eb' },
+  //   { id: 'music', name: 'Music', image: '/categories/music.jpg', color: '#db2777' },
+  //   { id: 'puzzle', name: 'Puzzle', image: '/categories/puzzle.jpg', color: '#059669' },
+  //   { id: 'shooter', name: 'Shooter', image: '/categories/shooter.jpg', color: '#dc2626' },
+  //   { id: 'social', name: 'Social', image: '/categories/social.jpg', color: '#7c3aed' },
+  //   { id: 'sports', name: 'Sports', image: '/categories/sports.jpg', color: '#16a34a' },
 ];
 
 interface CategoryBrowseProps {
@@ -56,9 +56,9 @@ export default function CategoryBrowse({ onCategorySelect, selectedCategory = 'a
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const scrollAmount = 320; // Scroll by ~2 cards
-      const newScrollLeft = scrollContainerRef.current.scrollLeft + 
+      const newScrollLeft = scrollContainerRef.current.scrollLeft +
         (direction === 'left' ? -scrollAmount : scrollAmount);
-      
+
       scrollContainerRef.current.scrollTo({
         left: newScrollLeft,
         behavior: 'smooth'
@@ -94,12 +94,12 @@ export default function CategoryBrowse({ onCategorySelect, selectedCategory = 'a
         />
 
         {/* Scrollable Categories Container */}
-        <div 
+        <div
           ref={scrollContainerRef}
           className="category-scroll-container"
           onScroll={checkScrollPosition}
         >
-          <motion.div 
+          <motion.div
             className="category-cards-wrapper"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -111,12 +111,12 @@ export default function CategoryBrowse({ onCategorySelect, selectedCategory = 'a
                 className={`category-card ${selectedCategory === category.id ? 'selected' : ''}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.4, 
+                transition={{
+                  duration: 0.4,
                   delay: index * 0.05,
                   ease: [0.25, 0.46, 0.45, 0.94]
                 }}
-                whileHover={{ 
+                whileHover={{
                   y: -8,
                   transition: { duration: 0.25, ease: 'easeOut' }
                 }}
@@ -127,19 +127,19 @@ export default function CategoryBrowse({ onCategorySelect, selectedCategory = 'a
                 <Link href={`/apps?category=${category.id}`} className="category-card-link">
                   {/* Card Background Image */}
                   <div className="category-card-image-container">
-                    <div 
+                    <div
                       className="category-card-image"
-                      style={{ 
+                      style={{
                         backgroundImage: `url(${category.image})`,
-                        backgroundColor: category.color 
+                        backgroundColor: category.color
                       }}
                     />
                     {/* Gradient Overlay */}
                     <div className="category-card-overlay" />
-                    
+
                     {/* Selection Indicator Dot */}
                     {(selectedCategory === category.id || hoveredCategory === category.id) && (
-                      <motion.div 
+                      <motion.div
                         className="category-indicator-dot"
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
@@ -151,7 +151,7 @@ export default function CategoryBrowse({ onCategorySelect, selectedCategory = 'a
                   </div>
 
                   {/* Category Name */}
-                  <motion.span 
+                  <motion.span
                     className="category-card-name"
                     animate={{
                       color: hoveredCategory === category.id ? '#fff' : 'rgba(255,255,255,0.9)'
@@ -298,7 +298,7 @@ export default function CategoryBrowse({ onCategorySelect, selectedCategory = 'a
           font-size: 0.875rem;
           font-weight: 600;
           text-align: center;
-          color: rgba(255, 255, 255, 0.9);
+          color: black;
           transition: color 0.2s ease;
           white-space: nowrap;
           overflow: hidden;
