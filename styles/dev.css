@@ -1,0 +1,233 @@
+/* ============================================================
+   VRSTORE THEME — DEV PORTAL
+   Apply: <html data-theme="dev">
+   Dev = creative tools energy: violet primary + cyan highlights.
+   ============================================================ */
+
+html[data-theme="dev"],
+.theme-dev {
+    --app-bg: #070A12;
+    --surface-1: #0C1428;
+    --surface-2: #101B34;
+
+    --brand-primary: var(--violet-500);
+    --brand-secondary: var(--cyan-400);
+    --brand-accent: var(--spark-500);
+
+    --app-bg-gradient:
+        radial-gradient(900px 700px at 18% 12%, rgba(124, 58, 237, .12), transparent 60%),
+        radial-gradient(900px 700px at 86% 18%, rgba(38, 230, 217, .08), transparent 60%),
+        radial-gradient(900px 700px at 50% 115%, rgba(255, 122, 92, .06), transparent 55%);
+
+    --glow-primary: 0 0 18px rgba(124, 58, 237, .22), 0 0 55px rgba(124, 58, 237, .10);
+    --glow-accent: 0 0 16px rgba(255, 122, 92, .18), 0 0 50px rgba(255, 122, 92, .08);
+    --glow-hero: 0 0 18px rgba(38, 230, 217, .18);
+
+    --sidebar-item-active-glow: 0 0 14px rgba(124, 58, 237, .18);
+
+    /* Layout Spec */
+    --sidebar-width: 260px;
+    --topbar-height: 64px;
+
+    /* Mapping developer.css variables to dark theme */
+    --bg-primary: var(--app-bg);
+    --bg-secondary: var(--surface-1);
+    --bg-elevated: var(--surface-2);
+    --bg-hover: rgba(255, 255, 255, 0.05);
+    --bg-active: rgba(255, 255, 255, 0.1);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-tertiary: #64748b;
+    --text-disabled: #475569;
+
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-medium: rgba(255, 255, 255, 0.15);
+    --border-dark: rgba(255, 255, 255, 0.25);
+
+    --shadow-1: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-2: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+    /* Brand Mappings */
+    --blue-primary: var(--brand-primary);
+    --blue-hover: #6d28d9;
+    /* violet-700 approx */
+    --blue-light: rgba(124, 58, 237, 0.15);
+    --blue-dark: #5b21b6;
+    /* violet-800 approx */
+
+    /* Generic Border */
+    --border: var(--border-light);
+
+    /* Navbar/Sidebar Helpers */
+    --surface-hover: var(--bg-hover);
+    --sidebar-item-active: var(--bg-active);
+
+    /* Button specific (used in dev.css re-implementations) */
+    --btn-primary-bg: var(--brand-primary);
+    --btn-primary-text: #ffffff;
+    --btn-ghost-bg: transparent;
+    --btn-ghost-border: var(--border-medium);
+}
+
+/* ============================================
+   Dev Portal Layout
+   ============================================ */
+
+.dev-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: var(--topbar-height) 1fr;
+    grid-template-areas:
+        "topbar topbar"
+        "sidebar content";
+    background: var(--app-bg);
+}
+
+/* Topbar */
+.dev-topbar {
+    grid-area: topbar;
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    justify-content: space-between;
+}
+
+.dev-topbar-inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.dev-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.dev-brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    box-shadow: var(--glow-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sidebar */
+.dev-sidebar {
+    grid-area: sidebar;
+    background: var(--surface-1);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    overflow-y: auto;
+}
+
+.dev-sidebar-header {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 12px 12px;
+}
+
+.dev-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dev-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: all var(--t-fast);
+    position: relative;
+}
+
+.dev-nav a:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+}
+
+.dev-nav a.active {
+    background: var(--sidebar-item-active);
+    color: var(--text-primary);
+    box-shadow: var(--sidebar-item-active-glow);
+}
+
+/* Content */
+.dev-content {
+    grid-area: content;
+    padding: 32px;
+    overflow-y: auto;
+}
+
+.dev-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Shared Components (mapping to new system) */
+.btn {
+    border: 0;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.25px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+
+/* Re-implementing buttons to match .vr-btn style */
+.btn-primary {
+    color: var(--btn-primary-text);
+    background: var(--btn-primary-bg);
+    box-shadow: var(--glow-primary);
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-ghost {
+    color: var(--text-primary);
+    background: var(--btn-ghost-bg);
+    border: 1px solid var(--btn-ghost-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}

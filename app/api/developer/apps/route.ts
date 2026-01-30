@@ -179,11 +179,16 @@ export async function POST(req: NextRequest) {
     const acknowledgments =
       String(data.get('acknowledgments') || '').trim() || null;
 
+    const trailerUrl = String(data.get('trailerUrl') || '').trim() || null;
+    const promoVideoUrl = String(data.get('promoVideoUrl') || '').trim() || null;
+
     // Booleans
     const requiresHandTracking = parseBool(
       data.get('requiresHandTracking'),
       false,
     );
+
+
     const requiresPassthrough = parseBool(
       data.get('requiresPassthrough'),
       false,
@@ -311,8 +316,8 @@ export async function POST(req: NextRequest) {
           iconUrl,
           screenshots: screenshotUrls as unknown as Prisma.JsonArray,
           heroImageUrl,
-          trailerUrl: null,
-          promoVideoUrl: null,
+          trailerUrl,
+          promoVideoUrl,
 
           sizeBytes,
           sha256: null,

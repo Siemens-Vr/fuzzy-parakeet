@@ -50,19 +50,17 @@ export default function NewAppPage() {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Basic Information</h2>
       <p className="text-gray-600">Tell users about your app with a compelling name and description.</p>
-      
+
       {/* App Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="label">
           App Name <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
           value={formData.name}
           onChange={(e) => updateField('name', e.target.value)}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            errors.name ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`input ${errors.name ? 'border-red-500' : ''}`}
           placeholder="My Awesome VR App"
           maxLength={50}
         />
@@ -74,7 +72,7 @@ export default function NewAppPage() {
 
       {/* URL Slug */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="label">
           URL Slug <span className="text-red-500">*</span>
         </label>
         <div className="flex items-center">
@@ -85,9 +83,7 @@ export default function NewAppPage() {
             type="text"
             value={formData.slug}
             onChange={(e) => updateField('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-            className={`flex-1 px-4 py-2 border rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-              errors.slug ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`input rounded-l-none ${errors.slug ? 'border-red-500' : ''}`}
             placeholder="my-awesome-vr-app"
           />
         </div>
@@ -96,16 +92,14 @@ export default function NewAppPage() {
 
       {/* Short Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="label">
           Short Description <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
           value={formData.summary}
           onChange={(e) => updateField('summary', e.target.value)}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            errors.summary ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`input ${errors.summary ? 'border-red-500' : ''}`}
           placeholder="A brief, catchy description of your app"
           maxLength={150}
         />
@@ -117,15 +111,13 @@ export default function NewAppPage() {
 
       {/* Full Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="label">
           Full Description <span className="text-red-500">*</span>
         </label>
         <textarea
           value={formData.description}
           onChange={(e) => updateField('description', e.target.value)}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[150px] ${
-            errors.description ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`textarea ${errors.description ? 'border-red-500' : ''}`}
           placeholder="Describe your app in detail. What does it do? What makes it unique?"
         />
         <div className="flex justify-between mt-1">
@@ -137,7 +129,7 @@ export default function NewAppPage() {
       {/* Category */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="label">
             Category <span className="text-red-500">*</span>
           </label>
           <select
@@ -146,9 +138,7 @@ export default function NewAppPage() {
               updateField('category', e.target.value);
               updateField('subcategory', '');
             }}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-              errors.category ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`select ${errors.category ? 'border-red-500' : ''}`}
           >
             <option value="">Select category</option>
             {CATEGORIES.map(cat => (
@@ -157,13 +147,13 @@ export default function NewAppPage() {
           </select>
           {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
         </div>
-        
+
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Subcategory</label>
+          <label className="label">Subcategory</label>
           <select
             value={formData.subcategory}
             onChange={(e) => updateField('subcategory', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="select"
             disabled={!formData.category}
           >
             <option value="">Select subcategory</option>
@@ -176,8 +166,8 @@ export default function NewAppPage() {
 
       {/* Tags */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Tags <span className="text-gray-400">(up to 10)</span>
+        <label className="label">
+          Tags <span className="helper-text">(up to 10)</span>
         </label>
         <div className="flex gap-2 mb-2">
           <input
@@ -185,7 +175,7 @@ export default function NewAppPage() {
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="input flex-1"
             placeholder="Add a tag"
             maxLength={20}
           />
@@ -214,29 +204,27 @@ export default function NewAppPage() {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Pricing & Distribution</h2>
       <p className="text-gray-600">Set your pricing strategy.</p>
-      
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-3">Pricing Model</label>
         <div className="grid grid-cols-2 gap-4">
           <button
             type="button"
             onClick={() => updateField('price', 0)}
-            className={`p-4 border-2 rounded-lg text-left transition-colors ${
-              formData.price === 0 ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-            }`}
+            className={`p-4 border-2 rounded-lg text-left transition-colors ${formData.price === 0 ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
+              }`}
           >
             <div className="font-medium">Free</div>
-            <div className="text-sm text-gray-500">Available to everyone at no cost</div>
+            <div className="text-sm text-gray-400">Available to everyone at no cost</div>
           </button>
           <button
             type="button"
             onClick={() => formData.price === 0 && updateField('price', 4.99)}
-            className={`p-4 border-2 rounded-lg text-left transition-colors ${
-              formData.price > 0 ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-            }`}
+            className={`p-4 border-2 rounded-lg text-left transition-colors ${formData.price > 0 ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
+              }`}
           >
             <div className="font-medium">Paid</div>
-            <div className="text-sm text-gray-500">Set a price for your app</div>
+            <div className="text-sm text-gray-400">Set a price for your app</div>
           </button>
         </div>
       </div>
@@ -244,11 +232,11 @@ export default function NewAppPage() {
       {formData.price > 0 && (
         <>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+            <label className="label">Currency</label>
             <select
               value={formData.currency}
               onChange={(e) => updateField('currency', e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="select"
             >
               {CURRENCIES.map(curr => (
                 <option key={curr.value} value={curr.value}>{curr.label}</option>
@@ -257,18 +245,17 @@ export default function NewAppPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Price <span className="text-red-500">*</span></label>
+            <label className="label">Price <span className="text-red-500">*</span></label>
             <div className="relative">
-              <span className="absolute left-3 top-2 text-gray-500">
+              <span className="absolute left-3 top-2 text-gray-400">
                 {CURRENCIES.find(c => c.value === formData.currency)?.symbol}
               </span>
               <input
                 type="number"
                 value={formData.price}
                 onChange={(e) => updateField('price', parseFloat(e.target.value) || 0)}
-                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                  errors.price ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`input pl-10 ${errors.price ? 'border-red-500' : ''
+                  }`}
                 min="0"
                 step="0.01"
               />
@@ -276,9 +263,9 @@ export default function NewAppPage() {
             {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
           </div>
 
-          <div className="p-4 bg-blue-50 rounded-lg">
-            <h3 className="font-medium text-blue-800 mb-2">Revenue Split</h3>
-            <p className="text-sm text-blue-700">
+          <div className="p-4 bg-blue-900/20 rounded-lg">
+            <h3 className="font-medium text-blue-400 mb-2">Revenue Split</h3>
+            <p className="text-sm text-blue-300">
               You receive <strong>70%</strong> of each sale. Our 30% platform fee covers payment processing,
               hosting, and distribution services.
             </p>
@@ -302,28 +289,27 @@ export default function NewAppPage() {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Technical Requirements</h2>
       <p className="text-gray-600">Specify technical details and device compatibility.</p>
-      
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Version <span className="text-red-500">*</span></label>
+        <label className="label">Version <span className="text-red-500">*</span></label>
         <input
           type="text"
           value={formData.version}
           onChange={(e) => updateField('version', e.target.value)}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-            errors.version ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`input ${errors.version ? 'border-red-500' : ''
+            }`}
           placeholder="1.0.0"
         />
         {errors.version && <p className="text-red-500 text-sm mt-1">{errors.version}</p>}
-        <p className="text-gray-400 text-sm mt-1">Use semantic versioning (e.g., 1.0.0)</p>
+        <p className="helper-text mt-1">Use semantic versioning (e.g., 1.0.0)</p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Android API Level</label>
+        <label className="label">Minimum Android API Level</label>
         <select
           value={formData.minApiLevel}
           onChange={(e) => updateField('minApiLevel', parseInt(e.target.value))}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="select"
         >
           {API_LEVELS.map(api => (
             <option key={api.value} value={api.value}>{api.label}</option>
@@ -332,14 +318,13 @@ export default function NewAppPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Target Devices <span className="text-red-500">*</span></label>
+        <label className="label">Target Devices <span className="text-red-500">*</span></label>
         <div className="grid grid-cols-2 gap-3">
           {TARGET_DEVICES.map(device => (
             <label
               key={device.value}
-              className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${
-                formData.targetDevices.includes(device.value) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-              }`}
+              className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.targetDevices.includes(device.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
+                }`}
             >
               <input
                 type="checkbox"
@@ -361,14 +346,13 @@ export default function NewAppPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Required Permissions</label>
+        <label className="label">Required Permissions</label>
         <div className="space-y-2">
           {PERMISSIONS.map(perm => (
             <label
               key={perm.value}
-              className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
-                formData.permissions.includes(perm.value) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-              }`}
+              className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${formData.permissions.includes(perm.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
+                }`}
             >
               <input
                 type="checkbox"
@@ -392,14 +376,14 @@ export default function NewAppPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Hardware Requirements</label>
+        <label className="label">Hardware Requirements</label>
         <div className="space-y-3">
           {[
             { field: 'requiresControllers' as const, label: 'Requires Controllers', desc: 'App requires VR controllers' },
             { field: 'requiresHandTracking' as const, label: 'Requires Hand Tracking', desc: 'App requires hand tracking' },
             { field: 'requiresPassthrough' as const, label: 'Requires Passthrough', desc: 'App requires camera passthrough (Mixed Reality)' },
           ].map(({ field, label, desc }) => (
-            <label key={field} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-gray-300">
+            <label key={field} className="flex items-center gap-3 p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-gray-600">
               <input
                 type="checkbox"
                 checked={formData[field]}
@@ -421,19 +405,18 @@ export default function NewAppPage() {
   const renderStep4 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Media & Assets</h2>
-      <p className="text-gray-600">Upload your APK file and visual assets.</p>
-      
+      <p className="helper-text">Upload your APK file and visual assets.</p>
+
       {/* APK Upload */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">APK File <span className="text-red-500">*</span></label>
+        <label className="label">APK File <span className="text-red-500">*</span></label>
         <div
           onDragEnter={(e) => handleDrag(e, 'apkFile')}
           onDragLeave={(e) => handleDrag(e, 'apkFile')}
           onDragOver={(e) => handleDrag(e, 'apkFile')}
           onDrop={(e) => handleDrop(e, 'apkFile')}
-          className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-            dragActive === 'apkFile' ? 'border-blue-500 bg-blue-50' : errors.apkFile ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-          }`}
+          className={`upload-zone ${dragActive === 'apkFile' ? 'drag-active' : ''
+            }`}
         >
           {formData.apkFile ? (
             <div className="flex items-center justify-center gap-4">
@@ -449,7 +432,7 @@ export default function NewAppPage() {
               <div className="text-4xl mb-2">📱</div>
               <div className="mb-2">Drag and drop your APK file here</div>
               <div className="text-gray-400 mb-4">or</div>
-              <label className="px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700">
+              <label className="btn btn-secondary cursor-pointer">
                 Browse Files
                 <input type="file" accept=".apk" onChange={(e) => handleFileChange('apkFile', e.target.files?.[0] || null)} className="hidden" />
               </label>
@@ -461,15 +444,14 @@ export default function NewAppPage() {
 
       {/* App Icon */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">App Icon <span className="text-red-500">*</span> <span className="text-gray-400">(512x512 PNG)</span></label>
+        <label className="label">App Icon <span className="text-red-500">*</span> <span className="helper-text">(512x512 PNG)</span></label>
         <div
           onDragEnter={(e) => handleDrag(e, 'iconFile')}
           onDragLeave={(e) => handleDrag(e, 'iconFile')}
           onDragOver={(e) => handleDrag(e, 'iconFile')}
           onDrop={(e) => handleDrop(e, 'iconFile')}
-          className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-            dragActive === 'iconFile' ? 'border-blue-500 bg-blue-50' : errors.iconFile ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-          }`}
+          className={`upload-zone ${dragActive === 'iconFile' ? 'drag-active' : ''
+            }`}
         >
           {formData.iconFile ? (
             <div className="flex items-center justify-center gap-4">
@@ -484,7 +466,7 @@ export default function NewAppPage() {
             <>
               <div className="text-4xl mb-2">🖼️</div>
               <div className="mb-2">Drag and drop your icon here</div>
-              <label className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
+              <label className="btn btn-secondary cursor-pointer">
                 Browse
                 <input type="file" accept="image/png" onChange={(e) => handleFileChange('iconFile', e.target.files?.[0] || null)} className="hidden" />
               </label>
@@ -496,15 +478,14 @@ export default function NewAppPage() {
 
       {/* Screenshots */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Screenshots <span className="text-red-500">*</span> <span className="text-gray-400">(3-8 images)</span></label>
+        <label className="label">Screenshots <span className="text-red-500">*</span> <span className="helper-text">(3-8 images)</span></label>
         <div
           onDragEnter={(e) => handleDrag(e, 'screenshots')}
           onDragLeave={(e) => handleDrag(e, 'screenshots')}
           onDragOver={(e) => handleDrag(e, 'screenshots')}
           onDrop={(e) => handleDrop(e, 'screenshots')}
-          className={`relative border-2 border-dashed rounded-lg p-6 transition-colors ${
-            dragActive === 'screenshots' ? 'border-blue-500 bg-blue-50' : errors.screenshots ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-          }`}
+          className={`upload-zone ${dragActive === 'screenshots' ? 'drag-active' : ''
+            }`}
         >
           {formData.screenshots.length > 0 ? (
             <div className="space-y-4">
@@ -517,7 +498,7 @@ export default function NewAppPage() {
                 ))}
               </div>
               {formData.screenshots.length < 8 && (
-                <label className="inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
+                <label className="btn btn-secondary cursor-pointer inline-block">
                   Add More
                   <input type="file" accept="image/*" multiple onChange={(e) => handleScreenshotsChange(e.target.files)} className="hidden" />
                 </label>
@@ -527,7 +508,7 @@ export default function NewAppPage() {
             <div className="text-center">
               <div className="text-4xl mb-2">📸</div>
               <div className="mb-2">Drag and drop screenshots here</div>
-              <label className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
+              <label className="btn btn-secondary cursor-pointer">
                 Browse
                 <input type="file" accept="image/*" multiple onChange={(e) => handleScreenshotsChange(e.target.files)} className="hidden" />
               </label>
@@ -535,18 +516,18 @@ export default function NewAppPage() {
           )}
         </div>
         {errors.screenshots && <p className="text-red-500 text-sm mt-1">{errors.screenshots}</p>}
-        <p className="text-gray-400 text-sm mt-1">{formData.screenshots.length}/8 screenshots</p>
+        <p className="helper-text mt-1">{formData.screenshots.length}/8 screenshots</p>
       </div>
 
       {/* Video URLs */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Trailer URL <span className="text-gray-400">(YouTube/Vimeo)</span></label>
-          <input type="url" value={formData.trailerUrl} onChange={(e) => updateField('trailerUrl', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://youtube.com/watch?v=..." />
+          <label className="label">Trailer URL <span className="helper-text">(YouTube/Vimeo)</span></label>
+          <input type="url" value={formData.trailerUrl} onChange={(e) => updateField('trailerUrl', e.target.value)} className="input" placeholder="https://youtube.com/watch?v=..." />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Promo Video URL <span className="text-gray-400">(optional)</span></label>
-          <input type="url" value={formData.promoVideoUrl} onChange={(e) => updateField('promoVideoUrl', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://youtube.com/watch?v=..." />
+          <label className="label">Promo Video URL <span className="helper-text">(optional)</span></label>
+          <input type="url" value={formData.promoVideoUrl} onChange={(e) => updateField('promoVideoUrl', e.target.value)} className="input" placeholder="https://youtube.com/watch?v=..." />
         </div>
       </div>
     </div>
@@ -556,13 +537,13 @@ export default function NewAppPage() {
   const renderStep5 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Content & Comfort Settings</h2>
-      <p className="text-gray-600">Help users understand what to expect from your app.</p>
-      
+      <p className="helper-text">Help users understand what to expect from your app.</p>
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Content Rating <span className="text-red-500">*</span></label>
+        <label className="label">Content Rating <span className="text-red-500">*</span></label>
         <div className="space-y-2">
           {CONTENT_RATINGS.map(rating => (
-            <label key={rating.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.contentRating === rating.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <label key={rating.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.contentRating === rating.value ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
               <input type="radio" name="contentRating" value={rating.value} checked={formData.contentRating === rating.value} onChange={(e) => updateField('contentRating', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
               <div><div className="font-medium">{rating.label}</div><div className="text-sm text-gray-500">{rating.description}</div></div>
             </label>
@@ -572,10 +553,10 @@ export default function NewAppPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Comfort Level <span className="text-red-500">*</span></label>
+        <label className="label">Comfort Level <span className="text-red-500">*</span></label>
         <div className="space-y-2">
           {COMFORT_LEVELS.map(level => (
-            <label key={level.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.comfortLevel === level.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <label key={level.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.comfortLevel === level.value ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
               <input type="radio" name="comfortLevel" value={level.value} checked={formData.comfortLevel === level.value} onChange={(e) => updateField('comfortLevel', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
               <div><div className="font-medium">{level.label}</div><div className="text-sm text-gray-500">{level.description}</div></div>
             </label>
@@ -585,10 +566,10 @@ export default function NewAppPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Play Area <span className="text-red-500">*</span></label>
+        <label className="label">Play Area <span className="text-red-500">*</span></label>
         <div className="space-y-2">
           {PLAY_AREAS.map(area => (
-            <label key={area.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playArea === area.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <label key={area.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playArea === area.value ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
               <input type="radio" name="playArea" value={area.value} checked={formData.playArea === area.value} onChange={(e) => updateField('playArea', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
               <div><div className="font-medium">{area.label}</div><div className="text-sm text-gray-500">{area.description}</div></div>
             </label>
@@ -598,10 +579,10 @@ export default function NewAppPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Player Modes <span className="text-red-500">*</span></label>
+        <label className="label">Player Modes <span className="text-red-500">*</span></label>
         <div className="grid grid-cols-2 gap-2">
           {PLAYER_MODES.map(mode => (
-            <label key={mode.value} className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playerModes.includes(mode.value) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <label key={mode.value} className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playerModes.includes(mode.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
               <input type="checkbox" checked={formData.playerModes.includes(mode.value)} onChange={(e) => e.target.checked ? updateField('playerModes', [...formData.playerModes, mode.value]) : updateField('playerModes', formData.playerModes.filter(m => m !== mode.value))} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
               <span>{mode.label}</span>
             </label>
@@ -610,18 +591,18 @@ export default function NewAppPage() {
         {errors.playerModes && <p className="text-red-500 text-sm mt-1">{errors.playerModes}</p>}
       </div>
 
-      <div className="p-4 bg-gray-50 rounded-lg space-y-3">
-        <label className="block text-sm font-medium text-gray-700">Monetization</label>
-        <label className="flex items-center gap-3">
+      <div className="p-4 bg-gray-800/50 border border-gray-700 rounded-lg space-y-3">
+        <label className="block text-sm font-medium text-gray-200">Monetization</label>
+        <label className="flex items-center gap-3 cursor-pointer">
           <input type="checkbox" checked={formData.containsAds} onChange={(e) => updateField('containsAds', e.target.checked)} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-          <span>Contains advertisements</span>
+          <span className="text-gray-300">Contains advertisements</span>
         </label>
-        <label className="flex items-center gap-3">
+        <label className="flex items-center gap-3 cursor-pointer">
           <input type="checkbox" checked={formData.hasInAppPurchases} onChange={(e) => updateField('hasInAppPurchases', e.target.checked)} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-          <span>Has in-app purchases</span>
+          <span className="text-gray-300">Has in-app purchases</span>
         </label>
         {formData.hasInAppPurchases && (
-          <textarea value={formData.inAppPurchaseInfo} onChange={(e) => updateField('inAppPurchaseInfo', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Describe in-app purchases..." rows={2} />
+          <textarea value={formData.inAppPurchaseInfo} onChange={(e) => updateField('inAppPurchaseInfo', e.target.value)} className="textarea" placeholder="Describe in-app purchases..." rows={2} />
         )}
       </div>
     </div>
@@ -631,30 +612,30 @@ export default function NewAppPage() {
   const renderStep6 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Features & Languages</h2>
-      <p className="text-gray-600">Highlight key features and supported languages.</p>
-      
+      <p className="helper-text">Highlight key features and supported languages.</p>
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Features</label>
+        <label className="label">Features</label>
         <div className="grid grid-cols-2 gap-2 mb-4">
           {COMMON_FEATURES.map(feature => (
-            <label key={feature} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors text-sm ${formData.features.includes(feature) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <label key={feature} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors text-sm ${formData.features.includes(feature) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
               <input type="checkbox" checked={formData.features.includes(feature)} onChange={() => toggleFeature(feature)} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
               <span>{feature}</span>
             </label>
           ))}
         </div>
-        
+
         <div className="flex gap-2 mb-2">
-          <input type="text" value={newFeature} onChange={(e) => setNewFeature(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Add custom feature" />
-          <button type="button" onClick={addFeature} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">Add</button>
+          <input type="text" value={newFeature} onChange={(e) => setNewFeature(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())} className="input flex-1" placeholder="Add custom feature" />
+          <button type="button" onClick={addFeature} className="btn btn-secondary">Add</button>
         </div>
-        
+
         {formData.features.filter(f => !COMMON_FEATURES.includes(f)).length > 0 && (
           <div className="flex flex-wrap gap-2">
             {formData.features.filter(f => !COMMON_FEATURES.includes(f)).map(feature => (
-              <span key={feature} className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+              <span key={feature} className="inline-flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-300 border border-green-800 rounded-full text-sm">
                 {feature}
-                <button type="button" onClick={() => removeFeature(feature)} className="hover:text-green-600">×</button>
+                <button type="button" onClick={() => removeFeature(feature)} className="hover:text-green-100">×</button>
               </span>
             ))}
           </div>
@@ -662,15 +643,15 @@ export default function NewAppPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">What&apos;s New <span className="text-gray-400">(for updates)</span></label>
-        <textarea value={formData.whatsNew} onChange={(e) => updateField('whatsNew', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Describe what's new in this version..." rows={3} />
+        <label className="label">What&apos;s New <span className="helper-text">(for updates)</span></label>
+        <textarea value={formData.whatsNew} onChange={(e) => updateField('whatsNew', e.target.value)} className="textarea" placeholder="Describe what's new in this version..." rows={3} />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Supported Languages <span className="text-red-500">*</span></label>
+        <label className="label">Supported Languages <span className="text-red-500">*</span></label>
         <div className="grid grid-cols-3 gap-2">
           {LANGUAGES.map(lang => (
-            <label key={lang.value} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors ${formData.languages.includes(lang.value) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <label key={lang.value} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors ${formData.languages.includes(lang.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
               <input type="checkbox" checked={formData.languages.includes(lang.value)} onChange={(e) => e.target.checked ? updateField('languages', [...formData.languages, lang.value]) : updateField('languages', formData.languages.filter(l => l !== lang.value))} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
               <span>{lang.label}</span>
             </label>
@@ -686,55 +667,55 @@ export default function NewAppPage() {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Support & Links</h2>
       <p className="text-gray-600">Help users get support and connect with you.</p>
-      
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Support Email</label>
-        <input type="email" value={formData.supportEmail} onChange={(e) => updateField('supportEmail', e.target.value)} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${errors.supportEmail ? 'border-red-500' : 'border-gray-300'}`} placeholder="support@yourcompany.com" />
+        <label className="label">Support Email</label>
+        <input type="email" value={formData.supportEmail} onChange={(e) => updateField('supportEmail', e.target.value)} className={`input ${errors.supportEmail ? 'border-red-500' : ''}`} placeholder="support@yourcompany.com" />
         {errors.supportEmail && <p className="text-red-500 text-sm mt-1">{errors.supportEmail}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Support Website</label>
-        <input type="url" value={formData.supportUrl} onChange={(e) => updateField('supportUrl', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://yourcompany.com/support" />
+        <label className="label">Support Website</label>
+        <input type="url" value={formData.supportUrl} onChange={(e) => updateField('supportUrl', e.target.value)} className="input" placeholder="https://yourcompany.com/support" />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Privacy Policy URL</label>
-        <input type="url" value={formData.privacyPolicyUrl} onChange={(e) => updateField('privacyPolicyUrl', e.target.value)} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${errors.privacyPolicyUrl ? 'border-red-500' : 'border-gray-300'}`} placeholder="https://yourcompany.com/privacy" />
+        <label className="label">Privacy Policy URL</label>
+        <input type="url" value={formData.privacyPolicyUrl} onChange={(e) => updateField('privacyPolicyUrl', e.target.value)} className={`input ${errors.privacyPolicyUrl ? 'border-red-500' : ''}`} placeholder="https://yourcompany.com/privacy" />
         {errors.privacyPolicyUrl && <p className="text-red-500 text-sm mt-1">{errors.privacyPolicyUrl}</p>}
       </div>
 
       <div className="space-y-4">
-        <label className="block text-sm font-medium text-gray-700">Social Links</label>
+        <label className="label">Social Links</label>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Discord</label>
-            <input type="url" value={formData.discordUrl} onChange={(e) => updateField('discordUrl', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://discord.gg/..." />
+            <label className="label text-sm text-gray-400 mb-1">Discord</label>
+            <input type="url" value={formData.discordUrl} onChange={(e) => updateField('discordUrl', e.target.value)} className="input" placeholder="https://discord.gg/..." />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Twitter/X</label>
-            <input type="url" value={formData.twitterUrl} onChange={(e) => updateField('twitterUrl', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://twitter.com/..." />
+            <label className="label text-sm text-gray-400 mb-1">Twitter/X</label>
+            <input type="url" value={formData.twitterUrl} onChange={(e) => updateField('twitterUrl', e.target.value)} className="input" placeholder="https://twitter.com/..." />
           </div>
           <div className="col-span-2">
-            <label className="block text-sm text-gray-600 mb-1">YouTube Channel</label>
-            <input type="url" value={formData.youtubeUrl} onChange={(e) => updateField('youtubeUrl', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://youtube.com/@..." />
+            <label className="label text-sm text-gray-400 mb-1">YouTube Channel</label>
+            <input type="url" value={formData.youtubeUrl} onChange={(e) => updateField('youtubeUrl', e.target.value)} className="input" placeholder="https://youtube.com/@..." />
           </div>
         </div>
       </div>
 
-      <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-        <label className="block text-sm font-medium text-gray-700">Additional Information</label>
+      <div className="space-y-4 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
+        <label className="label">Additional Information</label>
         <div>
-          <label className="block text-sm text-gray-600 mb-1">Developer Notes</label>
-          <textarea value={formData.developerNotes} onChange={(e) => updateField('developerNotes', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Notes for review team (not shown publicly)" rows={2} />
+          <label className="label text-sm text-gray-400 mb-1">Developer Notes</label>
+          <textarea value={formData.developerNotes} onChange={(e) => updateField('developerNotes', e.target.value)} className="textarea" placeholder="Notes for review team (not shown publicly)" rows={2} />
         </div>
         <div>
-          <label className="block text-sm text-gray-600 mb-1">Credits</label>
-          <textarea value={formData.credits} onChange={(e) => updateField('credits', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Credit team members, artists, musicians..." rows={2} />
+          <label className="label text-sm text-gray-400 mb-1">Credits</label>
+          <textarea value={formData.credits} onChange={(e) => updateField('credits', e.target.value)} className="textarea" placeholder="Credit team members, artists, musicians..." rows={2} />
         </div>
         <div>
-          <label className="block text-sm text-gray-600 mb-1">Acknowledgments</label>
-          <textarea value={formData.acknowledgments} onChange={(e) => updateField('acknowledgments', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Third-party assets, open source libraries..." rows={2} />
+          <label className="label text-sm text-gray-400 mb-1">Acknowledgments</label>
+          <textarea value={formData.acknowledgments} onChange={(e) => updateField('acknowledgments', e.target.value)} className="textarea" placeholder="Third-party assets, open source libraries..." rows={2} />
         </div>
       </div>
     </div>
@@ -745,52 +726,52 @@ export default function NewAppPage() {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Review & Submit</h2>
       <p className="text-gray-600">Review your submission before sending it for approval.</p>
-      
+
       {errors.submit && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{errors.submit}</div>
       )}
 
       <div className="grid grid-cols-2 gap-4">
         {[
-          { step: 1, title: 'Basic Info', content: <>Name: {formData.name || '—'}<br/>Category: {formData.category || '—'}</> },
+          { step: 1, title: 'Basic Info', content: <>Name: {formData.name || '—'}<br />Category: {formData.category || '—'}</> },
           { step: 2, title: 'Pricing', content: <>Price: {formData.price === 0 ? 'Free' : `${CURRENCIES.find(c => c.value === formData.currency)?.symbol}${formData.price}`}</> },
-          { step: 3, title: 'Technical', content: <>Version: {formData.version}<br/>Devices: {formData.targetDevices.length} selected</> },
-          { step: 4, title: 'Media', content: <>APK: {formData.apkFile ? '✓' : '—'}<br/>Screenshots: {formData.screenshots.length}/8</> },
+          { step: 3, title: 'Technical', content: <>Version: {formData.version}<br />Devices: {formData.targetDevices.length} selected</> },
+          { step: 4, title: 'Media', content: <>APK: {formData.apkFile ? '✓' : '—'}<br />Screenshots: {formData.screenshots.length}/8</> },
           { step: 5, title: 'Content', content: <>Rating: {CONTENT_RATINGS.find(r => r.value === formData.contentRating)?.label || '—'}</> },
-          { step: 6, title: 'Features', content: <>Features: {formData.features.length}<br/>Languages: {formData.languages.length}</> },
+          { step: 6, title: 'Features', content: <>Features: {formData.features.length}<br />Languages: {formData.languages.length}</> },
         ].map(({ step, title, content }) => (
-          <div key={step} className="p-4 border border-gray-200 rounded-lg">
+          <div key={step} className="p-4 border border-gray-700 rounded-lg bg-gray-800/30">
             <div className="flex justify-between items-start mb-2">
-              <h3 className="font-medium">{title}</h3>
-              <button type="button" onClick={() => goToStep(step)} className="text-blue-600 text-sm hover:underline">Edit</button>
+              <h3 className="font-medium text-gray-200">{title}</h3>
+              <button type="button" onClick={() => goToStep(step)} className="text-blue-400 text-sm hover:underline">Edit</button>
             </div>
-            <div className="text-sm text-gray-600">{content}</div>
+            <div className="text-sm text-gray-400">{content}</div>
           </div>
         ))}
       </div>
 
       {formData.iconFile && (
-        <div className="p-4 border border-gray-200 rounded-lg">
-          <h3 className="font-medium mb-4">Store Preview</h3>
+        <div className="p-4 border border-gray-700 rounded-lg bg-gray-800/30">
+          <h3 className="font-medium mb-4 text-gray-200">Store Preview</h3>
           <div className="flex gap-4">
             <img src={URL.createObjectURL(formData.iconFile)} alt="App icon" className="w-20 h-20 rounded-xl object-cover" />
             <div>
-              <h4 className="font-semibold text-lg">{formData.name}</h4>
-              <p className="text-gray-600 text-sm">{formData.summary}</p>
+              <h4 className="font-semibold text-lg text-gray-100">{formData.name}</h4>
+              <p className="text-gray-400 text-sm">{formData.summary}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs">{formData.category}</span>
-                <span className="text-sm font-medium">{formData.price === 0 ? 'Free' : `${CURRENCIES.find(c => c.value === formData.currency)?.symbol}${formData.price}`}</span>
+                <span className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300">{formData.category}</span>
+                <span className="text-sm font-medium text-gray-200">{formData.price === 0 ? 'Free' : `${CURRENCIES.find(c => c.value === formData.currency)?.symbol}${formData.price}`}</span>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <p className="text-sm text-yellow-800">
+      <div className="p-4 bg-yellow-900/10 border border-yellow-900/30 rounded-lg">
+        <p className="text-sm text-yellow-500/80">
           By submitting, you confirm you have the right to distribute this app and it complies with our
-          <a href="/terms" className="underline ml-1">Terms of Service</a> and
-          <a href="/guidelines" className="underline ml-1">Content Guidelines</a>.
+          <a href="/terms" className="underline ml-1 hover:text-yellow-400">Terms of Service</a> and
+          <a href="/guidelines" className="underline ml-1 hover:text-yellow-400">Content Guidelines</a>.
         </p>
       </div>
     </div>
@@ -811,14 +792,12 @@ export default function NewAppPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold">Submit New App</h1>
-        </div>
+    <div className="dev-container py-8">
+      <div className="page-header">
+        <h1>Submit New App</h1>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
@@ -830,17 +809,16 @@ export default function NewAppPage() {
                   className={step.id <= currentStep ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}
                   disabled={step.id > currentStep}
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                    step.id < currentStep ? 'bg-green-500 text-white' : step.id === currentStep ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
-                  }`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${step.id < currentStep ? 'bg-green-500 text-white' : step.id === currentStep ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' : 'bg-gray-800 text-gray-500 border border-gray-700'
+                    }`}>
                     {step.id < currentStep ? '✓' : step.id}
                   </div>
                   <div className="hidden md:block mt-2 text-center">
-                    <div className={`text-xs font-medium ${step.id === currentStep ? 'text-blue-600' : 'text-gray-500'}`}>{step.title}</div>
+                    <div className={`text-xs font-medium ${step.id === currentStep ? 'text-blue-400' : 'text-gray-500'}`}>{step.title}</div>
                   </div>
                 </button>
                 {index < STEPS.length - 1 && (
-                  <div className={`w-full h-1 mx-2 ${step.id < currentStep ? 'bg-green-500' : 'bg-gray-200'}`} style={{ minWidth: '20px', maxWidth: '60px' }} />
+                  <div className={`w-full h-1 mx-2 ${step.id < currentStep ? 'bg-green-500' : 'bg-gray-800 border border-gray-700'}`} style={{ minWidth: '20px', maxWidth: '60px' }} />
                 )}
               </div>
             ))}
@@ -848,8 +826,10 @@ export default function NewAppPage() {
         </div>
 
         {/* Form Content */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-          {renderStepContent()}
+        <div className="card mb-6">
+          <div className="card-body p-6">
+            {renderStepContent()}
+          </div>
         </div>
 
         {/* Navigation */}
@@ -858,19 +838,17 @@ export default function NewAppPage() {
             type="button"
             onClick={prevStep}
             disabled={currentStep === 1}
-            className={`px-6 py-2 rounded-lg transition-colors ${
-              currentStep === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`btn btn-secondary ${currentStep === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Previous
           </button>
-          
+
           {currentStep < STEPS.length ? (
-            <button type="button" onClick={nextStep} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button type="button" onClick={nextStep} className="btn btn-primary">
               Next
             </button>
           ) : (
-            <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50">
+            <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="btn btn-primary bg-green-600 hover:bg-green-700 disabled:opacity-50">
               {isSubmitting ? 'Submitting...' : 'Submit for Review'}
             </button>
           )}

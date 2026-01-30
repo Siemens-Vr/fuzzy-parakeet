@@ -81,7 +81,7 @@ export function useAppSubmissionForm() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(null);
-    
+
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       if (field === 'screenshots') {
@@ -133,16 +133,16 @@ export function useAppSubmissionForm() {
         if (!formData.name.trim()) newErrors.name = 'App name is required';
         else if (formData.name.length < 3) newErrors.name = 'Name must be at least 3 characters';
         else if (formData.name.length > 50) newErrors.name = 'Name must be less than 50 characters';
-        
+
         if (!formData.slug.trim()) newErrors.slug = 'URL slug is required';
         else if (!/^[a-z0-9-]+$/.test(formData.slug)) newErrors.slug = 'Slug can only contain lowercase letters, numbers, and hyphens';
-        
+
         if (!formData.summary.trim()) newErrors.summary = 'Short description is required';
         else if (formData.summary.length > 150) newErrors.summary = 'Summary must be less than 150 characters';
-        
+
         if (!formData.description.trim()) newErrors.description = 'Full description is required';
         else if (formData.description.length < 100) newErrors.description = 'Description must be at least 100 characters';
-        
+
         if (!formData.category) newErrors.category = 'Category is required';
         break;
 
@@ -156,7 +156,7 @@ export function useAppSubmissionForm() {
       case 3:
         if (!formData.version.trim()) newErrors.version = 'Version is required';
         else if (!/^\d+\.\d+\.\d+$/.test(formData.version)) newErrors.version = 'Version must be in format X.Y.Z';
-        
+
         if (formData.targetDevices.length === 0) newErrors.targetDevices = 'Select at least one target device';
         break;
 
@@ -221,7 +221,7 @@ export function useAppSubmissionForm() {
 
     try {
       const formDataToSend = new FormData();
-      
+
       Object.entries(formData).forEach(([key, value]) => {
         if (value instanceof File) {
           formDataToSend.append(key, value);
@@ -249,7 +249,7 @@ export function useAppSubmissionForm() {
       }
 
       const result = await response.json();
-      router.push(`/developer/apps/${result.id}`);
+      router.push(`/developer`);
     } catch (error) {
       setErrors({ submit: error instanceof Error ? error.message : 'Failed to submit app' });
     } finally {

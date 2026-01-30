@@ -3,12 +3,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Sidebar from '@/components/layout/Sidebar';
 import { StoreUiProvider, useStoreUi } from '@/contexts/StoreUiContext';
+import '@/styles/store.css';
 
 function StoreShell({ children }: { children: React.ReactNode }) {
   const { sidebarOpen, setSidebarOpen } = useStoreUi();
 
   return (
-    <div className="app-shell">
+    <div className="app-shell theme-store">
       {/* Mobile Menu Overlay (same as original) */}
       <AnimatePresence>
         {sidebarOpen && (

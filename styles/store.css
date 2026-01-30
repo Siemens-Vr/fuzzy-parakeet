@@ -1,0 +1,326 @@
+/* ============================================================
+   VRSTORE THEME — STORE
+   Apply: <html data-theme="store">
+   Store uses Admin undertone as canvas + ambient "alive" glow.
+   ============================================================ */
+
+html[data-theme="store"],
+.theme-store {
+    --app-bg: #0A0F1D;
+    --surface-1: #0F172A;
+    --surface-2: #121D33;
+
+    --brand-primary: var(--cyan-400);
+    --brand-secondary: var(--blue-500);
+    --brand-accent: var(--spark-500);
+
+    --app-bg-gradient:
+        radial-gradient(900px 700px at 18% 12%, rgba(38, 230, 217, .12), transparent 60%),
+        radial-gradient(900px 700px at 84% 18%, rgba(255, 122, 92, .09), transparent 60%),
+        radial-gradient(900px 700px at 50% 110%, rgba(47, 123, 255, .08), transparent 55%);
+
+    --glow-primary: 0 0 18px rgba(38, 230, 217, .20), 0 0 52px rgba(38, 230, 217, .10);
+    --glow-accent: 0 0 16px rgba(255, 122, 92, .18), 0 0 48px rgba(255, 122, 92, .09);
+    --glow-hero: 0 0 22px rgba(38, 230, 217, .26), 0 0 64px rgba(38, 230, 217, .11);
+
+    --sidebar-item-active-glow: var(--glow-primary);
+
+    /* Layout Variables */
+    --sidebar-width: 260px;
+}
+
+/* ============================================
+   Store Layout Overrides
+   ============================================ */
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+    background: var(--app-bg);
+}
+
+.vr-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    /* background managed by globals .vr-sidebar */
+    /* border managed by globals .vr-sidebar */
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    /* background managed by globals body */
+    position: relative;
+    transition: margin-left var(--t-med) var(--ease);
+    min-width: 0;
+}
+
+/* Sidebar Internals */
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--glow-primary);
+    flex-shrink: 0;
+    color: #000;
+    /* Contrast */
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Search Box */
+.search-container {
+    padding: 16px 20px;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.search-text {
+    /* For search input using vr-input class */
+}
+
+.vr-input.search-input {
+    padding-left: 44px;
+    border-radius: 999px;
+}
+
+/* Sidebar Nav */
+.sidebar-nav {
+    flex: 1;
+    padding: 8px 12px;
+}
+
+.nav-icon {
+    font-size: 20px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.nav-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.nav-badge {
+    padding: 2px 8px;
+    background: var(--brand-accent);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 999px;
+    text-transform: uppercase;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+}
+
+.footer-link {
+    display: block;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-decoration: none;
+    padding: 6px 0;
+    transition: color var(--t-fast);
+}
+
+.footer-link:hover {
+    color: var(--brand-primary);
+}
+
+/* Promo Card */
+.promo-card {
+    margin: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    border-radius: var(--r-md);
+    position: relative;
+    overflow: hidden;
+    color: #000;
+}
+
+.promo-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    opacity: 0.5;
+}
+
+.promo-text {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.8;
+    margin-bottom: 4px;
+}
+
+.promo-title {
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.promo-image {
+    position: absolute;
+    right: 10px;
+    bottom: 0px;
+    font-size: 32px;
+}
+
+/* Auth Section */
+.auth-section {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.login-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--surface-2);
+    border-radius: var(--r-md);
+    text-decoration: none;
+    transition: background var(--t-fast);
+    border: 1px solid var(--border);
+}
+
+.login-button:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+}
+
+.login-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    color: #000;
+}
+
+.login-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.login-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.login-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* User Info */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--surface-2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 0px;
+    }
+
+    .vr-sidebar {
+        transform: translateX(-100%);
+        transition: transform var(--t-med) var(--ease);
+        width: 260px;
+        /* Force width when open */
+        border-right: 1px solid var(--border);
+        background: var(--surface-1);
+        /* Solid bg on mobile */
+    }
+
+    .vr-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}

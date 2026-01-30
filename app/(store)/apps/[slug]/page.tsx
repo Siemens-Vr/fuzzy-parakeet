@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReviewSection from '@/components/ReviewSection';
+import AppMediaGallery from '@/components/AppMediaGallery';
 
 // Types
 interface AppDetails {
@@ -271,8 +272,6 @@ export default function AppDetailsPage() {
   const [relatedApps, setRelatedApps] = useState<RelatedApp[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'about' | 'reviews' | 'related'>('about');
-  const [selectedScreenshot, setSelectedScreenshot] = useState<number>(0);
-  const [showTrailer, setShowTrailer] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
   const [expandDescription, setExpandDescription] = useState(false);
@@ -544,11 +543,11 @@ export default function AppDetailsPage() {
               backgroundImage: app.heroImageUrl
                 ? `url(${app.heroImageUrl})`
                 : app.screenshots?.[0]
-                ? `url(${app.screenshots[0]})`
-                : undefined,
+                  ? `url(${app.screenshots[0]})`
+                  : undefined,
             }}
           />
-          <div 
+          <div
             className="absolute inset-0"
             style={{ background: 'linear-gradient(to bottom, rgba(0,102,204,0.7) 0%, rgba(0,102,204,0.85) 50%, var(--background) 100%)' }}
           />
@@ -589,7 +588,7 @@ export default function AppDetailsPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div 
+                    <div
                       className="w-full h-full flex items-center justify-center text-4xl text-white"
                       style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                     >
@@ -602,10 +601,9 @@ export default function AppDetailsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span
-                      className={`px-2 py-0.5 rounded text-xs font-medium ${
-                        CONTENT_RATING_INFO[app.contentRating]?.color ||
+                      className={`px-2 py-0.5 rounded text-xs font-medium ${CONTENT_RATING_INFO[app.contentRating]?.color ||
                         'bg-white/20 text-white'
-                      }`}
+                        }`}
                     >
                       {CONTENT_RATING_INFO[app.contentRating]?.label || app.contentRating}
                     </span>
@@ -716,7 +714,7 @@ export default function AppDetailsPage() {
                     <>
                       {/* BUY NOW only if paid app */}
                       {app.price > 0 && (
-                        <button 
+                        <button
                           className="w-full py-3 px-4 text-white font-semibold rounded-[var(--radius-md)] transition-all transform hover:scale-[1.02] shadow-[var(--shadow-glow)]"
                           style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                         >
@@ -735,11 +733,10 @@ export default function AppDetailsPage() {
                         <button
                           onClick={handleSideload}
                           disabled={busy || !isChromeOrEdge}
-                          className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 text-sm font-medium ${
-                            busy
-                              ? 'bg-[var(--primary-dark)] text-white/80 cursor-wait'
-                              : 'text-white hover:opacity-90'
-                          } ${!isChromeOrEdge ? 'opacity-60 cursor-not-allowed' : ''}`}
+                          className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 text-sm font-medium ${busy
+                            ? 'bg-[var(--primary-dark)] text-white/80 cursor-wait'
+                            : 'text-white hover:opacity-90'
+                            } ${!isChromeOrEdge ? 'opacity-60 cursor-not-allowed' : ''}`}
                           style={{ background: busy ? undefined : 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                         >
                           🎯 {busy ? 'Sideloading…' : 'Sideload now'}
@@ -752,11 +749,10 @@ export default function AppDetailsPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setIsWishlisted(!isWishlisted)}
-                      className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 transition-colors border ${
-                        isWishlisted
-                          ? 'bg-pink-500 text-white border-pink-500'
-                          : 'bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] border-[var(--border)]'
-                      }`}
+                      className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 transition-colors border ${isWishlisted
+                        ? 'bg-pink-500 text-white border-pink-500'
+                        : 'bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] border-[var(--border)]'
+                        }`}
                     >
                       <HeartIcon filled={isWishlisted} />
                       <span className="text-sm">
@@ -786,9 +782,8 @@ export default function AppDetailsPage() {
                   <div className="flex justify-between items-center">
                     <span className="text-[var(--text-tertiary)]">Comfort</span>
                     <span
-                      className={`px-2 py-0.5 rounded text-xs ${
-                        COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface)]'
-                      }`}
+                      className={`px-2 py-0.5 rounded text-xs ${COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface)]'
+                        }`}
                     >
                       {COMFORT_INFO[app.comfortLevel]?.icon}{' '}
                       {COMFORT_INFO[app.comfortLevel]?.label || app.comfortLevel}
@@ -818,85 +813,11 @@ export default function AppDetailsPage() {
       {/* Screenshots & Media Section */}
       {app.screenshots && app.screenshots.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="relative">
-            {/* Main Screenshot/Video */}
-            {/* <div className="relative aspect-video rounded-[var(--radius-xl)] overflow-hidden bg-[var(--surface)] mb-4 border-2 border-[var(--border)] shadow-[var(--shadow-lg)]">
-              {showTrailer && app.trailerUrl ? (
-                <iframe
-                  src={app.trailerUrl.replace('watch?v=', 'embed/')}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <>
-                  <img
-                    src={app.screenshots[selectedScreenshot] || '/placeholder.jpg'}
-                    alt={`${app.name} screenshot ${selectedScreenshot + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                  {app.trailerUrl && selectedScreenshot === 0 && (
-                    <button
-                      onClick={() => setShowTrailer(true)}
-                      className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/50 transition-colors group"
-                    >
-                      <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <PlayIcon />
-                      </div>
-                    </button>
-                  )}
-                </>
-              )}
-            </div> */}
-
-            {/* Thumbnail Row */}
-            <div className="flex gap-3 overflow-x-auto pb-2">
-              {app.trailerUrl && (
-                <button
-                  onClick={() => {
-                    setShowTrailer(true);
-                    setSelectedScreenshot(0);
-                  }}
-                  className={`relative flex-shrink-0 w-32 h-20 rounded-[var(--radius-md)] overflow-hidden border-2 transition-all ${
-                    showTrailer ? 'border-[var(--primary)]' : 'border-[var(--border)] hover:border-[var(--border-hover)]'
-                  }`}
-                >
-                  <img
-                    src={app.screenshots[0] || '/placeholder.jpg'}
-                    alt="Trailer"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                  </div>
-                </button>
-              )}
-              {app.screenshots.map((screenshot, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setShowTrailer(false);
-                    setSelectedScreenshot(index);
-                  }}
-                  className={`flex-shrink-0 w-32 h-20 rounded-[var(--radius-md)] overflow-hidden border-2 transition-all ${
-                    !showTrailer && selectedScreenshot === index
-                      ? 'border-[var(--primary)]'
-                      : 'border-[var(--border)] hover:border-[var(--border-hover)]'
-                  }`}
-                >
-                  <img
-                    src={screenshot}
-                    alt={`Screenshot ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
+          <AppMediaGallery
+            appName={app.name}
+            screenshots={app.screenshots}
+            trailerUrl={app.trailerUrl}
+          />
         </div>
       )}
 
@@ -912,11 +833,10 @@ export default function AppDetailsPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`py-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-[var(--primary)] text-[var(--primary)]'
-                    : 'border-transparent text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
-                }`}
+                className={`py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id
+                  ? 'border-[var(--primary)] text-[var(--primary)]'
+                  : 'border-transparent text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+                  }`}
               >
                 {tab.label}
               </button>
@@ -935,9 +855,8 @@ export default function AppDetailsPage() {
               <section>
                 <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">About this app</h2>
                 <div
-                  className={`prose max-w-none ${
-                    !expandDescription && 'line-clamp-6'
-                  }`}
+                  className={`prose max-w-none ${!expandDescription && 'line-clamp-6'
+                    }`}
                 >
                   <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{app.description}</p>
                 </div>
@@ -957,7 +876,7 @@ export default function AppDetailsPage() {
                   <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">What&apos;s New</h2>
                   <div className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 border border-[var(--border)]">
                     <div className="flex items-center gap-2 mb-3">
-                      <span 
+                      <span
                         className="px-2 py-1 text-white text-xs font-bold rounded"
                         style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                       >
@@ -1038,9 +957,8 @@ export default function AppDetailsPage() {
                   <div>
                     <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Comfort</h4>
                     <div
-                      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-sm ${
-                        COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface-elevated)]'
-                      }`}
+                      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-sm ${COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface-elevated)]'
+                        }`}
                     >
                       <span>{COMFORT_INFO[app.comfortLevel]?.icon || '😊'}</span>
                       <span>
@@ -1235,9 +1153,8 @@ export default function AppDetailsPage() {
                   <div className="flex justify-between">
                     <span className="text-[var(--text-tertiary)]">Content Rating</span>
                     <span
-                      className={`px-2 py-0.5 rounded text-xs ${
-                        CONTENT_RATING_INFO[app.contentRating]?.color || 'bg-[var(--surface-elevated)]'
-                      }`}
+                      className={`px-2 py-0.5 rounded text-xs ${CONTENT_RATING_INFO[app.contentRating]?.color || 'bg-[var(--surface-elevated)]'
+                        }`}
                     >
                       {CONTENT_RATING_INFO[app.contentRating]?.label || app.contentRating}
                     </span>
@@ -1289,7 +1206,7 @@ export default function AppDetailsPage() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                       ) : (
-                        <div 
+                        <div
                           className="w-full h-full flex items-center justify-center text-4xl text-white"
                           style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                         >

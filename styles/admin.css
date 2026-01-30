@@ -1,0 +1,26 @@
+/* ============================================================
+   VRSTORE THEME — ADMIN
+   Apply: <html data-theme="admin">
+   Admin stays calm: reduced glow, high clarity, trust blue.
+   ============================================================ */
+
+html[data-theme="admin"],
+.theme-admin {
+    --app-bg: #090E1B;
+    --surface-1: #0E1628;
+    --surface-2: #111C31;
+
+    --brand-primary: var(--blue-500);
+    --brand-secondary: var(--violet-500);
+    --brand-accent: var(--warning-500);
+
+    --app-bg-gradient:
+        radial-gradient(900px 700px at 20% 15%, rgba(47, 123, 255, .08), transparent 60%),
+        radial-gradient(900px 700px at 50% 115%, rgba(124, 58, 237, .05), transparent 55%);
+
+    --glow-primary: 0 0 12px rgba(47, 123, 255, .16);
+    --glow-accent: 0 0 10px rgba(245, 158, 11, .16);
+    --glow-hero: 0 0 0 rgba(0, 0, 0, 0);
+
+    --sidebar-item-active-glow: 0 0 10px rgba(47, 123, 255, .14);
+}

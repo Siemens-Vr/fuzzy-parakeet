@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import '@/styles/developer.css';
+import '@/styles/dev.css';
 
 function DeveloperLayoutInner({ children }: { children: ReactNode }) {
   const { user, loading, logout } = useAuth();
@@ -151,7 +152,7 @@ function DeveloperLayoutInner({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="dev-shell">
+    <div className="dev-shell theme-dev">
       {/* Topbar */}
       <div className="dev-topbar">
         <div className="dev-topbar-inner">

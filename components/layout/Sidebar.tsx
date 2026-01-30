@@ -28,7 +28,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+    <aside className={`vr-sidebar ${sidebarOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <Link href="/" className="logo" onClick={closeOnMobile}>
           <div className="logo-icon">
@@ -50,6 +50,7 @@ export default function Sidebar() {
           </svg>
           <input
             type="text"
+            className="vr-input search-input"
             placeholder="Search VR Store..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -64,7 +65,7 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`nav-item ${active ? 'active' : ''}`}
+              className={`nav-item ${active ? 'is-active' : ''}`}
               onClick={closeOnMobile}
             >
               <span className="nav-icon">{item.icon}</span>
