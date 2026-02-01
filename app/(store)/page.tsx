@@ -4,42 +4,63 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import AppCard, { type AppMeta } from '@/components/AppCard';
 import HeroCarousel from '@/components/HeroCarousel';
-import Link from 'next/link';
 import CategoryBrowse from '@/components/CategoryBrowse';
+import AppShelf from '@/components/AppShelf';
+import ArticleShelf from '@/components/ArticleShelf';
+import DiscoveryGrid from '@/components/DiscoveryGrid';
+import PromoBanner from '@/components/PromoBanner';
+import SideloadShelf from '@/components/SideloadShelf';
+import StoreFooter from '@/components/layout/StoreFooter';
 import { useStoreUi } from '@/contexts/StoreUiContext';
 
-const categories = [
-  'All apps',
-  'Games',
-  'Education',
-  'Entertainment',
-  'Productivity',
-  'Social',
-  'Utilities',
-  'Medical',
-  'Fitness',
-  'Adventure',
-  'Simulation',
-];
-
 export default function HomePage() {
-  const { searchQuery } = useStoreUi(); // ✅ from Sidebar now
+  const { searchQuery } = useStoreUi();
 
   const [apps, setApps] = useState<AppMeta[]>([]);
+  const [trendingApps, setTrendingApps] = useState<AppMeta[]>([]);
+  const [newApps, setNewApps] = useState<AppMeta[]>([]);
+  const [experimentalApps, setExperimentalApps] = useState<AppMeta[]>([]);
   const [loading, setLoading] = useState(true);
+  const [shelvesLoading, setShelvesLoading] = useState(true);
+
   const [selectedCategory, setSelectedCategory] = useState('All apps');
-  const [freeOnly, setFreeOnly] = useState(false);
   const [sortBy, setSortBy] = useState('downloads');
 
-  const handleCategorySelect = (categoryId: string) => {
-    setSelectedCategory(categoryId);
-  };
+  // Fetch specialized collections on mount
+  useEffect(() => {
+    fetchCollections();
+  }, []);
 
-  // Fetch apps from API (same dependencies as original + freeOnly)
+  // Fetch filtered apps when criteria change
   useEffect(() => {
     fetchApps();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory, sortBy, searchQuery, freeOnly]);
+  }, [selectedCategory, sortBy, searchQuery]);
+
+  const fetchCollections = async () => {
+    setShelvesLoading(true);
+    try {
+      // Fetch Trending (Sort by downloads)
+      const trendingRes = await fetch('/api/public/apps?sortBy=downloads&limit=10');
+      const trendingData = await trendingRes.json();
+
+      // Fetch New (Sort by releaseDate)
+      const newRes = await fetch('/api/public/apps?sortBy=releaseDate&limit=10');
+      const newData = await newRes.json();
+
+      // Fetch Experimental (Simulated for now with 'Utilities' or just a subset)
+      const experimentalRes = await fetch('/api/public/apps?limit=8');
+      const experimentalData = await experimentalRes.json();
+
+      setTrendingApps(mapApps(trendingData));
+      setNewApps(mapApps(newData));
+      setExperimentalApps(mapApps(experimentalData));
+    } catch (err) {
+      console.error('Error fetching collections:', err);
+    } finally {
+      setShelvesLoading(false);
+    }
+  };
 
   const fetchApps = async () => {
     setLoading(true);
@@ -48,38 +69,12 @@ export default function HomePage() {
       if (selectedCategory !== 'All apps') params.append('category', selectedCategory);
       if (searchQuery) params.append('search', searchQuery);
       params.append('sortBy', sortBy);
-      if (freeOnly) params.append('freeOnly', 'true');
 
       const response = await fetch(`/api/public/apps?${params.toString()}`);
-      if (!response.ok) {
-        console.error('Failed to fetch apps');
-        setApps([]);
-        return;
-      }
+      if (!response.ok) throw new Error('Failed to fetch');
 
       const data = await response.json();
-
-      // ✅ map -> AppMeta for AppCard
-      const mapped: AppMeta[] = (Array.isArray(data) ? data : []).map((app: any) => ({
-        slug: app.slug,
-        name: app.name,
-        version: app.version ?? '1.0.0',
-        filename: app.filename ?? '',
-        sizeBytes: app.sizeBytes ?? 0,
-        sha256: app.sha256 ?? '',
-        summary: app.summary,
-        description: app.description,
-        icon: app.icon,
-        screenshots: app.screenshots,
-        developer: app.developer,
-        category: app.category,
-        rating: app.rating,
-        downloads: app.downloads,
-        releaseDate: app.releaseDate,
-        lastUpdated: app.lastUpdated,
-      }));
-
-      setApps(mapped);
+      setApps(mapApps(data));
     } catch (error) {
       console.error('Error fetching apps:', error);
       setApps([]);
@@ -88,89 +83,112 @@ export default function HomePage() {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
+  const mapApps = (data: any[]): AppMeta[] => {
+    return (Array.isArray(data) ? data : []).map((app: any) => ({
+      slug: app.slug,
+      name: app.name,
+      icon: app.icon,
+      summary: app.summary,
+      developer: app.developer,
+      category: app.category,
+      rating: app.rating,
+      downloads: app.downloads,
+    } as AppMeta));
   };
 
-  const categoryVariants = {
-    hidden: { opacity: 0, x: -20 },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-      },
-    },
-  };
+  const isDiscoveryMode = !searchQuery && selectedCategory === 'All apps';
 
   return (
-    <div>
-      {/* Hero Carousel */}
+    <div className="home-container">
       <HeroCarousel />
 
-      <div >
-        {/* Loading State */}
-        {loading && (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              style={{
-                width: 40,
-                height: 40,
-                border: '4px solid var(--border)',
-                borderTopColor: 'var(--primary)',
-                borderRadius: '50%',
-                margin: '0 auto 16px',
-              }}
+      <div className="home-sections">
+        {isDiscoveryMode ? (
+          <>
+            <AppShelf
+              title="Trending Games"
+              apps={trendingApps}
+              loading={shelvesLoading}
+              viewAllHref="/apps?sortBy=downloads"
             />
-            <p style={{ color: 'var(--text-secondary)' }}>Loading apps...</p>
-          </div>
+
+            <DiscoveryGrid />
+
+            <AppShelf
+              title="New Releases"
+              apps={newApps}
+              loading={shelvesLoading}
+              viewAllHref="/apps?sortBy=releaseDate"
+            />
+
+            <PromoBanner />
+
+            <SideloadShelf
+              apps={experimentalApps}
+              loading={shelvesLoading}
+            />
+
+            <ArticleShelf />
+
+            <div className="section-divider" />
+
+            <header className="section-header-centered">
+              <h2 className="section-title">Browse All Apps</h2>
+              <p className="section-subtitle">Explore our full library of VR experiences</p>
+            </header>
+          </>
+        ) : (
+          <header className="results-header">
+            <h2 className="section-title">
+              {searchQuery ? `Search results for "${searchQuery}"` : selectedCategory}
+            </h2>
+            <p className="section-subtitle">{apps.length} apps found</p>
+          </header>
         )}
 
-        {/* Apps Grid */}
-        {!loading && apps.length > 0 && (
-          <motion.div variants={containerVariants} initial="hidden" animate="show" className="app-grid">
-            {apps.map((app, index) => (
+        {/* Main Grid Area */}
+        <div className="main-grid-area">
+          {loading ? (
+            <div className="loading-spinner">
               <motion.div
-                key={app.slug}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: index * 0.05,
-                  duration: 0.4,
-                  type: 'spring',
-                  stiffness: 100,
-                }}
-              >
-                <AppCard app={app} />
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-
-        {/* Empty State */}
-        {!loading && apps.length === 0 && (
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="empty-state">
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📱</div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No apps found</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>Try adjusting your filters or search query</p>
-          </motion.div>
-        )}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                className="spinner"
+              />
+            </div>
+          ) : apps.length > 0 ? (
+            <motion.div
+              className="app-grid"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {apps.map((app, index) => (
+                <motion.div
+                  key={app.slug}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <AppCard app={app} />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">📱</div>
+              <h2>No apps found</h2>
+              <p>Try adjusting your search or filters</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* CategoryBrowse (same as original position) */}
-      <div>
-        <CategoryBrowse selectedCategory={selectedCategory} onCategorySelect={handleCategorySelect} />
-      </div>
+      <CategoryBrowse
+        selectedCategory={selectedCategory}
+        onCategorySelect={setSelectedCategory}
+      />
+
+      <StoreFooter />
     </div>
   );
 }

@@ -138,13 +138,20 @@ a {
   /* Glows (premium, not neon) */
   --glow-primary: 0 0 18px rgba(38, 230, 217, .20), 0 0 52px rgba(38, 230, 217, .10);
   --glow-accent: 0 0 16px rgba(255, 122, 92, .18), 0 0 48px rgba(255, 122, 92, .09);
+
+  /* Legacy aliases for AppCard */
+  --primary: var(--brand-primary);
+  --primary-dark: #1e3a8a;
+  --primary-light: var(--brand-secondary);
+  --accent: var(--brand-accent);
+  --accent-dark: var(--spark-600);
   --glow-hero: 0 0 22px rgba(38, 230, 217, .26), 0 0 64px rgba(38, 230, 217, .11);
 
   /* Focus ring */
   --focus-ring: 0 0 0 3px rgba(47, 123, 255, .22);
 
   /* Sidebar */
-  
+
   --sidebar-bg: rgba(0, 0, 0, 0.22);
   --sidebar-border: var(--border);
   --sidebar-item: transparent;
@@ -199,9 +206,7 @@ a {
    3) Base components (optional)
 ---------------------------- */
 
-.app-shell{
-
-}
+.app-shell {}
 
 /* Layout helpers */
 .vr-container {
@@ -412,4 +417,16 @@ a {
 .vr-overlay {
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(10px);
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
