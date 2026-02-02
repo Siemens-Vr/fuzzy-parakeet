@@ -90,11 +90,18 @@ export default function Sidebar() {
           </Link>
         </div>
 
-        <div className="promo-card">
+      </div>
+
+      <div className="promo-card">
+        <div className="promo-content">
           <p className="promo-text">Looking for some</p>
           <h3 className="promo-title">Physics fueled<br />fun with friends?</h3>
-          <div className="promo-image">🤖</div>
         </div>
+        <img
+          src="/images/promo-character.png"
+          alt="Promo Character"
+          className="promo-character-img"
+        />
       </div>
 
       {/* Auth section pinned at bottom */}

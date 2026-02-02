@@ -89,6 +89,13 @@ html[data-theme="store"],
     scrollbar-color: #555 #000;
 }
 
+/* Disable scroll on large screens where content fits */
+@media (min-width: 1440px) and (min-height: 900px) {
+    .sidebar-scrollable {
+        overflow-y: hidden;
+    }
+}
+
 
 
 .main-content {
@@ -179,6 +186,8 @@ html[data-theme="store"],
     padding: 8px 12px;
 }
 
+
+
 .nav-icon {
     font-size: 20px;
     width: 24px;
@@ -186,6 +195,7 @@ html[data-theme="store"],
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    /* padding:10px; */
 }
 
 .nav-label {
@@ -229,50 +239,76 @@ html[data-theme="store"],
 
 /* Promo Card */
 .promo-card {
-    margin: 16px;
-    padding: 20px;
-    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
-    border-radius: var(--r-md);
+    margin: 0;
+    padding: 24px;
+    background: #0D1117;
+    background-image: radial-gradient(circle at 120% 50%, rgba(219, 39, 119, 0.45) 0%, transparent 60%);
+    border-radius: 0;
+    border-top: 1px solid var(--border);
     position: relative;
     overflow: hidden;
-    color: #000;
+    display: flex;
+    align-items: center;
+    min-height: 140px;
 }
 
-.promo-card::before {
+.promo-card::after {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-    opacity: 0.5;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(219, 39, 119, 0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    filter: blur(15px);
+}
+
+.promo-content {
+    position: relative;
+    z-index: 5;
+    max-width: 60%;
 }
 
 .promo-text {
-    font-size: 12px;
-    font-weight: 600;
-    opacity: 0.8;
-    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    opacity: 0.9;
+    margin-bottom: 8px;
 }
 
 .promo-title {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 800;
-    line-height: 1.2;
+    line-height: 1.25;
+    color: #fff;
+    letter-spacing: -0.01em;
 }
 
-.promo-image {
+.promo-character-img {
     position: absolute;
-    right: 10px;
-    bottom: 0px;
-    font-size: 32px;
+    right: -10px;
+    bottom: -10px;
+    height: 120%;
+    object-fit: contain;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Hide promo card on smaller screens (laptops and below) */
+@media (max-width: 1024px) {
+    .promo-card {
+        display: none;
+    }
 }
 
 /* Auth Section - Pinned at Bottom */
 .auth-section {
     padding: 16px;
-    border-top: 1px solid var(--border);
+    border-top: none;
     flex-shrink: 0;
     /* Prevent shrinking */
     background: var(--surface-1);
@@ -1457,10 +1493,10 @@ html[data-theme="store"],
 }
 
 .promo-title {
-    font-size: 42px;
+    font-size: 14px;
     font-weight: 900;
     color: #fff;
-    margin-bottom: 1.5rem;
+    /* margin-bottom: 1.5rem; */
     letter-spacing: -0.03em;
 }
 
@@ -1541,6 +1577,6 @@ html[data-theme="store"],
     }
 
     .promo-title {
-        font-size: 32px;
+        font-size: 14px;
     }
 }
