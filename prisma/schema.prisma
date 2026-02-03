@@ -110,6 +110,7 @@ model App {
   screenshots     Json        // Array of screenshot URLs
   heroImageUrl    String?
   trailerUrl      String?
+  trailerVideoUrl String?     // Uploaded video file URL
   promoVideoUrl   String?     // Additional promo video
   
   // Technical Details

@@ -42,7 +42,7 @@ export function useAppSubmissionForm() {
   }, []);
 
   // Handle file uploads
-  const handleFileChange = useCallback((field: 'apkFile' | 'iconFile' | 'heroImageFile', file: File | null) => {
+  const handleFileChange = useCallback((field: 'apkFile' | 'iconFile' | 'heroImageFile' | 'trailerVideoFile', file: File | null) => {
     updateField(field, file);
     if (field === 'apkFile' && file) {
       updateField('sizeBytes', file.size);
@@ -77,7 +77,7 @@ export function useAppSubmissionForm() {
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent, field: 'apkFile' | 'iconFile' | 'heroImageFile' | 'screenshots') => {
+  const handleDrop = useCallback((e: React.DragEvent, field: 'apkFile' | 'iconFile' | 'heroImageFile' | 'trailerVideoFile' | 'screenshots') => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(null);

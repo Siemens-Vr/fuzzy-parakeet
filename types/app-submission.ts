@@ -9,13 +9,13 @@ export interface AppFormData {
   category: string;
   subcategory: string;
   tags: string[];
-  
+
   // Step 2: Pricing & Distribution
   price: number;
   currency: string;
   salePrice: number | null;
   saleEndDate: string | null;
-  
+
   // Step 3: Technical Requirements
   version: string;
   minApiLevel: number;
@@ -25,15 +25,16 @@ export interface AppFormData {
   requiresHandTracking: boolean;
   requiresPassthrough: boolean;
   requiresControllers: boolean;
-  
+
   // Step 4: Media & Assets
   apkFile: File | null;
   iconFile: File | null;
   screenshots: File[];
   heroImageFile: File | null;
   trailerUrl: string;
+  trailerVideoFile: File | null;
   promoVideoUrl: string;
-  
+
   // Step 5: Content & Comfort
   contentRating: string;
   comfortLevel: string;
@@ -44,12 +45,12 @@ export interface AppFormData {
   containsAds: boolean;
   hasInAppPurchases: boolean;
   inAppPurchaseInfo: string;
-  
+
   // Step 6: Details & Features
   features: string[];
   whatsNew: string;
   languages: string[];
-  
+
   // Step 7: Support & Links
   privacyPolicyUrl: string;
   supportUrl: string;
@@ -57,7 +58,7 @@ export interface AppFormData {
   discordUrl: string;
   twitterUrl: string;
   youtubeUrl: string;
-  
+
   // Step 8: Additional Info
   developerNotes: string;
   credits: string;

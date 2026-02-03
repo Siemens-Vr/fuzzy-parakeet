@@ -2,18 +2,32 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faHome,
+  faDownload,
+  faGamepad,
+  faUsers,
+  faBolt,
+  faBullhorn,
+  faNewspaper,
+  faQuestionCircle,
+  faUser,
+  faSignInAlt,
+  faSearch
+} from '@fortawesome/free-solid-svg-icons';
 import { useStoreUi } from '@/contexts/StoreUiContext';
 import { useAuth } from '@/contexts/AuthContext';
 
 const SIDEBAR_ITEMS = [
-  { icon: '🏠', label: 'Home', href: '/' },
-  { icon: '⬇️', label: 'Get VR APP STORE', href: '/download' },
-  { icon: '🎮', label: 'Apps and Games', href: '/apps' },
-  { icon: '👥', label: 'Groups', href: '/groups' },
-  { icon: '⚡', label: 'Indie Alliance', href: '/indie' },
-  { icon: '⭐', label: 'Advertise', href: '/advertise' },
-  { icon: '📰', label: 'Articles', href: '/articles', badge: 'New!' },
-  { icon: '❓', label: 'Help & Support', href: '/support' },
+  { icon: <FontAwesomeIcon icon={faHome} />, label: 'Home', href: '/' },
+  { icon: <FontAwesomeIcon icon={faDownload} />, label: 'Get VR APP STORE', href: '/download' },
+  { icon: <FontAwesomeIcon icon={faGamepad} />, label: 'Apps and Games', href: '/apps' },
+  { icon: <FontAwesomeIcon icon={faUsers} />, label: 'Groups', href: '/groups' },
+  { icon: <FontAwesomeIcon icon={faBolt} />, label: 'Indie Alliance', href: '/indie' },
+  { icon: <FontAwesomeIcon icon={faBullhorn} />, label: 'Advertise', href: '/advertise' },
+  { icon: <FontAwesomeIcon icon={faNewspaper} />, label: 'Articles', href: '/articles', badge: 'New!' },
+  { icon: <FontAwesomeIcon icon={faQuestionCircle} />, label: 'Help & Support', href: '/support' },
 ];
 
 export default function Sidebar() {
@@ -46,10 +60,7 @@ export default function Sidebar() {
 
         <div className="search-container">
           <div className="search-box">
-            <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
+            <FontAwesomeIcon icon={faSearch} className="search-icon" style={{ fontSize: '14px' }} />
             <input
               type="text"
               className="vr-input search-input"
@@ -113,7 +124,9 @@ export default function Sidebar() {
           </div>
         ) : isLoggedIn ? (
           <Link href="/account" className="login-button" onClick={closeOnMobile}>
-            <div className="login-avatar">👤</div>
+            <div className="login-avatar">
+              <FontAwesomeIcon icon={faUser} style={{ fontSize: '16px' }} />
+            </div>
             <div className="login-text">
               <span className="login-title">{user?.name || 'My account'}</span>
               <span className="login-subtitle">Account</span>
@@ -121,7 +134,9 @@ export default function Sidebar() {
           </Link>
         ) : (
           <Link href="/auth/user/login" className="login-button" onClick={closeOnMobile}>
-            <div className="login-avatar">🎮</div>
+            <div className="login-avatar">
+              <FontAwesomeIcon icon={faSignInAlt} style={{ fontSize: '16px' }} />
+            </div>
             <div className="login-text">
               <span className="login-title">Log in or Sign up</span>
               <span className="login-subtitle">My account</span>

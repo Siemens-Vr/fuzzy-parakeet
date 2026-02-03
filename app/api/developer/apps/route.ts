@@ -252,6 +252,7 @@ export async function POST(req: NextRequest) {
     const apk = data.get('apkFile') as File | null;
     const icon = data.get('iconFile') as File | null;
     const heroImage = data.get('heroImageFile') as File | null;
+    const trailerVideo = data.get('trailerVideoFile') as File | null;
 
     const screenshots: File[] = [];
     for (const [k, v] of data.entries()) {
@@ -286,6 +287,7 @@ export async function POST(req: NextRequest) {
     const screenshotUrls = await Promise.all(
       screenshots.slice(0, 10).map(file => saveFile(file, 'screens')),
     );
+    const trailerVideoUrl = trailerVideo ? await saveFile(trailerVideo, 'trailers') : null;
 
     const sizeBytes = BigInt((apk as any).size || 0);
     const releaseNotes = String(data.get('releaseNotes') || '');
@@ -317,6 +319,7 @@ export async function POST(req: NextRequest) {
           screenshots: screenshotUrls as unknown as Prisma.JsonArray,
           heroImageUrl,
           trailerUrl,
+          trailerVideoUrl,
           promoVideoUrl,
 
           sizeBytes,

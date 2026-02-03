@@ -519,6 +519,39 @@ export default function NewAppPage() {
         <p className="helper-text mt-1">{formData.screenshots.length}/8 screenshots</p>
       </div>
 
+      {/* Trailer Video Upload */}
+      <div>
+        <label className="label">Trailer Video File <span className="helper-text">(optional, MP4)</span></label>
+        <div
+          onDragEnter={(e) => handleDrag(e, 'trailerVideoFile')}
+          onDragLeave={(e) => handleDrag(e, 'trailerVideoFile')}
+          onDragOver={(e) => handleDrag(e, 'trailerVideoFile')}
+          onDrop={(e) => handleDrop(e, 'trailerVideoFile')}
+          className={`upload-zone ${dragActive === 'trailerVideoFile' ? 'drag-active' : ''}`}
+        >
+          {formData.trailerVideoFile ? (
+            <div className="flex items-center justify-center gap-4">
+              <div className="text-4xl">🎬</div>
+              <div className="text-left">
+                <div className="font-medium">{formData.trailerVideoFile.name}</div>
+                <div className="text-sm text-gray-500">{formatFileSize(formData.trailerVideoFile.size)}</div>
+              </div>
+              <button type="button" onClick={() => handleFileChange('trailerVideoFile', null)} className="ml-4 text-red-500 hover:text-red-700">Remove</button>
+            </div>
+          ) : (
+            <>
+              <div className="text-4xl mb-2">🎥</div>
+              <div className="mb-2">Drag and drop your trailer video here</div>
+              <div className="text-gray-400 mb-4">or</div>
+              <label className="btn btn-secondary cursor-pointer">
+                Browse Files
+                <input type="file" accept="video/mp4,video/webm" onChange={(e) => handleFileChange('trailerVideoFile', e.target.files?.[0] || null)} className="hidden" />
+              </label>
+            </>
+          )}
+        </div>
+      </div>
+
       {/* Video URLs */}
       <div className="grid grid-cols-2 gap-4">
         <div>

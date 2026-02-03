@@ -73,6 +73,7 @@ export type AppMinAggregateOutputType = {
   iconUrl: string | null
   heroImageUrl: string | null
   trailerUrl: string | null
+  trailerVideoUrl: string | null
   promoVideoUrl: string | null
   sizeBytes: bigint | null
   sha256: string | null
@@ -129,6 +130,7 @@ export type AppMaxAggregateOutputType = {
   iconUrl: string | null
   heroImageUrl: string | null
   trailerUrl: string | null
+  trailerVideoUrl: string | null
   promoVideoUrl: string | null
   sizeBytes: bigint | null
   sha256: string | null
@@ -187,6 +189,7 @@ export type AppCountAggregateOutputType = {
   screenshots: number
   heroImageUrl: number
   trailerUrl: number
+  trailerVideoUrl: number
   promoVideoUrl: number
   sizeBytes: number
   sha256: number
@@ -278,6 +281,7 @@ export type AppMinAggregateInputType = {
   iconUrl?: true
   heroImageUrl?: true
   trailerUrl?: true
+  trailerVideoUrl?: true
   promoVideoUrl?: true
   sizeBytes?: true
   sha256?: true
@@ -334,6 +338,7 @@ export type AppMaxAggregateInputType = {
   iconUrl?: true
   heroImageUrl?: true
   trailerUrl?: true
+  trailerVideoUrl?: true
   promoVideoUrl?: true
   sizeBytes?: true
   sha256?: true
@@ -392,6 +397,7 @@ export type AppCountAggregateInputType = {
   screenshots?: true
   heroImageUrl?: true
   trailerUrl?: true
+  trailerVideoUrl?: true
   promoVideoUrl?: true
   sizeBytes?: true
   sha256?: true
@@ -542,6 +548,7 @@ export type AppGroupByOutputType = {
   screenshots: runtime.JsonValue
   heroImageUrl: string | null
   trailerUrl: string | null
+  trailerVideoUrl: string | null
   promoVideoUrl: string | null
   sizeBytes: bigint
   sha256: string | null
@@ -628,6 +635,7 @@ export type AppWhereInput = {
   screenshots?: Prisma.JsonFilter<"App">
   heroImageUrl?: Prisma.StringNullableFilter<"App"> | string | null
   trailerUrl?: Prisma.StringNullableFilter<"App"> | string | null
+  trailerVideoUrl?: Prisma.StringNullableFilter<"App"> | string | null
   promoVideoUrl?: Prisma.StringNullableFilter<"App"> | string | null
   sizeBytes?: Prisma.BigIntFilter<"App"> | bigint | number
   sha256?: Prisma.StringNullableFilter<"App"> | string | null
@@ -698,6 +706,7 @@ export type AppOrderByWithRelationInput = {
   screenshots?: Prisma.SortOrder
   heroImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   trailerUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  trailerVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   sha256?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -771,6 +780,7 @@ export type AppWhereUniqueInput = Prisma.AtLeast<{
   screenshots?: Prisma.JsonFilter<"App">
   heroImageUrl?: Prisma.StringNullableFilter<"App"> | string | null
   trailerUrl?: Prisma.StringNullableFilter<"App"> | string | null
+  trailerVideoUrl?: Prisma.StringNullableFilter<"App"> | string | null
   promoVideoUrl?: Prisma.StringNullableFilter<"App"> | string | null
   sizeBytes?: Prisma.BigIntFilter<"App"> | bigint | number
   sha256?: Prisma.StringNullableFilter<"App"> | string | null
@@ -841,6 +851,7 @@ export type AppOrderByWithAggregationInput = {
   screenshots?: Prisma.SortOrder
   heroImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   trailerUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  trailerVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   sha256?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -912,6 +923,7 @@ export type AppScalarWhereWithAggregatesInput = {
   screenshots?: Prisma.JsonWithAggregatesFilter<"App">
   heroImageUrl?: Prisma.StringNullableWithAggregatesFilter<"App"> | string | null
   trailerUrl?: Prisma.StringNullableWithAggregatesFilter<"App"> | string | null
+  trailerVideoUrl?: Prisma.StringNullableWithAggregatesFilter<"App"> | string | null
   promoVideoUrl?: Prisma.StringNullableWithAggregatesFilter<"App"> | string | null
   sizeBytes?: Prisma.BigIntWithAggregatesFilter<"App"> | bigint | number
   sha256?: Prisma.StringNullableWithAggregatesFilter<"App"> | string | null
@@ -974,6 +986,7 @@ export type AppCreateInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -1044,6 +1057,7 @@ export type AppUncheckedCreateInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -1112,6 +1126,7 @@ export type AppUpdateInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1182,6 +1197,7 @@ export type AppUncheckedUpdateInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1251,6 +1267,7 @@ export type AppCreateManyInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -1313,6 +1330,7 @@ export type AppUpdateManyMutationInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1376,6 +1394,7 @@ export type AppUncheckedUpdateManyInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1449,6 +1468,7 @@ export type AppCountOrderByAggregateInput = {
   screenshots?: Prisma.SortOrder
   heroImageUrl?: Prisma.SortOrder
   trailerUrl?: Prisma.SortOrder
+  trailerVideoUrl?: Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   sha256?: Prisma.SortOrder
@@ -1524,6 +1544,7 @@ export type AppMaxOrderByAggregateInput = {
   iconUrl?: Prisma.SortOrder
   heroImageUrl?: Prisma.SortOrder
   trailerUrl?: Prisma.SortOrder
+  trailerVideoUrl?: Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   sha256?: Prisma.SortOrder
@@ -1580,6 +1601,7 @@ export type AppMinOrderByAggregateInput = {
   iconUrl?: Prisma.SortOrder
   heroImageUrl?: Prisma.SortOrder
   trailerUrl?: Prisma.SortOrder
+  trailerVideoUrl?: Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   sha256?: Prisma.SortOrder
@@ -1838,6 +1860,7 @@ export type AppCreateWithoutDeveloperInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -1906,6 +1929,7 @@ export type AppUncheckedCreateWithoutDeveloperInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2004,6 +2028,7 @@ export type AppScalarWhereInput = {
   screenshots?: Prisma.JsonFilter<"App">
   heroImageUrl?: Prisma.StringNullableFilter<"App"> | string | null
   trailerUrl?: Prisma.StringNullableFilter<"App"> | string | null
+  trailerVideoUrl?: Prisma.StringNullableFilter<"App"> | string | null
   promoVideoUrl?: Prisma.StringNullableFilter<"App"> | string | null
   sizeBytes?: Prisma.BigIntFilter<"App"> | bigint | number
   sha256?: Prisma.StringNullableFilter<"App"> | string | null
@@ -2066,6 +2091,7 @@ export type AppCreateWithoutBuildsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2135,6 +2161,7 @@ export type AppUncheckedCreateWithoutBuildsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2218,6 +2245,7 @@ export type AppUpdateWithoutBuildsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2287,6 +2315,7 @@ export type AppUncheckedUpdateWithoutBuildsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2354,6 +2383,7 @@ export type AppCreateWithoutReviewsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2423,6 +2453,7 @@ export type AppUncheckedCreateWithoutReviewsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2506,6 +2537,7 @@ export type AppUpdateWithoutReviewsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2575,6 +2607,7 @@ export type AppUncheckedUpdateWithoutReviewsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2642,6 +2675,7 @@ export type AppCreateWithoutUserReviewsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2711,6 +2745,7 @@ export type AppUncheckedCreateWithoutUserReviewsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2794,6 +2829,7 @@ export type AppUpdateWithoutUserReviewsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2863,6 +2899,7 @@ export type AppUncheckedUpdateWithoutUserReviewsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2930,6 +2967,7 @@ export type AppCreateWithoutAnalyticsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -2999,6 +3037,7 @@ export type AppUncheckedCreateWithoutAnalyticsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -3082,6 +3121,7 @@ export type AppUpdateWithoutAnalyticsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3151,6 +3191,7 @@ export type AppUncheckedUpdateWithoutAnalyticsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3218,6 +3259,7 @@ export type AppCreateWithoutTransactionsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -3287,6 +3329,7 @@ export type AppUncheckedCreateWithoutTransactionsInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -3370,6 +3413,7 @@ export type AppUpdateWithoutTransactionsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3439,6 +3483,7 @@ export type AppUncheckedUpdateWithoutTransactionsInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3506,6 +3551,7 @@ export type AppCreateWithoutPurchasesInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -3575,6 +3621,7 @@ export type AppUncheckedCreateWithoutPurchasesInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -3658,6 +3705,7 @@ export type AppUpdateWithoutPurchasesInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3727,6 +3775,7 @@ export type AppUncheckedUpdateWithoutPurchasesInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3794,6 +3843,7 @@ export type AppCreateManyDeveloperInput = {
   screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: string | null
   trailerUrl?: string | null
+  trailerVideoUrl?: string | null
   promoVideoUrl?: string | null
   sizeBytes: bigint | number
   sha256?: string | null
@@ -3856,6 +3906,7 @@ export type AppUpdateWithoutDeveloperInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3924,6 +3975,7 @@ export type AppUncheckedUpdateWithoutDeveloperInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3992,6 +4044,7 @@ export type AppUncheckedUpdateManyWithoutDeveloperInput = {
   screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4131,6 +4184,7 @@ export type AppSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   screenshots?: boolean
   heroImageUrl?: boolean
   trailerUrl?: boolean
+  trailerVideoUrl?: boolean
   promoVideoUrl?: boolean
   sizeBytes?: boolean
   sha256?: boolean
@@ -4202,6 +4256,7 @@ export type AppSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   screenshots?: boolean
   heroImageUrl?: boolean
   trailerUrl?: boolean
+  trailerVideoUrl?: boolean
   promoVideoUrl?: boolean
   sizeBytes?: boolean
   sha256?: boolean
@@ -4266,6 +4321,7 @@ export type AppSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   screenshots?: boolean
   heroImageUrl?: boolean
   trailerUrl?: boolean
+  trailerVideoUrl?: boolean
   promoVideoUrl?: boolean
   sizeBytes?: boolean
   sha256?: boolean
@@ -4330,6 +4386,7 @@ export type AppSelectScalar = {
   screenshots?: boolean
   heroImageUrl?: boolean
   trailerUrl?: boolean
+  trailerVideoUrl?: boolean
   promoVideoUrl?: boolean
   sizeBytes?: boolean
   sha256?: boolean
@@ -4372,7 +4429,7 @@ export type AppSelectScalar = {
   wishlistCount?: boolean
 }
 
-export type AppOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "developerId" | "version" | "summary" | "description" | "category" | "subcategory" | "tags" | "contentRating" | "price" | "currency" | "salePrice" | "saleEndDate" | "apkUrl" | "iconUrl" | "screenshots" | "heroImageUrl" | "trailerUrl" | "promoVideoUrl" | "sizeBytes" | "sha256" | "minApiLevel" | "targetApiLevel" | "targetDevices" | "permissions" | "features" | "whatsNew" | "languages" | "privacyPolicyUrl" | "supportUrl" | "supportEmail" | "discordUrl" | "twitterUrl" | "youtubeUrl" | "requiresHandTracking" | "requiresPassthrough" | "requiresControllers" | "comfortLevel" | "playArea" | "playerModes" | "estimatedPlayTime" | "ageRating" | "containsAds" | "hasInAppPurchases" | "inAppPurchaseInfo" | "developerNotes" | "credits" | "acknowledgments" | "status" | "publishedAt" | "lastUpdated" | "createdAt" | "rating" | "ratingCount" | "downloads" | "revenue" | "viewCount" | "wishlistCount", ExtArgs["result"]["app"]>
+export type AppOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "developerId" | "version" | "summary" | "description" | "category" | "subcategory" | "tags" | "contentRating" | "price" | "currency" | "salePrice" | "saleEndDate" | "apkUrl" | "iconUrl" | "screenshots" | "heroImageUrl" | "trailerUrl" | "trailerVideoUrl" | "promoVideoUrl" | "sizeBytes" | "sha256" | "minApiLevel" | "targetApiLevel" | "targetDevices" | "permissions" | "features" | "whatsNew" | "languages" | "privacyPolicyUrl" | "supportUrl" | "supportEmail" | "discordUrl" | "twitterUrl" | "youtubeUrl" | "requiresHandTracking" | "requiresPassthrough" | "requiresControllers" | "comfortLevel" | "playArea" | "playerModes" | "estimatedPlayTime" | "ageRating" | "containsAds" | "hasInAppPurchases" | "inAppPurchaseInfo" | "developerNotes" | "credits" | "acknowledgments" | "status" | "publishedAt" | "lastUpdated" | "createdAt" | "rating" | "ratingCount" | "downloads" | "revenue" | "viewCount" | "wishlistCount", ExtArgs["result"]["app"]>
 export type AppInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   developer?: boolean | Prisma.DeveloperDefaultArgs<ExtArgs>
   builds?: boolean | Prisma.App$buildsArgs<ExtArgs>
@@ -4422,6 +4479,7 @@ export type $AppPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     screenshots: runtime.JsonValue
     heroImageUrl: string | null
     trailerUrl: string | null
+    trailerVideoUrl: string | null
     promoVideoUrl: string | null
     sizeBytes: bigint
     sha256: string | null
@@ -4912,6 +4970,7 @@ export interface AppFieldRefs {
   readonly screenshots: Prisma.FieldRef<"App", 'Json'>
   readonly heroImageUrl: Prisma.FieldRef<"App", 'String'>
   readonly trailerUrl: Prisma.FieldRef<"App", 'String'>
+  readonly trailerVideoUrl: Prisma.FieldRef<"App", 'String'>
   readonly promoVideoUrl: Prisma.FieldRef<"App", 'String'>
   readonly sizeBytes: Prisma.FieldRef<"App", 'BigInt'>
   readonly sha256: Prisma.FieldRef<"App", 'String'>

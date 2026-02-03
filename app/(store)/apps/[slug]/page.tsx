@@ -259,8 +259,8 @@ const StarRating = ({ rating, count }: { rating: number; count: number }) => {
   return (
     <div className="flex items-center gap-1">
       <div className="flex">{stars}</div>
-      <span className="text-[var(--text-secondary)] ml-1">{rating?.toFixed(1) || 'N/A'}</span>
-      <span className="text-[var(--text-tertiary)]">({formatNumber(count)} reviews)</span>
+      <span className="text-[var(--text-muted)] ml-1">{rating?.toFixed(1) || 'N/A'}</span>
+      <span className="text-[var(--text-muted)]">({formatNumber(count)} reviews)</span>
     </div>
   );
 };
@@ -472,7 +472,7 @@ export default function AppDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--app-bg)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--primary)]"></div>
       </div>
     );
@@ -480,7 +480,7 @@ export default function AppDetailsPage() {
 
   if (!app) {
     return (
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--app-bg)] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-4">App Not Found</h1>
           <Link href="/apps" className="text-[var(--primary)] hover:text-[var(--primary-dark)]">
@@ -511,18 +511,18 @@ export default function AppDetailsPage() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[var(--surface-elevated)] rounded-[var(--radius-xl)] p-8 max-w-sm text-center shadow-[var(--shadow-xl)] border-2 border-[var(--border)]"
+              className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-8 max-w-sm text-center shadow-[var(--shadow-lg)] border-2 border-[var(--border)]"
             >
               <div className="text-5xl mb-2">🔐</div>
               <h2 className="text-xl font-extrabold mb-2 text-[var(--text-primary)]">Sign In Required</h2>
-              <p className="text-sm text-[var(--text-tertiary)] mb-6">
+              <p className="text-sm text-[var(--text-muted)] mb-6">
                 You need to sign in to download or sideload apps from our store.
               </p>
               <Link href={`/auth/user/login?redirect=/apps/${params.slug}`}>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full py-3 px-6 rounded-[var(--radius-md)] font-bold text-white"
+                  className="w-full py-3 px-6 rounded-[var(--r-md)] font-bold text-white"
                   style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                 >
                   Sign In
@@ -549,7 +549,7 @@ export default function AppDetailsPage() {
           />
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to bottom, rgba(0,102,204,0.7) 0%, rgba(0,102,204,0.85) 50%, var(--background) 100%)' }}
+            style={{ background: 'linear-gradient(to bottom, rgba(0,102,204,0.7) 0%, rgba(0,102,204,0.85) 50%, var(--app-bg) 100%)' }}
           />
         </div>
 
@@ -580,7 +580,7 @@ export default function AppDetailsPage() {
             <div className="flex-1">
               <div className="flex items-start gap-6">
                 {/* App Icon */}
-                <div className="w-32 h-32 rounded-[var(--radius-xl)] bg-[var(--surface-elevated)] overflow-hidden shadow-[var(--shadow-xl)] flex-shrink-0 border-2 border-white/20">
+                <div className="w-32 h-32 rounded-[var(--r-lg)] bg-[var(--surface-2)] overflow-hidden shadow-[var(--shadow-lg)] flex-shrink-0 border-2 border-white/20">
                   {app.iconUrl ? (
                     <img
                       src={app.iconUrl}
@@ -675,7 +675,7 @@ export default function AppDetailsPage() {
 
             {/* Right: Purchase / Download / Sideload Card */}
             <div className="w-full lg:w-80 flex-shrink-0">
-              <div className="bg-[var(--surface-elevated)] backdrop-blur rounded-[var(--radius-xl)] p-6 shadow-[var(--shadow-xl)] border-2 border-[var(--border)]">
+              <div className="bg-[var(--surface-2)] backdrop-blur rounded-[var(--r-lg)] p-6 shadow-[var(--shadow-lg)] border-2 border-[var(--border)]">
                 {/* Price */}
                 <div className="mb-4">
                   {hasDiscount ? (
@@ -683,7 +683,7 @@ export default function AppDetailsPage() {
                       <span className="text-3xl font-bold text-[var(--text-primary)]">
                         {formatPrice(app.salePrice!, app.currency)}
                       </span>
-                      <span className="text-lg text-[var(--text-tertiary)] line-through">
+                      <span className="text-lg text-[var(--text-muted)] line-through">
                         {formatPrice(app.price, app.currency)}
                       </span>
                     </div>
@@ -705,7 +705,7 @@ export default function AppDetailsPage() {
                   {isPurchased ? (
                     <button
                       onClick={handleDownload}
-                      className="w-full py-3 px-4 bg-[var(--accent)] text-white font-semibold rounded-[var(--radius-md)] flex items-center justify-center gap-2"
+                      className="w-full py-3 px-4 bg-[var(--accent)] text-white font-semibold rounded-[var(--r-md)] flex items-center justify-center gap-2"
                     >
                       <DownloadIcon />
                       Install
@@ -715,7 +715,7 @@ export default function AppDetailsPage() {
                       {/* BUY NOW only if paid app */}
                       {app.price > 0 && (
                         <button
-                          className="w-full py-3 px-4 text-white font-semibold rounded-[var(--radius-md)] transition-all transform hover:scale-[1.02] shadow-[var(--shadow-glow)]"
+                          className="w-full py-3 px-4 text-white font-semibold rounded-[var(--r-md)] transition-all transform hover:scale-[1.02] shadow-[var(--shadow-glow)]"
                           style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
                         >
                           Buy Now
@@ -726,14 +726,14 @@ export default function AppDetailsPage() {
                       <div className="flex gap-3">
                         <button
                           onClick={handleDownload}
-                          className="flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 bg-[var(--surface)] text-[var(--text-primary)] hover:bg-[var(--surface-hover)] text-sm font-medium border border-[var(--border)]"
+                          className="flex-1 py-2 px-4 rounded-[var(--r-md)] flex items-center justify-center gap-2 bg-[var(--surface-2)] text-[var(--text-primary)] hover:bg-[var(--surface-hover)] text-sm font-medium border border-[var(--border)]"
                         >
                           ⬇️ Download now
                         </button>
                         <button
                           onClick={handleSideload}
                           disabled={busy || !isChromeOrEdge}
-                          className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 text-sm font-medium ${busy
+                          className={`flex-1 py-2 px-4 rounded-[var(--r-md)] flex items-center justify-center gap-2 text-sm font-medium ${busy
                             ? 'bg-[var(--primary-dark)] text-white/80 cursor-wait'
                             : 'text-white hover:opacity-90'
                             } ${!isChromeOrEdge ? 'opacity-60 cursor-not-allowed' : ''}`}
@@ -749,9 +749,9 @@ export default function AppDetailsPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setIsWishlisted(!isWishlisted)}
-                      className={`flex-1 py-2 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 transition-colors border ${isWishlisted
+                      className={`flex-1 py-2 px-4 rounded-[var(--r-md)] flex items-center justify-center gap-2 transition-colors border ${isWishlisted
                         ? 'bg-pink-500 text-white border-pink-500'
-                        : 'bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] border-[var(--border)]'
+                        : 'bg-[var(--surface-2)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] border-[var(--border)]'
                         }`}
                     >
                       <HeartIcon filled={isWishlisted} />
@@ -759,7 +759,7 @@ export default function AppDetailsPage() {
                         {isWishlisted ? 'Wishlisted' : 'Wishlist'}
                       </span>
                     </button>
-                    <button className="py-2 px-4 bg-[var(--surface)] text-[var(--text-secondary)] rounded-[var(--radius-md)] hover:bg-[var(--surface-hover)] transition-colors border border-[var(--border)]">
+                    <button className="py-2 px-4 bg-[var(--surface-2)] text-[var(--text-secondary)] rounded-[var(--r-md)] hover:bg-[var(--surface-hover)] transition-colors border border-[var(--border)]">
                       <ShareIcon />
                     </button>
                   </div>
@@ -768,21 +768,21 @@ export default function AppDetailsPage() {
                 {/* Quick Info */}
                 <div className="mt-6 pt-6 border-t border-[var(--border)] space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-[var(--text-tertiary)]">Version</span>
+                    <span className="text-[var(--text-muted)]">Version</span>
                     <span className="text-[var(--text-primary)]">{app.version}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[var(--text-tertiary)]">Updated</span>
+                    <span className="text-[var(--text-muted)]">Updated</span>
                     <span className="text-[var(--text-primary)]">{formatDate(app.lastUpdated)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[var(--text-tertiary)]">Size</span>
+                    <span className="text-[var(--text-muted)]">Size</span>
                     <span className="text-[var(--text-primary)]">{formatFileSize(app.sizeBytes)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[var(--text-tertiary)]">Comfort</span>
+                    <span className="text-[var(--text-muted)]">Comfort</span>
                     <span
-                      className={`px-2 py-0.5 rounded text-xs ${COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface)]'
+                      className={`px-2 py-0.5 rounded text-xs ${COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface-2)]'
                         }`}
                     >
                       {COMFORT_INFO[app.comfortLevel]?.icon}{' '}
@@ -793,14 +793,14 @@ export default function AppDetailsPage() {
 
                 {/* In-app purchases notice */}
                 {app.hasInAppPurchases && (
-                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-[var(--radius-md)]">
+                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-[var(--r-md)]">
                     <p className="text-yellow-700 text-xs">💰 Contains in-app purchases</p>
                   </div>
                 )}
 
                 {/* Sideload log (optional debugging info) */}
                 {sideloadLog && (
-                  <pre className="mt-4 max-h-40 overflow-auto text-xs bg-[var(--surface)] text-[var(--text-secondary)] rounded-[var(--radius-md)] p-3 whitespace-pre-wrap border border-[var(--border)]">
+                  <pre className="mt-4 max-h-40 overflow-auto text-xs bg-[var(--surface-2)] text-[var(--text-secondary)] rounded-[var(--r-md)] p-3 whitespace-pre-wrap border border-[var(--border)]">
                     {sideloadLog}
                   </pre>
                 )}
@@ -822,7 +822,7 @@ export default function AppDetailsPage() {
       )}
 
       {/* Tabs Navigation */}
-      <div className="sticky top-0 z-10 bg-[var(--background)]/95 backdrop-blur border-b border-[var(--border)]">
+      <div className="sticky top-0 z-10 bg-[var(--app-bg)]/95 backdrop-blur border-b border-[var(--border)]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-8">
             {[
@@ -835,7 +835,7 @@ export default function AppDetailsPage() {
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id
                   ? 'border-[var(--primary)] text-[var(--primary)]'
-                  : 'border-transparent text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+                  : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                   }`}
               >
                 {tab.label}
@@ -874,7 +874,7 @@ export default function AppDetailsPage() {
               {app.whatsNew && (
                 <section>
                   <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">What&apos;s New</h2>
-                  <div className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 border border-[var(--border)]">
+                  <div className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-4 border border-[var(--border)]">
                     <div className="flex items-center gap-2 mb-3">
                       <span
                         className="px-2 py-1 text-white text-xs font-bold rounded"
@@ -882,7 +882,7 @@ export default function AppDetailsPage() {
                       >
                         v{app.version}
                       </span>
-                      <span className="text-[var(--text-tertiary)] text-sm">
+                      <span className="text-[var(--text-muted)] text-sm">
                         {formatDate(app.lastUpdated)}
                       </span>
                     </div>
@@ -910,10 +910,10 @@ export default function AppDetailsPage() {
               {(app.credits || app.acknowledgments) && (
                 <section>
                   <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Credits</h2>
-                  <div className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 space-y-3 text-[var(--text-secondary)] text-sm border border-[var(--border)]">
+                  <div className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-4 space-y-3 text-[var(--text-secondary)] text-sm border border-[var(--border)]">
                     {app.credits && <p>{app.credits}</p>}
                     {app.acknowledgments && (
-                      <p className="text-[var(--text-tertiary)]">{app.acknowledgments}</p>
+                      <p className="text-[var(--text-muted)]">{app.acknowledgments}</p>
                     )}
                   </div>
                 </section>
@@ -923,18 +923,18 @@ export default function AppDetailsPage() {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Compatibility */}
-              <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+              <section className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-5 border border-[var(--border)]">
                 <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Compatibility</h3>
 
                 {/* Devices */}
                 {app.targetDevices && app.targetDevices.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Supported Devices</h4>
+                    <h4 className="text-sm font-medium text-[var(--text-muted)] mb-2">Supported Devices</h4>
                     <div className="flex flex-wrap gap-2">
                       {app.targetDevices.map((device) => (
                         <span
                           key={device}
-                          className="px-3 py-1 bg-[var(--surface-elevated)] text-[var(--text-primary)] text-sm rounded-full border border-[var(--border)]"
+                          className="px-3 py-1 bg-[var(--surface-2)] text-[var(--text-primary)] text-sm rounded-full border border-[var(--border)]"
                         >
                           {DEVICE_LABELS[device] || device}
                         </span>
@@ -946,7 +946,7 @@ export default function AppDetailsPage() {
                 {/* Play Area & Comfort */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Play Area</h4>
+                    <h4 className="text-sm font-medium text-[var(--text-muted)] mb-2">Play Area</h4>
                     <div className="flex items-center gap-2 text-[var(--text-primary)]">
                       <span className="text-xl">
                         {PLAY_AREA_INFO[app.playArea]?.icon || '🎮'}
@@ -955,9 +955,9 @@ export default function AppDetailsPage() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Comfort</h4>
+                    <h4 className="text-sm font-medium text-[var(--text-muted)] mb-2">Comfort</h4>
                     <div
-                      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-sm ${COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface-elevated)]'
+                      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-sm ${COMFORT_INFO[app.comfortLevel]?.color || 'bg-[var(--surface-2)]'
                         }`}
                     >
                       <span>{COMFORT_INFO[app.comfortLevel]?.icon || '😊'}</span>
@@ -970,13 +970,13 @@ export default function AppDetailsPage() {
 
                 {/* Hardware Requirements */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Requirements</h4>
+                  <h4 className="text-sm font-medium text-[var(--text-muted)] mb-2">Requirements</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                       {app.requiresControllers ? (
                         <CheckIcon />
                       ) : (
-                        <span className="w-5 h-5 text-[var(--text-tertiary)]">✕</span>
+                        <span className="w-5 h-5 text-[var(--text-muted)]">✕</span>
                       )}
                       <span>
                         Controllers {app.requiresControllers ? 'Required' : 'Optional'}
@@ -986,7 +986,7 @@ export default function AppDetailsPage() {
                       {app.requiresHandTracking ? (
                         <CheckIcon />
                       ) : (
-                        <span className="w-5 h-5 text-[var(--text-tertiary)]">✕</span>
+                        <span className="w-5 h-5 text-[var(--text-muted)]">✕</span>
                       )}
                       <span>
                         Hand Tracking {app.requiresHandTracking ? 'Required' : 'Supported'}
@@ -996,7 +996,7 @@ export default function AppDetailsPage() {
                       {app.requiresPassthrough ? (
                         <CheckIcon />
                       ) : (
-                        <span className="w-5 h-5 text-[var(--text-tertiary)]">✕</span>
+                        <span className="w-5 h-5 text-[var(--text-muted)]">✕</span>
                       )}
                       <span>
                         Passthrough {app.requiresPassthrough ? 'Required' : 'Not Required'}
@@ -1008,12 +1008,12 @@ export default function AppDetailsPage() {
                 {/* Player Modes */}
                 {app.playerModes && app.playerModes.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">Player Modes</h4>
+                    <h4 className="text-sm font-medium text-[var(--text-muted)] mb-2">Player Modes</h4>
                     <div className="flex flex-wrap gap-2">
                       {app.playerModes.map((mode) => (
                         <span
                           key={mode}
-                          className="px-2 py-1 bg-[var(--surface-elevated)] text-[var(--text-secondary)] text-xs rounded border border-[var(--border)]"
+                          className="px-2 py-1 bg-[var(--surface-2)] text-[var(--text-secondary)] text-xs rounded border border-[var(--border)]"
                         >
                           {PLAYER_MODE_LABELS[mode] || mode}
                         </span>
@@ -1025,7 +1025,7 @@ export default function AppDetailsPage() {
 
               {/* Permissions */}
               {app.permissions && app.permissions.length > 0 && (
-                <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+                <section className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-5 border border-[var(--border)]">
                   <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Permissions</h3>
                   <div className="space-y-2">
                     {app.permissions.map((perm) => (
@@ -1043,7 +1043,7 @@ export default function AppDetailsPage() {
 
               {/* Languages */}
               {app.languages && app.languages.length > 0 && (
-                <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+                <section className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-5 border border-[var(--border)]">
                   <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Languages</h3>
                   <p className="text-[var(--text-secondary)] text-sm">
                     {app.languages
@@ -1070,7 +1070,7 @@ export default function AppDetailsPage() {
               )}
 
               {/* Support Links */}
-              <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+              <section className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-5 border border-[var(--border)]">
                 <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Support & Links</h3>
                 <div className="space-y-3">
                   {app.supportUrl && (
@@ -1126,7 +1126,7 @@ export default function AppDetailsPage() {
                       href={app.privacyPolicyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] text-sm"
+                      className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] text-sm"
                     >
                       <span>🔒</span> Privacy Policy
                     </a>
@@ -1135,25 +1135,25 @@ export default function AppDetailsPage() {
               </section>
 
               {/* Additional Info */}
-              <section className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-5 border border-[var(--border)]">
+              <section className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-5 border border-[var(--border)]">
                 <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">Additional Information</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-[var(--text-tertiary)]">Category</span>
+                    <span className="text-[var(--text-muted)]">Category</span>
                     <span className="text-[var(--text-primary)] capitalize">
                       {app.category.toLowerCase()}
                     </span>
                   </div>
                   {app.subcategory && (
                     <div className="flex justify-between">
-                      <span className="text-[var(--text-tertiary)]">Subcategory</span>
+                      <span className="text-[var(--text-muted)]">Subcategory</span>
                       <span className="text-[var(--text-primary)]">{app.subcategory}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-[var(--text-tertiary)]">Content Rating</span>
+                    <span className="text-[var(--text-muted)]">Content Rating</span>
                     <span
-                      className={`px-2 py-0.5 rounded text-xs ${CONTENT_RATING_INFO[app.contentRating]?.color || 'bg-[var(--surface-elevated)]'
+                      className={`px-2 py-0.5 rounded text-xs ${CONTENT_RATING_INFO[app.contentRating]?.color || 'bg-[var(--surface-2)]'
                         }`}
                     >
                       {CONTENT_RATING_INFO[app.contentRating]?.label || app.contentRating}
@@ -1161,16 +1161,16 @@ export default function AppDetailsPage() {
                   </div>
                   {app.estimatedPlayTime && (
                     <div className="flex justify-between">
-                      <span className="text-[var(--text-tertiary)]">Play Time</span>
+                      <span className="text-[var(--text-muted)]">Play Time</span>
                       <span className="text-[var(--text-primary)]">{app.estimatedPlayTime}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-[var(--text-tertiary)]">Min API Level</span>
+                    <span className="text-[var(--text-muted)]">Min API Level</span>
                     <span className="text-[var(--text-primary)]">Android {app.minApiLevel}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[var(--text-tertiary)]">Released</span>
+                    <span className="text-[var(--text-muted)]">Released</span>
                     <span className="text-[var(--text-primary)]">
                       {app.publishedAt ? formatDate(app.publishedAt) : 'N/A'}
                     </span>
@@ -1196,9 +1196,9 @@ export default function AppDetailsPage() {
                   <Link
                     key={relatedApp.id}
                     href={`/apps/${relatedApp.slug}`}
-                    className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 hover:bg-[var(--surface-hover)] transition-colors group border border-[var(--border)]"
+                    className="bg-[var(--surface-2)] rounded-[var(--r-lg)] p-4 hover:bg-[var(--surface-hover)] transition-colors group border border-[var(--border)]"
                   >
-                    <div className="w-full aspect-square rounded-[var(--radius-md)] bg-[var(--surface-elevated)] mb-3 overflow-hidden border border-[var(--border)]">
+                    <div className="w-full aspect-square rounded-[var(--r-md)] bg-[var(--surface-2)] mb-3 overflow-hidden border border-[var(--border)]">
                       {relatedApp.iconUrl ? (
                         <img
                           src={relatedApp.iconUrl}
@@ -1217,7 +1217,7 @@ export default function AppDetailsPage() {
                     <h3 className="font-medium text-[var(--text-primary)] truncate">{relatedApp.name}</h3>
                     <div className="flex items-center gap-1 text-sm mt-1">
                       <StarIcon filled />
-                      <span className="text-[var(--text-tertiary)]">
+                      <span className="text-[var(--text-muted)]">
                         {relatedApp.rating?.toFixed(1) || 'N/A'}
                       </span>
                     </div>
@@ -1228,12 +1228,12 @@ export default function AppDetailsPage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-[var(--surface)] rounded-[var(--radius-lg)] border border-[var(--border)]">
+              <div className="text-center py-12 bg-[var(--surface-2)] rounded-[var(--r-lg)] border border-[var(--border)]">
                 <div className="text-4xl mb-4">🔍</div>
                 <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
                   No related apps found
                 </h3>
-                <p className="text-[var(--text-tertiary)]">Check back later for recommendations</p>
+                <p className="text-[var(--text-muted)]">Check back later for recommendations</p>
               </div>
             )}
           </div>
@@ -1241,7 +1241,7 @@ export default function AppDetailsPage() {
       </div>
 
       {/* Footer CTA (Mobile sticky) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[var(--background)]/95 backdrop-blur border-t border-[var(--border)] p-4">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[var(--app-bg)]/95 backdrop-blur border-t border-[var(--border)] p-4">
         <div className="flex items-center gap-4">
           <div className="flex-1">
             {hasDiscount ? (
@@ -1249,7 +1249,7 @@ export default function AppDetailsPage() {
                 <span className="text-xl font-bold text-[var(--text-primary)]">
                   {formatPrice(app.salePrice!, app.currency)}
                 </span>
-                <span className="text-sm text-[var(--text-tertiary)] line-through">
+                <span className="text-sm text-[var(--text-muted)] line-through">
                   {formatPrice(app.price, app.currency)}
                 </span>
               </div>
@@ -1261,7 +1261,7 @@ export default function AppDetailsPage() {
           </div>
           <button
             onClick={handleDownload}
-            className="px-8 py-3 text-white font-semibold rounded-[var(--radius-md)] shadow-[var(--shadow-glow)]"
+            className="px-8 py-3 text-white font-semibold rounded-[var(--r-md)] shadow-[var(--shadow-glow)]"
             style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
           >
             {app.price === 0 ? 'Download now' : 'Buy / Download'}

@@ -245,28 +245,17 @@ a {
 .vr-sidebar a {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 8px 10px;
   border-radius: 12px;
   color: var(--text-secondary);
-  background: var(--sidebar-item);
+  background: transparent;
   border: 1px solid transparent;
-  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+  transition: all var(--t-fast) var(--ease);
 }
 
-.vr-sidebar a:hover {
-  background: var(--sidebar-item-hover);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
 
-.vr-sidebar a[aria-current="page"],
-.vr-sidebar a.is-active {
-  background: var(--sidebar-item-active);
-  border-color: var(--border-strong);
-  color: var(--text-primary);
-  box-shadow: var(--sidebar-item-active-glow);
-}
 
 /* Buttons */
 .vr-btn {

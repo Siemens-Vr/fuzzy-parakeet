@@ -34,6 +34,7 @@ export const INITIAL_FORM_DATA: AppFormData = {
   screenshots: [],
   heroImageFile: null,
   trailerUrl: '',
+  trailerVideoFile: null,
   promoVideoUrl: '',
   contentRating: 'EVERYONE',
   comfortLevel: 'COMFORTABLE',

@@ -1,15 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faFacebook,
+    faInstagram,
+    faLinkedin,
+    faTiktok,
+    faXTwitter,
+    faYoutube
+} from '@fortawesome/free-brands-svg-icons';
 
 const SOCIAL_LINKS = [
-    { name: 'Facebook', char: 'f', href: '#' },
-    { name: 'Instagram', char: 'ig', href: '#' },
-    { name: 'Reddit', char: 'r', href: '#' },
-    { name: 'X', char: 'X', href: '#' },
-    { name: 'YouTube', char: 'y', href: '#' },
-    { name: 'TikTok', char: 'tk', href: '#' },
-    { name: 'LinkedIn', char: 'in', href: '#' },
+    { name: 'Facebook', icon: faFacebook, href: 'https://www.facebook.com/people/Vrafrica-Dekut/61568080754017/' },
+    { name: 'Instagram', icon: faInstagram, href: 'https://www.instagram.com/vml_dekut/' },
+    { name: 'X', icon: faXTwitter, href: 'https://x.com/Vml_dekut' },
+    { name: 'YouTube', icon: faYoutube, href: 'https://www.youtube.com/@VML-DeKUT-y7i' },
+    { name: 'TikTok', icon: faTiktok, href: 'https://www.tiktok.com/@vml_dekut' },
+    { name: 'LinkedIn', icon: faLinkedin, href: 'https://www.linkedin.com/in/virtual-mechatronics-labs-914389337/' },
 ];
 
 const FOOTER_LINKS = [
@@ -41,8 +49,8 @@ export default function StoreFooter() {
                 <div className="footer-middle">
                     <div className="footer-socials">
                         {SOCIAL_LINKS.map(social => (
-                            <Link key={social.name} href={social.href} className="social-icon" title={social.name}>
-                                {social.char}
+                            <Link key={social.name} href={social.href} className="social-icon" title={social.name} target="_blank" rel="noopener noreferrer">
+                                <FontAwesomeIcon icon={social.icon} />
                             </Link>
                         ))}
                     </div>

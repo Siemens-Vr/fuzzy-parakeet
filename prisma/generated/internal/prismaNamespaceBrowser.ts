@@ -158,6 +158,7 @@ export const AppScalarFieldEnum = {
   screenshots: 'screenshots',
   heroImageUrl: 'heroImageUrl',
   trailerUrl: 'trailerUrl',
+  trailerVideoUrl: 'trailerVideoUrl',
   promoVideoUrl: 'promoVideoUrl',
   sizeBytes: 'sizeBytes',
   sha256: 'sha256',

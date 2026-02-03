@@ -11,6 +11,8 @@ import DiscoveryGrid from '@/components/DiscoveryGrid';
 import PromoBanner from '@/components/PromoBanner';
 import SideloadShelf from '@/components/SideloadShelf';
 import StoreFooter from '@/components/layout/StoreFooter';
+import Carding from '@/components/layout/Carding';
+import SeeMoreCard from '@/components/layout/SeeMoreCard';
 import { useStoreUi } from '@/contexts/StoreUiContext';
 
 export default function HomePage() {
@@ -109,7 +111,8 @@ export default function HomePage() {
               title="Trending Games"
               apps={trendingApps}
               loading={shelvesLoading}
-              viewAllHref="/apps?sortBy=downloads"
+              leadingItem={<Carding />}
+              trailingItem={<SeeMoreCard showMoreUrl="/apps?sortBy=downloads" />}
             />
 
             <DiscoveryGrid />
