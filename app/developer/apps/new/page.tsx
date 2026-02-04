@@ -48,7 +48,7 @@ export default function NewAppPage() {
   // Step 1: Basic Info
   const renderStep1 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Basic Information</h2>
+      <h2 className="text-xl text-primary font-semibold">Basic Information</h2>
       <p className="text-secondary">Tell users about your app with a compelling name and description.</p>
 
       {/* App Name */}
@@ -202,7 +202,7 @@ export default function NewAppPage() {
   // Step 2: Pricing
   const renderStep2 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Pricing & Distribution</h2>
+      <h2 className="text-xl text-primary font-semibold">Pricing & Distribution</h2>
       <p className="text-secondary">Set your pricing strategy.</p>
 
       <div>
@@ -214,7 +214,7 @@ export default function NewAppPage() {
             className={`p-4 border-2 rounded-lg text-left transition-colors ${formData.price === 0 ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
               }`}
           >
-            <div className="font-medium">Free</div>
+            <div className="font-medium text-primary">Free</div>
             <div className="text-sm text-secondary">Available to everyone at no cost</div>
           </button>
           <button
@@ -223,7 +223,7 @@ export default function NewAppPage() {
             className={`p-4 border-2 rounded-lg text-left transition-colors ${formData.price > 0 ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
               }`}
           >
-            <div className="font-medium">Paid</div>
+            <div className="font-medium text-primary">Paid</div>
             <div className="text-sm text-secondary">Set a price for your app</div>
           </button>
         </div>
@@ -287,7 +287,7 @@ export default function NewAppPage() {
   // Step 3: Technical
   const renderStep3 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Technical Requirements</h2>
+      <h2 className="text-xl font-semibold text-primary">Technical Requirements</h2>
       <p className="text-secondary">Specify technical details and device compatibility.</p>
 
       <div>
@@ -338,7 +338,7 @@ export default function NewAppPage() {
                 }}
                 className="w-4 h-4 text-primary rounded focus:ring-primary"
               />
-              <span>{device.label}</span>
+              <span className="text-primary">{device.label}</span>
             </label>
           ))}
         </div>
@@ -367,7 +367,7 @@ export default function NewAppPage() {
                 className="w-4 h-4 mt-0.5 text-blue-600 rounded focus:ring-blue-500"
               />
               <div>
-                <div className="font-medium">{perm.label}</div>
+                <div className="font-medium text-primary">{perm.label}</div>
                 <div className="text-sm text-secondary">{perm.description}</div>
               </div>
             </label>
@@ -391,7 +391,7 @@ export default function NewAppPage() {
                 className="w-4 h-4 text-primary rounded focus:ring-primary"
               />
               <div>
-                <div className="font-medium">{label}</div>
+                <div className="font-medium text-primary">{label}</div>
                 <div className="text-sm text-secondary">{desc}</div>
               </div>
             </label>
@@ -404,7 +404,7 @@ export default function NewAppPage() {
   // Step 4: Media
   const renderStep4 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Media & Assets</h2>
+      <h2 className="text-xl font-semibold text-primary">Media & Assets</h2>
       <p className="helper-text text-secondary">Upload your APK file and visual assets.</p>
 
       {/* APK Upload */}
@@ -430,7 +430,7 @@ export default function NewAppPage() {
           ) : (
             <>
               <div className="text-4xl mb-2">📱</div>
-              <div className="mb-2">Drag and drop your APK file here</div>
+              <div className="mb-2 text-primary">Drag and drop your APK file here</div>
               <div className="text-tertiary mb-4">or</div>
               <label className="btn btn-secondary cursor-pointer">
                 Browse Files
@@ -465,7 +465,7 @@ export default function NewAppPage() {
           ) : (
             <>
               <div className="text-4xl mb-2">🖼️</div>
-              <div className="mb-2">Drag and drop your icon here</div>
+              <div className="mb-2 text-primary">Drag and drop your icon here</div>
               <label className="btn btn-secondary cursor-pointer">
                 Browse
                 <input type="file" accept="image/png" onChange={(e) => handleFileChange('iconFile', e.target.files?.[0] || null)} className="hidden" />
@@ -507,7 +507,7 @@ export default function NewAppPage() {
           ) : (
             <div className="text-center">
               <div className="text-4xl mb-2">📸</div>
-              <div className="mb-2">Drag and drop screenshots here</div>
+              <div className="mb-2 text-primary">Drag and drop screenshots here</div>
               <label className="btn btn-secondary cursor-pointer">
                 Browse
                 <input type="file" accept="image/*" multiple onChange={(e) => handleScreenshotsChange(e.target.files)} className="hidden" />
@@ -541,7 +541,7 @@ export default function NewAppPage() {
           ) : (
             <>
               <div className="text-4xl mb-2">🎥</div>
-              <div className="mb-2">Drag and drop your trailer video here</div>
+              <div className="mb-2 text-primary">Drag and drop your trailer video here</div>
               <div className="text-tertiary mb-4">or</div>
               <label className="btn btn-secondary cursor-pointer">
                 Browse Files
@@ -764,7 +764,7 @@ export default function NewAppPage() {
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{errors.submit}</div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 ">
         {[
           { step: 1, title: 'Basic Info', content: <>Name: {formData.name || '—'}<br />Category: {formData.category || '—'}</> },
           { step: 2, title: 'Pricing', content: <>Price: {formData.price === 0 ? 'Free' : `${CURRENCIES.find(c => c.value === formData.currency)?.symbol}${formData.price}`}</> },
@@ -778,7 +778,7 @@ export default function NewAppPage() {
               <h3 className="font-medium text-primary">{title}</h3>
               <button type="button" onClick={() => goToStep(step)} className="text-blue-primary text-sm hover:underline">Edit</button>
             </div>
-            <div className="text-sm text-secondary">{content}</div>
+            <div className="text-sm text-primary">{content}</div>
           </div>
         ))}
       </div>
