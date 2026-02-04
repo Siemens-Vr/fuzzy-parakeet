@@ -49,7 +49,7 @@ export default function NewAppPage() {
   const renderStep1 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Basic Information</h2>
-      <p className="text-gray-600">Tell users about your app with a compelling name and description.</p>
+      <p className="text-secondary">Tell users about your app with a compelling name and description.</p>
 
       {/* App Name */}
       <div>
@@ -66,7 +66,7 @@ export default function NewAppPage() {
         />
         <div className="flex justify-between mt-1">
           {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-          <p className="text-gray-400 text-sm ml-auto">{formData.name.length}/50</p>
+          <p className="text-tertiary text-sm ml-auto">{formData.name.length}/50</p>
         </div>
       </div>
 
@@ -76,7 +76,7 @@ export default function NewAppPage() {
           URL Slug <span className="text-red-500">*</span>
         </label>
         <div className="flex items-center">
-          <span className="text-gray-500 bg-gray-100 px-3 py-2 border border-r-0 border-gray-300 rounded-l-lg">
+          <span className="text-secondary bg-surface-2 px-3 py-2 border border-r-0 border-border rounded-l-lg">
             vrstore.com/app/
           </span>
           <input
@@ -105,7 +105,7 @@ export default function NewAppPage() {
         />
         <div className="flex justify-between mt-1">
           {errors.summary && <p className="text-red-500 text-sm">{errors.summary}</p>}
-          <p className="text-gray-400 text-sm ml-auto">{formData.summary.length}/150</p>
+          <p className="text-tertiary text-sm ml-auto">{formData.summary.length}/150</p>
         </div>
       </div>
 
@@ -122,7 +122,7 @@ export default function NewAppPage() {
         />
         <div className="flex justify-between mt-1">
           {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
-          <p className="text-gray-400 text-sm ml-auto">{formData.description.length} characters</p>
+          <p className="text-tertiary text-sm ml-auto">{formData.description.length} characters</p>
         </div>
       </div>
 
@@ -182,16 +182,16 @@ export default function NewAppPage() {
           <button
             type="button"
             onClick={addTag}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            className="px-4 py-2 bg-surface-1 text-primary rounded-lg hover:bg-surface-2"
           >
             Add
           </button>
         </div>
         <div className="flex flex-wrap gap-2">
           {formData.tags.map(tag => (
-            <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+            <span key={tag} className="badge badge-blue" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               {tag}
-              <button type="button" onClick={() => removeTag(tag)} className="hover:text-blue-600">×</button>
+              <button type="button" onClick={() => removeTag(tag)} className="hover:text-primary">×</button>
             </span>
           ))}
         </div>
@@ -203,10 +203,10 @@ export default function NewAppPage() {
   const renderStep2 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Pricing & Distribution</h2>
-      <p className="text-gray-600">Set your pricing strategy.</p>
+      <p className="text-secondary">Set your pricing strategy.</p>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">Pricing Model</label>
+        <label className="label mb-3">Pricing Model</label>
         <div className="grid grid-cols-2 gap-4">
           <button
             type="button"
@@ -215,7 +215,7 @@ export default function NewAppPage() {
               }`}
           >
             <div className="font-medium">Free</div>
-            <div className="text-sm text-gray-400">Available to everyone at no cost</div>
+            <div className="text-sm text-secondary">Available to everyone at no cost</div>
           </button>
           <button
             type="button"
@@ -224,7 +224,7 @@ export default function NewAppPage() {
               }`}
           >
             <div className="font-medium">Paid</div>
-            <div className="text-sm text-gray-400">Set a price for your app</div>
+            <div className="text-sm text-secondary">Set a price for your app</div>
           </button>
         </div>
       </div>
@@ -247,7 +247,7 @@ export default function NewAppPage() {
           <div>
             <label className="label">Price <span className="text-red-500">*</span></label>
             <div className="relative">
-              <span className="absolute left-3 top-2 text-gray-400">
+              <span className="absolute left-3 top-2 text-secondary">
                 {CURRENCIES.find(c => c.value === formData.currency)?.symbol}
               </span>
               <input
@@ -263,14 +263,14 @@ export default function NewAppPage() {
             {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
           </div>
 
-          <div className="p-4 bg-blue-900/20 rounded-lg">
-            <h3 className="font-medium text-blue-400 mb-2">Revenue Split</h3>
-            <p className="text-sm text-blue-300">
+          <div className="p-4 bg-surface-2 rounded-lg">
+            <h3 className="font-medium text-primary mb-2">Revenue Split</h3>
+            <p className="text-sm text-secondary">
               You receive <strong>70%</strong> of each sale. Our 30% platform fee covers payment processing,
               hosting, and distribution services.
             </p>
             {formData.price > 0 && (
-              <div className="mt-3 text-sm flex justify-between text-blue-700">
+              <div className="mt-3 text-sm flex justify-between text-blue-400">
                 <span>Your earnings per sale:</span>
                 <span className="font-medium">
                   {CURRENCIES.find(c => c.value === formData.currency)?.symbol}
@@ -288,7 +288,7 @@ export default function NewAppPage() {
   const renderStep3 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Technical Requirements</h2>
-      <p className="text-gray-600">Specify technical details and device compatibility.</p>
+      <p className="text-secondary">Specify technical details and device compatibility.</p>
 
       <div>
         <label className="label">Version <span className="text-red-500">*</span></label>
@@ -323,7 +323,7 @@ export default function NewAppPage() {
           {TARGET_DEVICES.map(device => (
             <label
               key={device.value}
-              className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.targetDevices.includes(device.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
+              className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.targetDevices.includes(device.value) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'
                 }`}
             >
               <input
@@ -336,7 +336,7 @@ export default function NewAppPage() {
                     updateField('targetDevices', formData.targetDevices.filter(d => d !== device.value));
                   }
                 }}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-primary rounded focus:ring-primary"
               />
               <span>{device.label}</span>
             </label>
@@ -351,7 +351,7 @@ export default function NewAppPage() {
           {PERMISSIONS.map(perm => (
             <label
               key={perm.value}
-              className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${formData.permissions.includes(perm.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'
+              className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${formData.permissions.includes(perm.value) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'
                 }`}
             >
               <input
@@ -368,7 +368,7 @@ export default function NewAppPage() {
               />
               <div>
                 <div className="font-medium">{perm.label}</div>
-                <div className="text-sm text-gray-500">{perm.description}</div>
+                <div className="text-sm text-secondary">{perm.description}</div>
               </div>
             </label>
           ))}
@@ -383,16 +383,16 @@ export default function NewAppPage() {
             { field: 'requiresHandTracking' as const, label: 'Requires Hand Tracking', desc: 'App requires hand tracking' },
             { field: 'requiresPassthrough' as const, label: 'Requires Passthrough', desc: 'App requires camera passthrough (Mixed Reality)' },
           ].map(({ field, label, desc }) => (
-            <label key={field} className="flex items-center gap-3 p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-gray-600">
+            <label key={field} className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:border-medium">
               <input
                 type="checkbox"
                 checked={formData[field]}
                 onChange={(e) => updateField(field, e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-primary rounded focus:ring-primary"
               />
               <div>
                 <div className="font-medium">{label}</div>
-                <div className="text-sm text-gray-500">{desc}</div>
+                <div className="text-sm text-secondary">{desc}</div>
               </div>
             </label>
           ))}
@@ -405,7 +405,7 @@ export default function NewAppPage() {
   const renderStep4 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Media & Assets</h2>
-      <p className="helper-text">Upload your APK file and visual assets.</p>
+      <p className="helper-text text-secondary">Upload your APK file and visual assets.</p>
 
       {/* APK Upload */}
       <div>
@@ -420,10 +420,10 @@ export default function NewAppPage() {
         >
           {formData.apkFile ? (
             <div className="flex items-center justify-center gap-4">
-              <div className="text-4xl">📦</div>
+              <div className="text-4xl mb-2">📦</div>
               <div className="text-left">
                 <div className="font-medium">{formData.apkFile.name}</div>
-                <div className="text-sm text-gray-500">{formatFileSize(formData.apkFile.size)}</div>
+                <div className="text-sm text-secondary">{formatFileSize(formData.apkFile.size)}</div>
               </div>
               <button type="button" onClick={() => handleFileChange('apkFile', null)} className="ml-4 text-red-500 hover:text-red-700">Remove</button>
             </div>
@@ -431,7 +431,7 @@ export default function NewAppPage() {
             <>
               <div className="text-4xl mb-2">📱</div>
               <div className="mb-2">Drag and drop your APK file here</div>
-              <div className="text-gray-400 mb-4">or</div>
+              <div className="text-tertiary mb-4">or</div>
               <label className="btn btn-secondary cursor-pointer">
                 Browse Files
                 <input type="file" accept=".apk" onChange={(e) => handleFileChange('apkFile', e.target.files?.[0] || null)} className="hidden" />
@@ -458,7 +458,7 @@ export default function NewAppPage() {
               <img src={URL.createObjectURL(formData.iconFile)} alt="App icon preview" className="w-24 h-24 rounded-xl object-cover" />
               <div className="text-left">
                 <div className="font-medium">{formData.iconFile.name}</div>
-                <div className="text-sm text-gray-500">{formatFileSize(formData.iconFile.size)}</div>
+                <div className="text-sm text-secondary">{formatFileSize(formData.iconFile.size)}</div>
                 <button type="button" onClick={() => handleFileChange('iconFile', null)} className="text-red-500 hover:text-red-700 text-sm mt-1">Remove</button>
               </div>
             </div>
@@ -534,7 +534,7 @@ export default function NewAppPage() {
               <div className="text-4xl">🎬</div>
               <div className="text-left">
                 <div className="font-medium">{formData.trailerVideoFile.name}</div>
-                <div className="text-sm text-gray-500">{formatFileSize(formData.trailerVideoFile.size)}</div>
+                <div className="text-sm text-secondary">{formatFileSize(formData.trailerVideoFile.size)}</div>
               </div>
               <button type="button" onClick={() => handleFileChange('trailerVideoFile', null)} className="ml-4 text-red-500 hover:text-red-700">Remove</button>
             </div>
@@ -542,7 +542,7 @@ export default function NewAppPage() {
             <>
               <div className="text-4xl mb-2">🎥</div>
               <div className="mb-2">Drag and drop your trailer video here</div>
-              <div className="text-gray-400 mb-4">or</div>
+              <div className="text-tertiary mb-4">or</div>
               <label className="btn btn-secondary cursor-pointer">
                 Browse Files
                 <input type="file" accept="video/mp4,video/webm" onChange={(e) => handleFileChange('trailerVideoFile', e.target.files?.[0] || null)} className="hidden" />
@@ -570,15 +570,15 @@ export default function NewAppPage() {
   const renderStep5 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Content & Comfort Settings</h2>
-      <p className="helper-text">Help users understand what to expect from your app.</p>
+      <p className="helper-text text-secondary">Help users understand what to expect from your app.</p>
 
       <div>
         <label className="label">Content Rating <span className="text-red-500">*</span></label>
         <div className="space-y-2">
           {CONTENT_RATINGS.map(rating => (
-            <label key={rating.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.contentRating === rating.value ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+            <label key={rating.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.contentRating === rating.value ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="radio" name="contentRating" value={rating.value} checked={formData.contentRating === rating.value} onChange={(e) => updateField('contentRating', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
-              <div><div className="font-medium">{rating.label}</div><div className="text-sm text-gray-500">{rating.description}</div></div>
+              <div><div className="font-medium">{rating.label}</div><div className="text-sm text-secondary">{rating.description}</div></div>
             </label>
           ))}
         </div>
@@ -589,9 +589,9 @@ export default function NewAppPage() {
         <label className="label">Comfort Level <span className="text-red-500">*</span></label>
         <div className="space-y-2">
           {COMFORT_LEVELS.map(level => (
-            <label key={level.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.comfortLevel === level.value ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+            <label key={level.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.comfortLevel === level.value ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="radio" name="comfortLevel" value={level.value} checked={formData.comfortLevel === level.value} onChange={(e) => updateField('comfortLevel', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
-              <div><div className="font-medium">{level.label}</div><div className="text-sm text-gray-500">{level.description}</div></div>
+              <div><div className="font-medium">{level.label}</div><div className="text-sm text-secondary">{level.description}</div></div>
             </label>
           ))}
         </div>
@@ -602,9 +602,9 @@ export default function NewAppPage() {
         <label className="label">Play Area <span className="text-red-500">*</span></label>
         <div className="space-y-2">
           {PLAY_AREAS.map(area => (
-            <label key={area.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playArea === area.value ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+            <label key={area.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playArea === area.value ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="radio" name="playArea" value={area.value} checked={formData.playArea === area.value} onChange={(e) => updateField('playArea', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
-              <div><div className="font-medium">{area.label}</div><div className="text-sm text-gray-500">{area.description}</div></div>
+              <div><div className="font-medium">{area.label}</div><div className="text-sm text-secondary">{area.description}</div></div>
             </label>
           ))}
         </div>
@@ -615,7 +615,7 @@ export default function NewAppPage() {
         <label className="label">Player Modes <span className="text-red-500">*</span></label>
         <div className="grid grid-cols-2 gap-2">
           {PLAYER_MODES.map(mode => (
-            <label key={mode.value} className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playerModes.includes(mode.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+            <label key={mode.value} className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playerModes.includes(mode.value) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="checkbox" checked={formData.playerModes.includes(mode.value)} onChange={(e) => e.target.checked ? updateField('playerModes', [...formData.playerModes, mode.value]) : updateField('playerModes', formData.playerModes.filter(m => m !== mode.value))} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
               <span>{mode.label}</span>
             </label>
@@ -624,15 +624,15 @@ export default function NewAppPage() {
         {errors.playerModes && <p className="text-red-500 text-sm mt-1">{errors.playerModes}</p>}
       </div>
 
-      <div className="p-4 bg-gray-800/50 border border-gray-700 rounded-lg space-y-3">
-        <label className="block text-sm font-medium text-gray-200">Monetization</label>
+      <div className="p-4 bg-surface-2 border border-border rounded-lg space-y-3">
+        <label className="block text-sm font-medium text-primary">Monetization</label>
         <label className="flex items-center gap-3 cursor-pointer">
-          <input type="checkbox" checked={formData.containsAds} onChange={(e) => updateField('containsAds', e.target.checked)} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-          <span className="text-gray-300">Contains advertisements</span>
+          <input type="checkbox" checked={formData.containsAds} onChange={(e) => updateField('containsAds', e.target.checked)} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+          <span className="text-secondary">Contains advertisements</span>
         </label>
         <label className="flex items-center gap-3 cursor-pointer">
-          <input type="checkbox" checked={formData.hasInAppPurchases} onChange={(e) => updateField('hasInAppPurchases', e.target.checked)} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-          <span className="text-gray-300">Has in-app purchases</span>
+          <input type="checkbox" checked={formData.hasInAppPurchases} onChange={(e) => updateField('hasInAppPurchases', e.target.checked)} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+          <span className="text-secondary">Has in-app purchases</span>
         </label>
         {formData.hasInAppPurchases && (
           <textarea value={formData.inAppPurchaseInfo} onChange={(e) => updateField('inAppPurchaseInfo', e.target.value)} className="textarea" placeholder="Describe in-app purchases..." rows={2} />
@@ -645,13 +645,13 @@ export default function NewAppPage() {
   const renderStep6 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Features & Languages</h2>
-      <p className="helper-text">Highlight key features and supported languages.</p>
+      <p className="helper-text text-secondary">Highlight key features and supported languages.</p>
 
       <div>
         <label className="label">Features</label>
         <div className="grid grid-cols-2 gap-2 mb-4">
           {COMMON_FEATURES.map(feature => (
-            <label key={feature} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors text-sm ${formData.features.includes(feature) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+            <label key={feature} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors text-sm ${formData.features.includes(feature) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="checkbox" checked={formData.features.includes(feature)} onChange={() => toggleFeature(feature)} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
               <span>{feature}</span>
             </label>
@@ -666,9 +666,9 @@ export default function NewAppPage() {
         {formData.features.filter(f => !COMMON_FEATURES.includes(f)).length > 0 && (
           <div className="flex flex-wrap gap-2">
             {formData.features.filter(f => !COMMON_FEATURES.includes(f)).map(feature => (
-              <span key={feature} className="inline-flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-300 border border-green-800 rounded-full text-sm">
+              <span key={feature} className="inline-flex items-center gap-1 px-3 py-1 bg-surface-1 text-primary border border-border rounded-full text-sm">
                 {feature}
-                <button type="button" onClick={() => removeFeature(feature)} className="hover:text-green-100">×</button>
+                <button type="button" onClick={() => removeFeature(feature)} className="hover:text-primary">×</button>
               </span>
             ))}
           </div>
@@ -684,7 +684,7 @@ export default function NewAppPage() {
         <label className="label">Supported Languages <span className="text-red-500">*</span></label>
         <div className="grid grid-cols-3 gap-2">
           {LANGUAGES.map(lang => (
-            <label key={lang.value} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors ${formData.languages.includes(lang.value) ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+            <label key={lang.value} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors ${formData.languages.includes(lang.value) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="checkbox" checked={formData.languages.includes(lang.value)} onChange={(e) => e.target.checked ? updateField('languages', [...formData.languages, lang.value]) : updateField('languages', formData.languages.filter(l => l !== lang.value))} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
               <span>{lang.label}</span>
             </label>
@@ -699,7 +699,7 @@ export default function NewAppPage() {
   const renderStep7 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Support & Links</h2>
-      <p className="text-gray-600">Help users get support and connect with you.</p>
+      <p className="text-secondary">Help users get support and connect with you.</p>
 
       <div>
         <label className="label">Support Email</label>
@@ -722,32 +722,32 @@ export default function NewAppPage() {
         <label className="label">Social Links</label>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="label text-sm text-gray-400 mb-1">Discord</label>
+            <label className="label text-sm text-secondary mb-1">Discord</label>
             <input type="url" value={formData.discordUrl} onChange={(e) => updateField('discordUrl', e.target.value)} className="input" placeholder="https://discord.gg/..." />
           </div>
           <div>
-            <label className="label text-sm text-gray-400 mb-1">Twitter/X</label>
+            <label className="label text-sm text-secondary mb-1">Twitter/X</label>
             <input type="url" value={formData.twitterUrl} onChange={(e) => updateField('twitterUrl', e.target.value)} className="input" placeholder="https://twitter.com/..." />
           </div>
           <div className="col-span-2">
-            <label className="label text-sm text-gray-400 mb-1">YouTube Channel</label>
+            <label className="label text-sm text-secondary mb-1">YouTube Channel</label>
             <input type="url" value={formData.youtubeUrl} onChange={(e) => updateField('youtubeUrl', e.target.value)} className="input" placeholder="https://youtube.com/@..." />
           </div>
         </div>
       </div>
 
-      <div className="space-y-4 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
+      <div className="space-y-4 p-4 bg-surface-2 border border-border rounded-lg">
         <label className="label">Additional Information</label>
         <div>
-          <label className="label text-sm text-gray-400 mb-1">Developer Notes</label>
+          <label className="label text-sm text-secondary mb-1">Developer Notes</label>
           <textarea value={formData.developerNotes} onChange={(e) => updateField('developerNotes', e.target.value)} className="textarea" placeholder="Notes for review team (not shown publicly)" rows={2} />
         </div>
         <div>
-          <label className="label text-sm text-gray-400 mb-1">Credits</label>
+          <label className="label text-sm text-secondary mb-1">Credits</label>
           <textarea value={formData.credits} onChange={(e) => updateField('credits', e.target.value)} className="textarea" placeholder="Credit team members, artists, musicians..." rows={2} />
         </div>
         <div>
-          <label className="label text-sm text-gray-400 mb-1">Acknowledgments</label>
+          <label className="label text-sm text-secondary mb-1">Acknowledgments</label>
           <textarea value={formData.acknowledgments} onChange={(e) => updateField('acknowledgments', e.target.value)} className="textarea" placeholder="Third-party assets, open source libraries..." rows={2} />
         </div>
       </div>
@@ -758,7 +758,7 @@ export default function NewAppPage() {
   const renderStep8 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Review & Submit</h2>
-      <p className="text-gray-600">Review your submission before sending it for approval.</p>
+      <p className="text-secondary">Review your submission before sending it for approval.</p>
 
       {errors.submit && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{errors.submit}</div>
@@ -773,27 +773,27 @@ export default function NewAppPage() {
           { step: 5, title: 'Content', content: <>Rating: {CONTENT_RATINGS.find(r => r.value === formData.contentRating)?.label || '—'}</> },
           { step: 6, title: 'Features', content: <>Features: {formData.features.length}<br />Languages: {formData.languages.length}</> },
         ].map(({ step, title, content }) => (
-          <div key={step} className="p-4 border border-gray-700 rounded-lg bg-gray-800/30">
+          <div key={step} className="p-4 border border-border rounded-lg bg-surface-2">
             <div className="flex justify-between items-start mb-2">
-              <h3 className="font-medium text-gray-200">{title}</h3>
-              <button type="button" onClick={() => goToStep(step)} className="text-blue-400 text-sm hover:underline">Edit</button>
+              <h3 className="font-medium text-primary">{title}</h3>
+              <button type="button" onClick={() => goToStep(step)} className="text-blue-primary text-sm hover:underline">Edit</button>
             </div>
-            <div className="text-sm text-gray-400">{content}</div>
+            <div className="text-sm text-secondary">{content}</div>
           </div>
         ))}
       </div>
 
       {formData.iconFile && (
-        <div className="p-4 border border-gray-700 rounded-lg bg-gray-800/30">
-          <h3 className="font-medium mb-4 text-gray-200">Store Preview</h3>
+        <div className="p-4 border border-border rounded-lg bg-surface-2">
+          <h3 className="font-medium mb-4 text-primary">Store Preview</h3>
           <div className="flex gap-4">
             <img src={URL.createObjectURL(formData.iconFile)} alt="App icon" className="w-20 h-20 rounded-xl object-cover" />
             <div>
-              <h4 className="font-semibold text-lg text-gray-100">{formData.name}</h4>
-              <p className="text-gray-400 text-sm">{formData.summary}</p>
+              <h4 className="font-semibold text-lg text-secondary">{formData.name}</h4>
+              <p className="text-secondary text-sm">{formData.summary}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300">{formData.category}</span>
-                <span className="text-sm font-medium text-gray-200">{formData.price === 0 ? 'Free' : `${CURRENCIES.find(c => c.value === formData.currency)?.symbol}${formData.price}`}</span>
+                <span className="px-2 py-1 bg-surface-1 rounded text-xs text-secondary">{formData.category}</span>
+                <span className="text-sm font-medium text-primary">{formData.price === 0 ? 'Free' : `${CURRENCIES.find(c => c.value === formData.currency)?.symbol}${formData.price}`}</span>
               </div>
             </div>
           </div>
@@ -842,16 +842,16 @@ export default function NewAppPage() {
                   className={step.id <= currentStep ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}
                   disabled={step.id > currentStep}
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${step.id < currentStep ? 'bg-green-500 text-white' : step.id === currentStep ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' : 'bg-gray-800 text-gray-500 border border-gray-700'
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${step.id < currentStep ? 'bg-green-500 text-white' : step.id === currentStep ? 'bg-primary text-white shadow-[0_0_15px_rgba(124,58,237,0.4)]' : 'bg-surface-1 text-tertiary border border-border'
                     }`}>
                     {step.id < currentStep ? '✓' : step.id}
                   </div>
                   <div className="hidden md:block mt-2 text-center">
-                    <div className={`text-xs font-medium ${step.id === currentStep ? 'text-blue-400' : 'text-gray-500'}`}>{step.title}</div>
+                    <div className={`text-xs font-medium ${step.id === currentStep ? 'text-primary' : 'text-tertiary'}`}>{step.title}</div>
                   </div>
                 </button>
                 {index < STEPS.length - 1 && (
-                  <div className={`w-full h-1 mx-2 ${step.id < currentStep ? 'bg-green-500' : 'bg-gray-800 border border-gray-700'}`} style={{ minWidth: '20px', maxWidth: '60px' }} />
+                  <div className={`w-full h-1 mx-2 ${step.id < currentStep ? 'bg-green-500' : 'bg-surface-1 border border-border'}`} style={{ minWidth: '20px', maxWidth: '60px' }} />
                 )}
               </div>
             ))}

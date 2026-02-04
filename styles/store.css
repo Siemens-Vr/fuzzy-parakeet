@@ -135,7 +135,7 @@ html[data-theme="store"],
     justify-content: center;
     box-shadow: var(--glow-primary);
     flex-shrink: 0;
-    color: #000;
+    color: #fff;
     /* Contrast */
 }
 
@@ -143,10 +143,7 @@ html[data-theme="store"],
     font-size: 18px;
     font-weight: 800;
     letter-spacing: 0.5px;
-    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #fff;
 }
 
 
@@ -174,8 +171,9 @@ html[data-theme="store"],
 .vr-input.search-input {
     padding-left: 44px;
     border-radius: 999px;
-    border-color: var(--brand-primary);
-    box-shadow: 0 0 10px color-mix(in srgb, var(--brand-primary) 15%, transparent);
+    border-color: rgba(156, 163, 175, 0.4);
+    box-shadow: 0 0 10px rgba(156, 163, 175, 0.1);
+    color: rgba(156, 163, 175, 0.8);
 }
 
 
@@ -1872,4 +1870,4 @@ html[data-theme="store"],
         align-items: flex-start;
         gap: 1rem;
     }
-}
+}@media (max-width: 1440px) { .hero-info-card { display: none !important; } }

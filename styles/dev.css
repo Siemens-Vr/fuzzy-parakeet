@@ -40,6 +40,7 @@ html[data-theme="dev"],
     --text-secondary: #94a3b8;
     --text-tertiary: #64748b;
     --text-disabled: #475569;
+    --text-muted: #64748b;
 
     --border-light: rgba(255, 255, 255, 0.08);
     --border-medium: rgba(255, 255, 255, 0.15);
@@ -51,10 +52,18 @@ html[data-theme="dev"],
     /* Brand Mappings */
     --blue-primary: var(--brand-primary);
     --blue-hover: #6d28d9;
-    /* violet-700 approx */
     --blue-light: rgba(124, 58, 237, 0.15);
     --blue-dark: #5b21b6;
-    /* violet-800 approx */
+
+    /* Status Mappings */
+    --green: #22c55e;
+    --green-light: rgba(34, 197, 94, 0.15);
+    --yellow: #eab308;
+    --yellow-light: rgba(234, 179, 8, 0.15);
+    --orange: #f97316;
+    --orange-light: rgba(249, 115, 22, 0.15);
+    --red: #ef4444;
+    --red-light: rgba(239, 68, 68, 0.15);
 
     /* Generic Border */
     --border: var(--border-light);
@@ -68,6 +77,27 @@ html[data-theme="dev"],
     --btn-primary-text: #ffffff;
     --btn-ghost-bg: transparent;
     --btn-ghost-border: var(--border-medium);
+}
+
+/* Text Color Utilities */
+.text-primary {
+    color: var(--text-primary) !important;
+}
+
+.text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+.text-tertiary {
+    color: var(--text-tertiary) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.text-brand {
+    color: var(--brand-primary) !important;
 }
 
 /* ============================================

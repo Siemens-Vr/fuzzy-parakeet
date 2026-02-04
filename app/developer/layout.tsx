@@ -26,7 +26,7 @@ function DeveloperLayoutInner({ children }: { children: ReactNode }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#f6f8fa'
+        background: '#070A12'
       }}>
         <motion.div
           animate={{ rotate: 360 }}
@@ -34,8 +34,8 @@ function DeveloperLayoutInner({ children }: { children: ReactNode }) {
           style={{
             width: 50,
             height: 50,
-            border: '4px solid #e5e7eb',
-            borderTopColor: '#2563eb',
+            border: '4px solid rgba(255,255,255,0.1)',
+            borderTopColor: '#7c3aed',
             borderRadius: '50%'
           }}
         />

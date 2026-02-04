@@ -5,23 +5,26 @@ import { useState } from 'react';
 const heroImages = [
   {
     id: 1,
-    image: '/hero/default-hero-6.png',
-    title: 'Skills Drive Explorer',
-    description: 'Construct an epic base and battle for peace in Crystal Comm...'
-  },
-  {
-    id: 2,
     image: '/hero/default-hero-1.png',
     title: 'Pneumatics: Learn and experience',
     description:
       'Experience a risk-free, immersive dive into (electro)pneumatic and hydraulic systems.'
   },
+
+
   {
-    id: 3,
+    id: 2,
     image: '/hero/default-hero.png',
     title: 'Death Match Mode',
     description: 'Learn all about Engineering'
-  }
+  },
+  {
+    id: 3,
+    image: '/hero/default-hero-1.png',
+    title: 'Pneumatics: Learn and experience',
+    description:
+      'Experience a risk-free, immersive dive into (electro)pneumatic and hydraulic systems.'
+  },
 ];
 
 const activeIndicatorStyle: React.CSSProperties = {
@@ -272,17 +275,19 @@ export default function HeroCarousel() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               style={{
                 position: 'absolute',
-                right: 'clamp(12px, 3vw, 30px)',
+                right: 'clamp(60px, 12vw, 120px)',
                 top: 'clamp(60px, 10vh, 120px)',
-                width: 'min(320px, 40vw)',
-                padding: 'clamp(14px, 2vw, 20px)',
+                width: 'min(330px, 40vw)',
+                minHeight: '330px',
+                padding: 'clamp(20px, 2vw, 26px)',
                 borderRadius: '16px',
-                background: 'rgba(0,0,0,0.65)',
+                background: 'black',
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
                 border: '1px solid rgba(255,255,255,0.18)',
                 boxShadow:
                   '0 10px 30px rgba(0,0,0,0.55), inset 0 0 1px rgba(255,255,255,0.4)',
+
                 textAlign: 'left',
                 color: 'white',
                 zIndex: 6
@@ -354,20 +359,6 @@ export default function HeroCarousel() {
             </div>
           </div>
 
-          <style jsx>{`
-            /* Hide the app info card on laptop and smaller */
-            @media (max-width: 1024px) {
-              .hero-info-card {
-                display: none !important;
-              }
-            }
-
-            @media (max-width: 480px) {
-              :global(button) {
-                -webkit-tap-highlight-color: transparent;
-              }
-            }
-          `}</style>
         </div>
       </div>
     </div>

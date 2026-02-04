@@ -123,6 +123,7 @@ export async function GET(
             screenshots: app.screenshots || [],
             heroImageUrl: app.heroImageUrl,
             trailerUrl: app.trailerUrl,
+            trailerVideoUrl: app.trailerVideoUrl,
             promoVideoUrl: app.promoVideoUrl,
 
             // Content
@@ -218,7 +219,7 @@ export async function PATCH(
             const textFields: (keyof Prisma.AppUpdateInput)[] = [
                 'name', 'slug', 'summary', 'description', 'subcategory',
                 'whatsNew', 'privacyPolicyUrl', 'supportUrl', 'supportEmail',
-                'discordUrl', 'twitterUrl', 'youtubeUrl', 'trailerUrl', 'promoVideoUrl',
+                'discordUrl', 'twitterUrl', 'youtubeUrl', 'trailerUrl', 'trailerVideoUrl', 'promoVideoUrl',
                 'estimatedPlayTime', 'ageRating', 'inAppPurchaseInfo',
                 'developerNotes', 'credits', 'acknowledgments', 'currency'
             ];
@@ -304,6 +305,11 @@ export async function PATCH(
                 updateData.heroImageUrl = await saveFile(heroImageFile, 'hero');
             }
 
+            const trailerVideoFile = data.get('trailerVideoFile') as File | null;
+            if (trailerVideoFile && trailerVideoFile.size > 0) {
+                updateData.trailerVideoUrl = await saveFile(trailerVideoFile, 'trailers');
+            }
+
             // Screenshots
             const newScreenshots: string[] = [];
             for (const [key, value] of data.entries()) {
@@ -335,7 +341,7 @@ export async function PATCH(
                 'features', 'whatsNew', 'languages', 'tags',
                 'privacyPolicyUrl', 'supportUrl', 'supportEmail',
                 'discordUrl', 'twitterUrl', 'youtubeUrl',
-                'trailerUrl', 'promoVideoUrl',
+                'trailerUrl', 'trailerVideoUrl', 'promoVideoUrl',
                 'estimatedPlayTime', 'ageRating',
                 'developerNotes', 'credits', 'acknowledgments'
             ];

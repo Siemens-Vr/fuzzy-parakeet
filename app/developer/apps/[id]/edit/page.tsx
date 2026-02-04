@@ -44,6 +44,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
         updateField,
         handleIconChange,
         handleHeroImageChange,
+        handleTrailerVideoChange,
         handleNewScreenshots,
         removeExistingScreenshot,
         removeNewScreenshot,
@@ -62,10 +63,10 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             <div className="card" style={{ padding: '60px', textAlign: 'center' }}>
                 <div style={{
                     width: 50, height: 50, margin: '0 auto 16px',
-                    border: '4px solid #e5e7eb', borderTopColor: '#3b82f6',
+                    border: '4px solid rgba(255,255,255,0.1)', borderTopColor: '#7c3aed',
                     borderRadius: '50%', animation: 'spin 1s linear infinite'
                 }} />
-                <div style={{ color: '#6b7280' }}>Loading app data...</div>
+                <div className="text-secondary">Loading app data...</div>
                 <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
             </div>
         );
@@ -75,10 +76,10 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
         return (
             <div className="card" style={{ padding: '60px', textAlign: 'center' }}>
                 <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
-                <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8, color: '#dc2626' }}>
+                <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8, color: '#ef4444' }}>
                     Unable to load app
                 </h2>
-                <p style={{ color: '#6b7280', marginBottom: 24 }}>{error}</p>
+                <p className="text-secondary" style={{ marginBottom: 24 }}>{error}</p>
                 <Link href="/developer" className="btn btn-primary">
                     Back to Dashboard
                 </Link>
@@ -95,10 +96,10 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     <div style={{
                         width: 120, height: 120,
                         borderRadius: 16,
-                        border: '2px dashed #d1d5db',
+                        border: '2px dashed var(--border-medium)',
                         overflow: 'hidden',
                         position: 'relative',
-                        background: '#f9fafb'
+                        background: 'var(--bg-secondary)'
                     }}>
                         {(formData.iconFile || formData.iconUrl) ? (
                             <img
@@ -109,7 +110,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         ) : (
                             <div style={{
                                 height: '100%', display: 'flex', alignItems: 'center',
-                                justifyContent: 'center', color: '#9ca3af', fontSize: 32
+                                justifyContent: 'center', color: 'var(--text-tertiary)', fontSize: 32
                             }}>
                                 🖼️
                             </div>
@@ -151,9 +152,9 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         <label className="block text-sm font-medium mb-1">URL Slug</label>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span style={{
-                                background: '#f3f4f6', padding: '8px 12px',
-                                border: '1px solid #d1d5db', borderRight: 'none',
-                                borderRadius: '8px 0 0 8px', color: '#6b7280', fontSize: 14
+                                background: 'var(--bg-active)', padding: '8px 12px',
+                                border: '1px solid var(--border-medium)', borderRight: 'none',
+                                borderRadius: '8px 0 0 8px', color: 'var(--text-secondary)', fontSize: 14
                             }}>
                                 /app/
                             </span>
@@ -184,7 +185,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
                     {errors.summary && <p className="text-red-500 text-sm">{errors.summary}</p>}
-                    <span style={{ marginLeft: 'auto', fontSize: 12, color: '#9ca3af' }}>
+                    <span style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--text-tertiary)' }}>
                         {formData.summary.length}/150
                     </span>
                 </div>
@@ -195,9 +196,9 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 <label className="block text-sm font-medium mb-2">Hero Image (Cover Art)</label>
                 <div style={{
                     width: '100%', aspectRatio: '2/1', maxWidth: 600,
-                    borderRadius: 16, border: '2px dashed #d1d5db',
+                    borderRadius: 16, border: '2px dashed var(--border-medium)',
                     overflow: 'hidden', position: 'relative',
-                    background: '#f9fafb'
+                    background: 'var(--bg-secondary)'
                 }}>
                     {(formData.heroImageFile || formData.heroImageUrl) ? (
                         <img
@@ -208,7 +209,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     ) : (
                         <div style={{
                             height: '100%', display: 'flex', flexDirection: 'column',
-                            alignItems: 'center', justifyContent: 'center', color: '#9ca3af'
+                            alignItems: 'center', justifyContent: 'center', color: 'var(--text-tertiary)'
                         }}>
                             <span style={{ fontSize: 48 }}>🌄</span>
                             <span style={{ marginTop: 12 }}>Upload Cover Art (2:1 ratio)</span>
@@ -248,11 +249,11 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             {/* Video URLs - Moved from Support Tab */}
-            <div className="card" style={{ padding: 16, background: '#f9fafb' }}>
+            <div className="card" style={{ padding: 16, background: 'var(--bg-active)' }}>
                 <label className="block text-sm font-medium mb-3">Videos</label>
                 <div className="space-y-3">
                     <div>
-                        <label className="block text-sm text-gray-600 mb-1">Trailer URL</label>
+                        <label className="block text-sm text-secondary mb-1">Trailer URL</label>
                         <input
                             type="url"
                             value={formData.trailerUrl}
@@ -262,7 +263,51 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-600 mb-1">Promo Video URL</label>
+                        <label className="block text-sm text-secondary mb-1">Trailer Video File (Upload)</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{
+                                flex: 1,
+                                height: 44,
+                                border: '1px solid var(--border-medium)',
+                                borderRadius: 8,
+                                background: 'var(--bg-secondary)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '0 12px',
+                                position: 'relative',
+                                overflow: 'hidden'
+                            }}>
+                                <span style={{ fontSize: 13, color: (formData.trailerVideoFile || formData.trailerVideoUrl) ? 'var(--text-primary)' : 'var(--text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    {formData.trailerVideoFile
+                                        ? formData.trailerVideoFile.name
+                                        : (formData.trailerVideoUrl ? 'Video Uploaded ✓' : 'Support MP4, WebM (Max 50MB)')}
+                                </span>
+                                <input
+                                    type="file"
+                                    accept="video/mp4,video/webm"
+                                    onChange={(e) => handleTrailerVideoChange(e.target.files?.[0] || null)}
+                                    style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        opacity: 0,
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                            </div>
+                            {formData.trailerVideoFile && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleTrailerVideoChange(null)}
+                                    className="btn btn-outline"
+                                    style={{ padding: '8px 12px', height: 44 }}
+                                >
+                                    Clear
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm text-secondary mb-1">Promo Video URL</label>
                         <input
                             type="url"
                             value={formData.promoVideoUrl}
@@ -403,18 +448,18 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     {(formData.screenshotUrls.length + formData.newScreenshots.length) < 10 && (
                         <label style={{
                             aspectRatio: '16/9',
-                            border: '2px dashed #d1d5db',
+                            border: '2px dashed var(--border-medium)',
                             borderRadius: 8,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
-                            background: '#f9fafb',
+                            background: 'var(--bg-secondary)',
                             flexDirection: 'column',
                             gap: 4
                         }}>
                             <span style={{ fontSize: 24 }}>+</span>
-                            <span style={{ fontSize: 12, color: '#6b7280' }}>Add</span>
+                            <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Add</span>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -441,7 +486,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         style={{ padding: 16, textAlign: 'left' }}
                     >
                         <div style={{ fontWeight: 600 }}>Free</div>
-                        <div style={{ fontSize: 14, color: '#6b7280' }}>Available at no cost</div>
+                        <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Available at no cost</div>
                     </button>
                     <button
                         type="button"
@@ -450,7 +495,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         style={{ padding: 16, textAlign: 'left' }}
                     >
                         <div style={{ fontWeight: 600 }}>Paid</div>
-                        <div style={{ fontSize: 14, color: '#6b7280' }}>Set a price</div>
+                        <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Set a price</div>
                     </button>
                 </div>
             </div>
@@ -483,9 +528,9 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         </div>
                     </div>
 
-                    <div className="card" style={{ padding: 16, background: '#eff6ff' }}>
-                        <div style={{ fontWeight: 600, color: '#1e40af', marginBottom: 4 }}>Revenue Split</div>
-                        <p style={{ fontSize: 14, color: '#3b82f6' }}>
+                    <div className="card" style={{ padding: 16, background: 'var(--blue-light)' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--blue-primary)', marginBottom: 4 }}>Revenue Split</div>
+                        <p style={{ fontSize: 14, color: 'var(--blue-primary)' }}>
                             You receive <strong>70%</strong> of each sale (
                             {CURRENCIES.find(c => c.value === formData.currency)?.symbol}
                             {(formData.price * 0.7).toFixed(2)} per sale)
@@ -498,12 +543,12 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
     const renderTechnicalTab = () => (
         <div className="space-y-6">
-            <div className="card" style={{ padding: 16, background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+            <div className="card" style={{ padding: 16, background: 'var(--green-light)', border: '1px solid var(--green)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <span style={{ fontSize: 24 }}>📦</span>
                     <div>
                         <div style={{ fontWeight: 600 }}>Current APK</div>
-                        <div style={{ fontSize: 14, color: '#6b7280' }}>
+                        <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
                             Version {formData.version} • {formatFileSize(formData.sizeBytes)}
                         </div>
                     </div>
@@ -582,7 +627,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                             />
                             <div>
                                 <div style={{ fontWeight: 500 }}>{perm.label}</div>
-                                <div style={{ fontSize: 13, color: '#6b7280' }}>{perm.description}</div>
+                                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{perm.description}</div>
                             </div>
                         </label>
                     ))}
@@ -631,7 +676,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                             />
                             <div>
                                 <div style={{ fontWeight: 500 }}>{rating.label}</div>
-                                <div style={{ fontSize: 13, color: '#6b7280' }}>{rating.description}</div>
+                                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{rating.description}</div>
                             </div>
                         </label>
                     ))}
@@ -656,7 +701,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                             />
                             <div>
                                 <div style={{ fontWeight: 500 }}>{level.label}</div>
-                                <div style={{ fontSize: 13, color: '#6b7280' }}>{level.description}</div>
+                                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{level.description}</div>
                             </div>
                         </label>
                     ))}
@@ -681,7 +726,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                             />
                             <div>
                                 <div style={{ fontWeight: 500 }}>{area.label}</div>
-                                <div style={{ fontSize: 13, color: '#6b7280' }}>{area.description}</div>
+                                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{area.description}</div>
                             </div>
                         </label>
                     ))}
@@ -788,7 +833,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         {formData.features.filter(f => !COMMON_FEATURES.includes(f)).map(feature => (
                             <span key={feature} className="badge badge-green" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                                 {feature}
-                                <button type="button" onClick={() => removeFeature(feature)}>×</button>
+                                <button type="button" onClick={() => removeFeature(feature)} className="hover:text-primary">×</button>
                             </span>
                         ))}
                     </div>
@@ -877,7 +922,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 <label className="block text-sm font-medium mb-2">Social Links</label>
                 <div className="space-y-3">
                     <div>
-                        <label className="block text-sm text-gray-600 mb-1">Discord</label>
+                        <label className="block text-sm text-secondary mb-1">Discord</label>
                         <input
                             type="url"
                             value={formData.discordUrl}
@@ -887,7 +932,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-600 mb-1">Twitter/X</label>
+                        <label className="block text-sm text-secondary mb-1">Twitter/X</label>
                         <input
                             type="url"
                             value={formData.twitterUrl}
@@ -897,7 +942,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-600 mb-1">YouTube</label>
+                        <label className="block text-sm text-secondary mb-1">YouTube</label>
                         <input
                             type="url"
                             value={formData.youtubeUrl}
@@ -913,7 +958,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 <label className="block text-sm font-medium mb-2">Additional Information</label>
                 <div className="space-y-3">
                     <div>
-                        <label className="block text-sm text-gray-600 mb-1">Developer Notes (not public)</label>
+                        <label className="block text-sm text-secondary mb-1">Developer Notes (not public)</label>
                         <textarea
                             value={formData.developerNotes}
                             onChange={(e) => updateField('developerNotes', e.target.value)}
@@ -923,7 +968,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-600 mb-1">Credits</label>
+                        <label className="block text-sm text-secondary mb-1">Credits</label>
                         <textarea
                             value={formData.credits}
                             onChange={(e) => updateField('credits', e.target.value)}
@@ -960,8 +1005,8 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             }}>
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <Link href="/developer" style={{ color: '#6b7280' }}>Dashboard</Link>
-                        <span style={{ color: '#9ca3af' }}>/</span>
+                        <Link href="/developer" style={{ color: 'var(--text-secondary)' }}>Dashboard</Link>
+                        <span style={{ color: 'var(--text-tertiary)' }}>/</span>
                         <span style={{ fontWeight: 600 }}>{formData.name || 'Edit App'}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -969,7 +1014,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                             {formData.status.replace('_', ' ')}
                         </span>
                         {formData.lastUpdated && (
-                            <span style={{ fontSize: 13, color: '#6b7280' }}>
+                            <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
                                 Last updated: {new Date(formData.lastUpdated).toLocaleDateString()}
                             </span>
                         )}
@@ -994,10 +1039,10 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 <div className="card" style={{
                     padding: 16,
                     marginBottom: 24,
-                    background: '#fef2f2',
-                    border: '1px solid #fecaca'
+                    background: 'var(--red-light)',
+                    border: '1px solid var(--red)'
                 }}>
-                    <span style={{ color: '#dc2626' }}>{error}</span>
+                    <span style={{ color: 'var(--red)' }}>{error}</span>
                 </div>
             )}
 
@@ -1006,7 +1051,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 display: 'flex',
                 gap: 4,
                 marginBottom: 24,
-                borderBottom: '1px solid #e5e7eb',
+                borderBottom: '1px solid var(--border-light)',
                 paddingBottom: 0
             }}>
                 {TABS.map(tab => (
@@ -1016,15 +1061,16 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                         style={{
                             padding: '12px 16px',
                             border: 'none',
-                            background: activeTab === tab.id ? '#fff' : 'transparent',
-                            borderBottom: activeTab === tab.id ? '2px solid #3b82f6' : '2px solid transparent',
-                            color: activeTab === tab.id ? '#1f2937' : '#6b7280',
+                            background: activeTab === tab.id ? 'var(--bg-active)' : 'transparent',
+                            borderBottom: activeTab === tab.id ? '2px solid var(--brand-primary)' : '2px solid transparent',
+                            color: activeTab === tab.id ? 'var(--text-primary)' : 'var(--text-secondary)',
                             fontWeight: activeTab === tab.id ? 600 : 400,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             gap: 6,
-                            marginBottom: -1
+                            marginBottom: -1,
+                            borderRadius: '8px 8px 0 0'
                         }}
                     >
                         <span>{tab.icon}</span>

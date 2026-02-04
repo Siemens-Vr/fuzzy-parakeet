@@ -95,7 +95,7 @@ export default function DeveloperDashboard() {
       <div className="card" style={{ padding: '40px', textAlign: 'center' }}>
         <div style={{
           width: 40, height: 40, margin: '0 auto 10px',
-          border: '4px solid #1f2937', borderTopColor: 'transparent',
+          border: '4px solid rgba(255,255,255,0.1)', borderTopColor: '#7c3aed',
           borderRadius: '999px', animation: 'spin 1s linear infinite'
         }} />
         <div className="helper">Loading dashboard…</div>
@@ -111,7 +111,7 @@ export default function DeveloperDashboard() {
           width: 60,
           height: 60,
           margin: '0 auto 16px',
-          background: '#fee2e2',
+          background: 'rgba(239, 68, 68, 0.1)',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
@@ -120,20 +120,21 @@ export default function DeveloperDashboard() {
         }}>
           ⚠️
         </div>
-        <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 8px', color: '#dc2626' }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 8px', color: '#ef4444' }}>
           Unable to load dashboard
         </h2>
         <p className="helper" style={{ marginBottom: 20 }}>{error}</p>
-        <button
-          onClick={fetchData}
-          className="btn btn-primary"
-          style={{ marginRight: 8 }}
-        >
-          Try again
-        </button>
-        <Link href="/" className="btn btn-outline">
-          Go to store
-        </Link>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
+          <button
+            onClick={fetchData}
+            className="btn btn-primary"
+          >
+            Try again
+          </button>
+          <Link href="/" className="btn btn-ghost">
+            Go to store
+          </Link>
+        </div>
       </div>
     );
   }

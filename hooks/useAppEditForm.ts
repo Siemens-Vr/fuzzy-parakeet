@@ -11,11 +11,13 @@ export interface AppEditFormData extends Omit<AppFormData, 'apkFile' | 'iconFile
     heroImageUrl: string | null;
     screenshotUrls: string[];
     apkUrl: string;
+    trailerVideoUrl: string | null;
 
     // New files to upload (optional)
     iconFile: File | null;
     heroImageFile: File | null;
     newScreenshots: File[];
+    trailerVideoFile: File | null;
 
     // Meta
     status: string;
@@ -50,6 +52,8 @@ const INITIAL_EDIT_DATA: AppEditFormData = {
     heroImageFile: null,
     newScreenshots: [],
     trailerUrl: '',
+    trailerVideoUrl: null,
+    trailerVideoFile: null,
     promoVideoUrl: '',
     contentRating: 'EVERYONE',
     comfortLevel: 'COMFORTABLE',
@@ -131,6 +135,8 @@ export function useAppEditForm(appId: string) {
                     heroImageFile: null,
                     newScreenshots: [],
                     trailerUrl: data.trailerUrl || '',
+                    trailerVideoUrl: data.trailerVideoUrl || null,
+                    trailerVideoFile: null,
                     promoVideoUrl: data.promoVideoUrl || '',
                     contentRating: data.contentRating || 'EVERYONE',
                     comfortLevel: data.comfortLevel || 'COMFORTABLE',
@@ -190,6 +196,10 @@ export function useAppEditForm(appId: string) {
 
     const handleHeroImageChange = useCallback((file: File | null) => {
         updateField('heroImageFile', file);
+    }, [updateField]);
+
+    const handleTrailerVideoChange = useCallback((file: File | null) => {
+        updateField('trailerVideoFile', file);
     }, [updateField]);
 
     const handleNewScreenshots = useCallback((files: FileList | null) => {
@@ -317,6 +327,7 @@ export function useAppEditForm(appId: string) {
             formDataToSend.append('twitterUrl', formData.twitterUrl || '');
             formDataToSend.append('youtubeUrl', formData.youtubeUrl || '');
             formDataToSend.append('trailerUrl', formData.trailerUrl || '');
+            formDataToSend.append('trailerVideoUrl', formData.trailerVideoUrl || '');
             formDataToSend.append('promoVideoUrl', formData.promoVideoUrl || '');
             formDataToSend.append('estimatedPlayTime', formData.estimatedPlayTime || '');
             formDataToSend.append('ageRating', formData.ageRating || '');
@@ -333,6 +344,9 @@ export function useAppEditForm(appId: string) {
             }
             if (formData.heroImageFile) {
                 formDataToSend.append('heroImageFile', formData.heroImageFile);
+            }
+            if (formData.trailerVideoFile) {
+                formDataToSend.append('trailerVideoFile', formData.trailerVideoFile);
             }
             formData.newScreenshots.forEach((file, index) => {
                 formDataToSend.append(`screenshot_${index}`, file);
@@ -385,6 +399,7 @@ export function useAppEditForm(appId: string) {
         updateField,
         handleIconChange,
         handleHeroImageChange,
+        handleTrailerVideoChange,
         handleNewScreenshots,
         removeExistingScreenshot,
         removeNewScreenshot,
