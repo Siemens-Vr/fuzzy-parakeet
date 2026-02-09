@@ -360,7 +360,7 @@ html[data-theme="store"],
 }
 
 /* Hide promo card on smaller screens (laptops and below) */
-@media (max-width: 1024px) {
+@media (max-width: 1536px) {
     .promo-card {
         display: none;
     }
@@ -547,6 +547,65 @@ html[data-theme="store"],
     background: var(--surface-2);
 }
 
+/* ── Trailer video overlay ── */
+.card-trailer-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.card-trailer-video.playing {
+    opacity: 1;
+}
+
+.card-trailer-indicator {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+    z-index: 8;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .card-trailer-indicator:not(.hidden) {
+    animation: pulse-indicator 1.5s ease-in-out infinite;
+}
+
+.card-trailer-indicator.hidden {
+    opacity: 0;
+    transform: scale(0.6);
+}
+
+@keyframes pulse-indicator {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+    }
+}
+
 .card-image {
     width: 100%;
     height: 100%;
@@ -654,6 +713,45 @@ html[data-theme="store"],
     font-size: 14px;
     font-weight: 600;
     color: var(--text-secondary);
+}
+
+/* ── Card hover download button ── */
+.card-content-wrapper {
+    min-height: 72px;
+}
+
+.card-dl-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.85);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.card-dl-icon:hover {
+    border-color: #fff;
+    color: #fff;
+}
+
+.card-hover-tags {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.01em;
+}
+
+.card-hover-dot {
+    margin: 0 6px;
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .empty-state {
@@ -1773,7 +1871,7 @@ html[data-theme="store"],
 .category-filters {
     display: flex;
     gap: 12px;
-    margin: 2rem 20px 0px;
+    margin: 20px 20px 0px;
     padding: 0.5rem 0;
     overflow-x: auto;
     scrollbar-width: none;
@@ -1870,4 +1968,10 @@ html[data-theme="store"],
         align-items: flex-start;
         gap: 1rem;
     }
-}@media (max-width: 1440px) { .hero-info-card { display: none !important; } }
+}
+
+@media (max-width: 1536px) {
+    .hero-info-card {
+        display: none !important;
+    }
+}

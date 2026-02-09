@@ -151,7 +151,7 @@ export default function HomePage() {
       {/* Main Content */}
       <div style={{}}>
         {/* Search Bar */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -163,7 +163,7 @@ export default function HomePage() {
           }}
         >
 
-        </motion.div>
+        </motion.div> */}
 
         {/* Category Filters */}
         <motion.div

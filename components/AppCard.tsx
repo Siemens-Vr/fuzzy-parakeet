@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 export type AppMeta = {
   slug: string;
@@ -16,16 +16,21 @@ export type AppMeta = {
   screenshots?: string[];
   developer?: string;
   category?: string;
+  tags?: string[];
   rating?: number;
   downloads?: number;
   releaseDate?: string;
   lastUpdated?: string;
+  trailerVideoUrl?: string;
 };
 
 export default function AppCard({ app }: { app: AppMeta }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 3D tilt effect
   const x = useMotionValue(0);
@@ -61,10 +66,32 @@ export default function AppCard({ app }: { app: AppMeta }) {
     x.set(0);
     y.set(0);
     setIsHovered(false);
+    // Stop trailer video
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+    setVideoPlaying(false);
   };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
+    // Start trailer video after a short delay
+    if (app.trailerVideoUrl && videoRef.current) {
+      hoverTimerRef.current = setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play().then(() => {
+            setVideoPlaying(true);
+          }).catch(() => {
+            // Autoplay blocked or video error — fail silently
+          });
+        }
+      }, 400);
+    }
   };
 
   const handleDownload = (e: React.MouseEvent) => {
@@ -128,7 +155,25 @@ export default function AppCard({ app }: { app: AppMeta }) {
               setImageLoaded(true);
             }}
           />
-          
+
+          {/* Trailer Video Overlay */}
+          {app.trailerVideoUrl && (
+            <>
+              <video
+                ref={videoRef}
+                className={`card-trailer-video ${videoPlaying ? 'playing' : ''}`}
+                src={app.trailerVideoUrl}
+                muted
+                loop
+                playsInline
+                preload="none"
+              />
+              {/* <div className={`card-trailer-indicator ${videoPlaying ? 'hidden' : ''}`}>
+                ▶
+              </div> */}
+            </>
+          )}
+
           {/* Rating Badge */}
           {app.rating && (
             <motion.div
@@ -162,7 +207,7 @@ export default function AppCard({ app }: { app: AppMeta }) {
           )}
 
           {/* Hover Actions */}
-          <motion.div 
+          <motion.div
             className="card-actions"
             initial={{ opacity: 0, y: 20 }}
           >
@@ -170,7 +215,7 @@ export default function AppCard({ app }: { app: AppMeta }) {
               onClick={handleDownload}
               className="card-action-btn download"
               aria-label="Download"
-              whileHover={{ 
+              whileHover={{
                 scale: 1.2,
                 rotate: 360,
                 transition: { duration: 0.4 }
@@ -183,7 +228,7 @@ export default function AppCard({ app }: { app: AppMeta }) {
               onClick={handleFavorite}
               className="card-action-btn favorite"
               aria-label="Favorite"
-              whileHover={{ 
+              whileHover={{
                 scale: 1.2,
                 transition: { duration: 0.2 }
               }}
@@ -215,47 +260,107 @@ export default function AppCard({ app }: { app: AppMeta }) {
         />
 
         {/* Card Content */}
-        <motion.div 
-          className="card-content"
-          style={{ transform: "translateZ(30px)" }}
-          animate={{
-            y: isHovered ? -8 : 0
-          }}
-          transition={{
-            duration: 0.3,
-            ease: "easeInOut"
-          }}
-        >
-          <motion.div 
-            className="card-title"
-            whileHover={{ x: 5 }}
+        <div className="card-content-wrapper" style={{ position: 'relative', overflow: 'hidden' }}>
+          {/* Normal content - visible by default, hidden on hover */}
+          <motion.div
+            className="card-content"
+            style={{ transform: "translateZ(30px)" }}
+            animate={{
+              opacity: isHovered ? 0 : 1,
+              y: isHovered ? -12 : 0,
+            }}
+            transition={{
+              duration: 0.25,
+              ease: "easeInOut"
+            }}
           >
-            {app.name}
+            <div className="card-title">
+              {app.name}
+            </div>
+            <div className="card-meta-row">
+              <span
+                style={{
+                  textTransform: 'uppercase',
+                  fontWeight: 700,
+                  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
+                FREE
+              </span>
+              <span>
+                {app.downloads ? `${Math.floor(app.downloads / 1000)}k` : '0'} Reviews
+              </span>
+            </div>
           </motion.div>
-          <motion.div 
-            className="card-meta-row"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
+
+          {/* Hover state - download icon + category tags */}
+          <motion.div
+            className="card-hover-action"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 10,
+              pointerEvents: isHovered ? 'auto' : 'none',
+            }}
+            animate={{
+              opacity: isHovered ? 1 : 0,
+              y: isHovered ? 0 : 12,
+            }}
+            transition={{
+              duration: 0.25,
+              ease: "easeInOut"
+            }}
           >
-            <motion.span 
-              style={{ 
-                textTransform: 'uppercase', 
-                fontWeight: 700,
-                background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}
-              whileHover={{ scale: 1.1 }}
+            {/* Circular download icon */}
+            <motion.div
+              className="card-dl-icon"
+              whileHover={{ scale: 1.12 }}
+              whileTap={{ scale: 0.9 }}
             >
-              FREE
-            </motion.span>
-            <span>
-              {app.downloads ? `${Math.floor(app.downloads / 1000)}k` : '0'} Reviews
-            </span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </motion.div>
+
+            {/* Category tags */}
+            <div className="card-hover-tags">
+              {(() => {
+                const allTags = app.tags && app.tags.length > 0
+                  ? app.tags
+                  : app.category
+                    ? [app.category.charAt(0) + app.category.slice(1).toLowerCase().replace(/_/g, ' ')]
+                    : [];
+                const shown = allTags.slice(0, 2);
+                const remaining = allTags.length - 2;
+                return (
+                  <>
+                    {shown.map((tag, i) => (
+                      <span key={i}>
+                        {i > 0 && <span className="card-hover-dot">•</span>}
+                        {tag}
+                      </span>
+                    ))}
+                    {remaining > 0 && (
+                      <span>
+                        <span className="card-hover-dot">•</span>
+                        +{remaining}
+                      </span>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </motion.div>
     </Link>
   );

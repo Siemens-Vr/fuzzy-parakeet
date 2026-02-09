@@ -447,6 +447,9 @@ export async function POST(req: NextRequest) {
       });
 
       return createdApp;
+    }, {
+      maxWait: 10000,
+      timeout: 20000,
     });
 
     return NextResponse.json(

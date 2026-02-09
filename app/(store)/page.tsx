@@ -95,6 +95,8 @@ export default function HomePage() {
       category: app.category,
       rating: app.rating,
       downloads: app.downloads,
+      trailerVideoUrl: app.trailerVideoUrl || undefined,
+      tags: Array.isArray(app.tags) ? app.tags : [],
     } as AppMeta));
   };
 

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 
+
 type DashboardStats = {
   totalApps: number;
   totalDownloads: number;
@@ -151,7 +152,7 @@ export default function DeveloperDashboard() {
     <div className="space-y-8">
       <div className="row" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 800, margin: 0 }}>Welcome back!</h1>
+          <h1 style={{ fontSize: 22, color: 'white', fontWeight: 800, margin: 0 }}>Welcome back!</h1>
           <div className="helper">Here’s an overview of your app performance</div>
         </div>
         <Link href="/developer/apps/new" className=" btn btn-primary">Submit new app</Link>

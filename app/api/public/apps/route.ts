@@ -62,6 +62,8 @@ export async function GET(req: NextRequest) {
         sizeBytes: true,
         lastUpdated: true,
         publishedAt: true,
+        trailerVideoUrl: true,
+        tags: true,
         developer: {
           select: {
             organizationName: true,
@@ -73,22 +75,24 @@ export async function GET(req: NextRequest) {
     console.log(apps)
 
     // Format response
-   const formattedApps = apps.map(app => ({
-    slug: app.slug,
-    name: app.name,
-    version: app.version,
-    summary: app.summary,
-    description: app.description,
-    icon: app.iconUrl,
-    screenshots: Array.isArray(app.screenshots) ? app.screenshots : [],
-    developer: app.developer?.organizationName ?? 'Unknown developer',
-    category: app.category,
-    rating: app.rating || 0,
-    downloads: app.downloads,
-    sizeBytes: Number(app.sizeBytes),
-    lastUpdated: app.lastUpdated ? app.lastUpdated.toISOString() : null,
-    releaseDate: app.publishedAt ? app.publishedAt.toISOString() : null,
-  }));
+    const formattedApps = apps.map(app => ({
+      slug: app.slug,
+      name: app.name,
+      version: app.version,
+      summary: app.summary,
+      description: app.description,
+      icon: app.iconUrl,
+      screenshots: Array.isArray(app.screenshots) ? app.screenshots : [],
+      developer: app.developer?.organizationName ?? 'Unknown developer',
+      category: app.category,
+      rating: app.rating || 0,
+      downloads: app.downloads,
+      sizeBytes: Number(app.sizeBytes),
+      trailerVideoUrl: app.trailerVideoUrl || null,
+      tags: Array.isArray(app.tags) ? app.tags : [],
+      lastUpdated: app.lastUpdated ? app.lastUpdated.toISOString() : null,
+      releaseDate: app.publishedAt ? app.publishedAt.toISOString() : null,
+    }));
 
     return NextResponse.json(formattedApps, {
       headers: {

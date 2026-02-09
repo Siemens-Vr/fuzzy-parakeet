@@ -4,11 +4,12 @@ import { PrismaClient } from "@/prisma/generated/client"
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
+  pool: Pool | undefined;
 };
 
-// 1. Create a Pool instance (standard for 2026 driver adapters)
-const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL 
+// 1. Create or retrieve a Pool instance
+const pool = globalForPrisma.pool ?? new Pool({
+  connectionString: process.env.DATABASE_URL
 });
 
 // 2. Initialize the adapter with the pool
@@ -23,4 +24,5 @@ export const prisma =
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
+  globalForPrisma.pool = pool;
 }

@@ -92,7 +92,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             {/* App Icon & Name */}
             <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
                 <div>
-                    <label className="block text-sm font-medium mb-2">App Icon</label>
+                    <label className="label">App Icon</label>
                     <div style={{
                         width: 120, height: 120,
                         borderRadius: 16,
@@ -135,7 +135,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
                 <div style={{ flex: 1 }}>
                     <div style={{ marginBottom: 16 }}>
-                        <label className="block text-sm font-medium mb-1">
+                        <label className="label">
                             App Name <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -149,7 +149,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">URL Slug</label>
+                        <label className="label">URL Slug</label>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span style={{
                                 background: 'var(--bg-active)', padding: '8px 12px',
@@ -172,7 +172,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
             {/* Summary */}
             <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="label">
                     Short Description <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -193,7 +193,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
             {/* Hero Image */}
             <div>
-                <label className="block text-sm font-medium mb-2">Hero Image (Cover Art)</label>
+                <label className="label">Hero Image (Cover Art)</label>
                 <div style={{
                     width: '100%', aspectRatio: '2/1', maxWidth: 600,
                     borderRadius: 16, border: '2px dashed var(--border-medium)',
@@ -235,7 +235,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
             {/* Description */}
             <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="label">
                     Full Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -250,7 +250,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
             {/* Video URLs - Moved from Support Tab */}
             <div className="card" style={{ padding: 16, background: 'var(--bg-active)' }}>
-                <label className="block text-sm font-medium mb-3">Videos</label>
+                <label className="label">Videos</label>
                 <div className="space-y-3">
                     <div>
                         <label className="block text-sm text-secondary mb-1">Trailer URL</label>
@@ -322,7 +322,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             {/* Category */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div>
-                    <label className="block text-sm font-medium mb-1">
+                    <label className="label">
                         Category <span className="text-red-500">*</span>
                     </label>
                     <select
@@ -341,7 +341,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
                 </div>
                 <div>
-                    <label className="block text-sm font-medium mb-1">Subcategory</label>
+                    <label className="label">Subcategory</label>
                     <select
                         value={formData.subcategory}
                         onChange={(e) => updateField('subcategory', e.target.value)}
@@ -358,7 +358,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
             {/* Tags */}
             <div>
-                <label className="block text-sm font-medium mb-1">Tags (up to 10)</label>
+                <label className="label">Tags (up to 10)</label>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <input
                         type="text"
@@ -383,7 +383,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
 
             {/* Screenshots */}
             <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="label">
                     Screenshots ({formData.screenshotUrls.length + formData.newScreenshots.length}/10)
                 </label>
                 <div style={{
@@ -477,7 +477,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
     const renderPricingTab = () => (
         <div className="space-y-6">
             <div>
-                <label className="block text-sm font-medium mb-2">Pricing Model</label>
+                <label className="label">Pricing Model</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                     <button
                         type="button"
@@ -504,7 +504,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 <>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Currency</label>
+                            <label className="label">Currency</label>
                             <select
                                 value={formData.currency}
                                 onChange={(e) => updateField('currency', e.target.value)}
@@ -516,7 +516,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Price</label>
+                            <label className="label">Price</label>
                             <input
                                 type="number"
                                 value={formData.price}
@@ -529,7 +529,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     </div>
 
                     <div className="card" style={{ padding: 16, background: 'var(--blue-light)' }}>
-                        <div style={{ fontWeight: 600, color: 'var(--blue-primary)', marginBottom: 4 }}>Revenue Split</div>
+                        <div className="text-primary" style={{ fontWeight: 600, marginBottom: 4 }}>Revenue Split</div>
                         <p style={{ fontSize: 14, color: 'var(--blue-primary)' }}>
                             You receive <strong>70%</strong> of each sale (
                             {CURRENCIES.find(c => c.value === formData.currency)?.symbol}
@@ -547,7 +547,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <span style={{ fontSize: 24 }}>📦</span>
                     <div>
-                        <div style={{ fontWeight: 600 }}>Current APK</div>
+                        <div className="text-primary" style={{ fontWeight: 600 }}>Current APK</div>
                         <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
                             Version {formData.version} • {formatFileSize(formData.sizeBytes)}
                         </div>
@@ -563,7 +563,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1">Minimum API Level</label>
+                <label className="label">Minimum API Level</label>
                 <select
                     value={formData.minApiLevel}
                     onChange={(e) => updateField('minApiLevel', parseInt(e.target.value))}
@@ -576,7 +576,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="label">
                     Target Devices <span className="text-red-500">*</span>
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
@@ -597,7 +597,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                                     }
                                 }}
                             />
-                            <span>{device.label}</span>
+                            <span className="text-primary">{device.label}</span>
                         </label>
                     ))}
                 </div>
@@ -605,7 +605,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Required Permissions</label>
+                <label className="label">Required Permissions</label>
                 <div className="space-y-2">
                     {PERMISSIONS.map(perm => (
                         <label
@@ -626,7 +626,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                                 style={{ marginTop: 2 }}
                             />
                             <div>
-                                <div style={{ fontWeight: 500 }}>{perm.label}</div>
+                                <div className="text-primary" style={{ fontWeight: 500 }}>{perm.label}</div>
                                 <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{perm.description}</div>
                             </div>
                         </label>
@@ -635,7 +635,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Hardware Requirements</label>
+                <label className="label">Hardware Requirements</label>
                 <div className="space-y-2">
                     {[
                         { field: 'requiresControllers' as const, label: 'Requires Controllers' },
@@ -659,7 +659,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
     const renderContentTab = () => (
         <div className="space-y-6">
             <div>
-                <label className="block text-sm font-medium mb-2">Content Rating</label>
+                <label className="label">Content Rating</label>
                 <div className="space-y-2">
                     {CONTENT_RATINGS.map(rating => (
                         <label
@@ -675,7 +675,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                                 style={{ marginTop: 2 }}
                             />
                             <div>
-                                <div style={{ fontWeight: 500 }}>{rating.label}</div>
+                                <div className="text-primary" style={{ fontWeight: 500 }}>{rating.label}</div>
                                 <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{rating.description}</div>
                             </div>
                         </label>
@@ -684,7 +684,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Comfort Level</label>
+                <label className="label">Comfort Level</label>
                 <div className="space-y-2">
                     {COMFORT_LEVELS.map(level => (
                         <label
@@ -700,7 +700,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                                 style={{ marginTop: 2 }}
                             />
                             <div>
-                                <div style={{ fontWeight: 500 }}>{level.label}</div>
+                                <div className="text-primary" style={{ fontWeight: 500 }}>{level.label}</div>
                                 <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{level.description}</div>
                             </div>
                         </label>
@@ -709,7 +709,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Play Area</label>
+                <label className="label">Play Area</label>
                 <div className="space-y-2">
                     {PLAY_AREAS.map(area => (
                         <label
@@ -725,7 +725,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                                 style={{ marginTop: 2 }}
                             />
                             <div>
-                                <div style={{ fontWeight: 500 }}>{area.label}</div>
+                                <div className="text-primary" style={{ fontWeight: 500 }}>{area.label}</div>
                                 <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{area.description}</div>
                             </div>
                         </label>
@@ -734,7 +734,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Player Modes</label>
+                <label className="label">Player Modes</label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
                     {PLAYER_MODES.map(mode => (
                         <label
@@ -761,7 +761,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div className="card" style={{ padding: 16 }}>
-                <label className="block text-sm font-medium mb-2">Monetization</label>
+                <label className="label">Monetization</label>
                 <div className="space-y-2">
                     <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <input
@@ -797,7 +797,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
     const renderFeaturesTab = () => (
         <div className="space-y-6">
             <div>
-                <label className="block text-sm font-medium mb-2">Features</label>
+                <label className="label">Features</label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 12 }}>
                     {COMMON_FEATURES.map(feature => (
                         <label
@@ -810,7 +810,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                                 checked={formData.features.includes(feature)}
                                 onChange={() => toggleFeature(feature)}
                             />
-                            <span>{feature}</span>
+                            <span className="text-primary">{feature}</span>
                         </label>
                     ))}
                 </div>
@@ -841,7 +841,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1">What&apos;s New</label>
+                <label className="label">What&apos;s New</label>
                 <textarea
                     value={formData.whatsNew}
                     onChange={(e) => updateField('whatsNew', e.target.value)}
@@ -852,7 +852,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="label">
                     Supported Languages <span className="text-red-500">*</span>
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
@@ -873,7 +873,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                                     }
                                 }}
                             />
-                            <span>{lang.label}</span>
+                            <span className="text-primary">{lang.label}</span>
                         </label>
                     ))}
                 </div>
@@ -886,7 +886,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
         <div className="space-y-6">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div>
-                    <label className="block text-sm font-medium mb-1">Support Email</label>
+                    <label className="label">Support Email</label>
                     <input
                         type="email"
                         value={formData.supportEmail}
@@ -896,7 +896,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium mb-1">Support Website</label>
+                    <label className="label">Support Website</label>
                     <input
                         type="url"
                         value={formData.supportUrl}
@@ -908,7 +908,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1">Privacy Policy URL</label>
+                <label className="label">Privacy Policy URL</label>
                 <input
                     type="url"
                     value={formData.privacyPolicyUrl}
@@ -919,7 +919,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Social Links</label>
+                <label className="label">Social Links</label>
                 <div className="space-y-3">
                     <div>
                         <label className="block text-sm text-secondary mb-1">Discord</label>
@@ -955,7 +955,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
             </div>
 
             <div className="card" style={{ padding: 16 }}>
-                <label className="block text-sm font-medium mb-2">Additional Information</label>
+                <label className="label">Additional Information</label>
                 <div className="space-y-3">
                     <div>
                         <label className="block text-sm text-secondary mb-1">Developer Notes (not public)</label>
@@ -1007,7 +1007,7 @@ export default function EditAppPage({ params }: { params: { id: string } }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                         <Link href="/developer" style={{ color: 'var(--text-secondary)' }}>Dashboard</Link>
                         <span style={{ color: 'var(--text-tertiary)' }}>/</span>
-                        <span style={{ fontWeight: 600 }}>{formData.name || 'Edit App'}</span>
+                        <span className="text-primary" style={{ fontWeight: 600 }}>{formData.name || 'Edit App'}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <span className={`badge badge-${formData.status === 'PUBLISHED' ? 'green' : formData.status === 'IN_REVIEW' ? 'yellow' : 'gray'}`}>
