@@ -59,17 +59,19 @@ export async function GET(
                         organizationName: true,
                     }
                 },
-                builds: {
-                    orderBy: { uploadedAt: 'desc' },
-                    take: 5,
-                    select: {
-                        id: true,
-                        version: true,
-                        buildNumber: true,
-                        channel: true,
-                        isActive: true,
-                        uploadedAt: true,
+                draft: true, // Include the staging draft
+                channels: {
+                    include: {
+                        currentRelease: {
+                            include: {
+                                artifact: true
+                            }
+                        }
                     }
+                },
+                artifacts: {
+                    orderBy: { createdAt: 'desc' },
+                    take: 5
                 }
             }
         });
@@ -166,7 +168,21 @@ export async function GET(
 
             // Related
             developer: app.developer,
-            recentBuilds: app.builds,
+
+            // New Workflow Data
+            draft: app.draft,
+            channels: app.channels,
+
+            // Map artifacts to mimic "recent builds" for now, or just provide them
+            recentBuilds: app.artifacts.map(a => ({
+                id: a.id,
+                version: a.versionString,
+                buildNumber: a.versionCode,
+                uploadedAt: a.createdAt,
+                sizeBytes: a.fileSize,
+                // isActive and channel are now derived from 'channels' array, 
+                // so we don't mock them here to avoid confusion.
+            })),
         };
 
         return NextResponse.json(appData);
@@ -179,7 +195,7 @@ export async function GET(
     }
 }
 
-/** PATCH: Update app metadata */
+/** PATCH: Update app metadata (Draft) */
 export async function PATCH(
     req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
@@ -191,7 +207,7 @@ export async function PATCH(
         // Verify app exists and developer owns it
         const existingApp = await prisma.app.findUnique({
             where: { id },
-            select: { id: true, developerId: true, status: true }
+            include: { draft: true }
         });
 
         if (!existingApp) {
@@ -208,15 +224,71 @@ export async function PATCH(
             );
         }
 
+        // Ensure Draft exists
+        let draftId = existingApp.draft?.id;
+        if (!draftId) {
+            // Create Draft from App (Copy fields)
+            const newDraft = await prisma.appDraft.create({
+                data: {
+                    appId: existingApp.id,
+                    name: existingApp.name,
+                    summary: existingApp.summary,
+                    description: existingApp.description,
+                    category: existingApp.category,
+                    subcategory: existingApp.subcategory,
+                    tags: existingApp.tags as any,
+                    contentRating: existingApp.contentRating,
+                    price: existingApp.price,
+                    currency: existingApp.currency,
+                    salePrice: existingApp.salePrice,
+                    saleEndDate: existingApp.saleEndDate,
+                    iconUrl: existingApp.iconUrl,
+                    screenshots: existingApp.screenshots as any,
+                    heroImageUrl: existingApp.heroImageUrl,
+                    trailerUrl: existingApp.trailerUrl,
+                    trailerVideoUrl: existingApp.trailerVideoUrl,
+                    promoVideoUrl: existingApp.promoVideoUrl,
+                    minApiLevel: existingApp.minApiLevel,
+                    targetApiLevel: existingApp.targetApiLevel,
+                    targetDevices: existingApp.targetDevices as any,
+                    permissions: existingApp.permissions as any,
+                    requiresHandTracking: existingApp.requiresHandTracking,
+                    requiresPassthrough: existingApp.requiresPassthrough,
+                    requiresControllers: existingApp.requiresControllers,
+                    comfortLevel: existingApp.comfortLevel,
+                    playArea: existingApp.playArea,
+                    playerModes: existingApp.playerModes as any,
+                    features: existingApp.features as any,
+                    whatsNew: existingApp.whatsNew,
+                    languages: existingApp.languages as any,
+                    privacyPolicyUrl: existingApp.privacyPolicyUrl,
+                    supportUrl: existingApp.supportUrl,
+                    supportEmail: existingApp.supportEmail,
+                    discordUrl: existingApp.discordUrl,
+                    twitterUrl: existingApp.twitterUrl,
+                    youtubeUrl: existingApp.youtubeUrl,
+                    estimatedPlayTime: existingApp.estimatedPlayTime,
+                    ageRating: existingApp.ageRating,
+                    containsAds: existingApp.containsAds,
+                    hasInAppPurchases: existingApp.hasInAppPurchases,
+                    inAppPurchaseInfo: existingApp.inAppPurchaseInfo,
+                    developerNotes: existingApp.developerNotes,
+                    credits: existingApp.credits,
+                    acknowledgments: existingApp.acknowledgments,
+                }
+            });
+            draftId = newDraft.id;
+        }
+
         const contentType = req.headers.get('content-type') || '';
-        let updateData: Prisma.AppUpdateInput = {};
+        let updateData: any = {}; // Using any because AppDraft all fields are nullable
 
         if (contentType.includes('multipart/form-data')) {
             // Handle form data with file uploads
             const data = await req.formData();
 
             // Text fields
-            const textFields: (keyof Prisma.AppUpdateInput)[] = [
+            const textFields = [
                 'name', 'slug', 'summary', 'description', 'subcategory',
                 'whatsNew', 'privacyPolicyUrl', 'supportUrl', 'supportEmail',
                 'discordUrl', 'twitterUrl', 'youtubeUrl', 'trailerUrl', 'trailerVideoUrl', 'promoVideoUrl',
@@ -225,13 +297,13 @@ export async function PATCH(
             ];
 
             for (const field of textFields) {
-                const value = data.get(field as string);
+                const value = data.get(field);
                 if (value !== null) {
-                    (updateData as any)[field] = String(value).trim() || null;
+                    updateData[field] = String(value).trim() || null;
                 }
             }
 
-            // Category (enum)
+            // Category (enum) - Draft handles enums or null
             const categoryStr = data.get('category');
             if (categoryStr) {
                 const cat = String(categoryStr).toUpperCase();
@@ -254,18 +326,18 @@ export async function PATCH(
             if (minApiLevel !== null) updateData.minApiLevel = parseInt(String(minApiLevel), 10) || 29;
 
             // Boolean fields
-            updateData.requiresHandTracking = parseBool(data.get('requiresHandTracking'));
-            updateData.requiresPassthrough = parseBool(data.get('requiresPassthrough'));
-            updateData.requiresControllers = parseBool(data.get('requiresControllers'));
-            updateData.containsAds = parseBool(data.get('containsAds'));
-            updateData.hasInAppPurchases = parseBool(data.get('hasInAppPurchases'));
+            const boolFields = ['requiresHandTracking', 'requiresPassthrough', 'requiresControllers', 'containsAds', 'hasInAppPurchases'];
+            for (const f of boolFields) {
+                const v = data.get(f);
+                if (v !== null) updateData[f] = parseBool(v);
+            }
 
             // Array fields
             const arrayFields = ['tags', 'targetDevices', 'permissions', 'playerModes', 'features', 'languages'];
             for (const field of arrayFields) {
                 const value = data.get(field);
                 if (value !== null) {
-                    (updateData as any)[field] = parseJsonArray(value);
+                    updateData[field] = parseJsonArray(value);
                 }
             }
 
@@ -321,8 +393,11 @@ export async function PATCH(
 
             // If new screenshots uploaded, merge with existing or replace
             const existingScreenshots = data.get('existingScreenshots');
+            // Logic: if existingScreenshots provided, it's the base list. Append new.
+            // If not provided, we might be overwriting or doing partial.
+            // Typically frontend sends the "kept" URLs in existingScreenshots.
             if (existingScreenshots || newScreenshots.length > 0) {
-                const existing = parseJsonArray(existingScreenshots);
+                const existing = existingScreenshots ? parseJsonArray(existingScreenshots) : (existingApp.draft?.screenshots as any[] || existingApp.screenshots as any[] || []);
                 updateData.screenshots = [...existing, ...newScreenshots].slice(0, 10);
             }
 
@@ -330,12 +405,11 @@ export async function PATCH(
             // Handle JSON body (simpler metadata updates)
             const body = await req.json();
 
-            // Copy allowed fields
-            const allowedFields = [
+            // Copy allowed fields (Same list + types)
+            const textFields = [
                 'name', 'slug', 'summary', 'description', 'subcategory',
                 'price', 'currency', 'salePrice',
                 'minApiLevel', 'targetDevices', 'permissions',
-                'requiresHandTracking', 'requiresPassthrough', 'requiresControllers',
                 'contentRating', 'comfortLevel', 'playArea', 'playerModes',
                 'containsAds', 'hasInAppPurchases', 'inAppPurchaseInfo',
                 'features', 'whatsNew', 'languages', 'tags',
@@ -346,43 +420,33 @@ export async function PATCH(
                 'developerNotes', 'credits', 'acknowledgments'
             ];
 
-            for (const field of allowedFields) {
+            for (const field of textFields) {
                 if (body[field] !== undefined) {
-                    (updateData as any)[field] = body[field];
+                    updateData[field] = body[field];
                 }
             }
 
-            // Handle category enum
-            if (body.category) {
-                const cat = String(body.category).toUpperCase();
-                if (Object.values(Category).includes(cat as Category)) {
-                    updateData.category = cat as Category;
-                }
+            // Booleans
+            const boolFields = ['requiresHandTracking', 'requiresPassthrough', 'requiresControllers', 'containsAds', 'hasInAppPurchases'];
+            for (const f of boolFields) {
+                if (body[f] !== undefined) updateData[f] = body[f];
             }
+
+            // Handle enums
+            if (body.category) updateData.category = body.category;
+            // ... (other enums usually passed as strings in JSON match if types align)
         }
 
-        // Update lastUpdated
-        updateData.lastUpdated = new Date();
+        // Update lastUpdated on App? No, update AppDraft.updatedAt (auto).
 
-        // Determine if status should change based on current status
-        // If app is PUBLISHED and significant changes are made, it may need re-review
-        // For now, we'll keep status unchanged for metadata updates
-        // Build updates (new APK) are handled separately
-
-        const updatedApp = await prisma.app.update({
-            where: { id },
+        const updatedDraft = await prisma.appDraft.update({
+            where: { id: draftId },
             data: updateData,
-            select: {
-                id: true,
-                name: true,
-                status: true,
-                lastUpdated: true,
-            }
         });
 
         return NextResponse.json({
-            message: 'App updated successfully',
-            app: updatedApp
+            message: 'App draft saved successfully',
+            draft: updatedDraft
         });
 
     } catch (error: any) {

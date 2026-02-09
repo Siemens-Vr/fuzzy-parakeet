@@ -8,7 +8,7 @@ import crypto from 'crypto';
 import {
   AppStatus,
   Category,
-  ReleaseChannel,
+  ReleaseChannelKey,
   ContentRating,
   ComfortLevel,
   PlayArea,
@@ -99,13 +99,11 @@ export async function GET(req: NextRequest) {
   }
 }
 
-/** POST: create App + first AppBuild from multi-part form */
+/** POST: create App + first Artifact/Release from multi-part form */
 export async function POST(req: NextRequest) {
   try {
     const { developerId } = await requireDeveloper(req);
     const data = await req.formData();
-
-    // console.log(data)
 
     // ---- Required basics
     const name = String(data.get('name') || '').trim();
@@ -125,7 +123,6 @@ export async function POST(req: NextRequest) {
     }
 
     const validCategories = Object.values(Category);
-    console.log(validCategories)
     if (!validCategories.includes(categoryStr as Category)) {
       return NextResponse.json(
         { message: 'Invalid category' },
@@ -187,8 +184,6 @@ export async function POST(req: NextRequest) {
       data.get('requiresHandTracking'),
       false,
     );
-
-
     const requiresPassthrough = parseBool(
       data.get('requiresPassthrough'),
       false,
@@ -211,7 +206,7 @@ export async function POST(req: NextRequest) {
         ? parseInt(String(targetApiLevelRaw), 10)
         : null;
 
-    // Enums from form
+    // Enums
     const rawContentRating = String(
       data.get('contentRating') || ContentRating.EVERYONE,
     ).toUpperCase();
@@ -292,28 +287,27 @@ export async function POST(req: NextRequest) {
     const sizeBytes = BigInt((apk as any).size || 0);
     const releaseNotes = String(data.get('releaseNotes') || '');
 
-    // Create app + first build
+    // Transaction: Create App, Draft, Artifact, Channels, and Initial Release
     const app = await prisma.$transaction(async tx => {
+      // 1. Create the App (Live/Production container)
+      // Note: We populate it with the initial data so the dashboard works,
+      // but status is IN_REVIEW.
       const createdApp = await tx.app.create({
         data: {
           slug: slugify(name),
           name,
           developerId,
-
           version,
           summary,
           description,
-
           category: categoryStr as Category,
           subcategory,
-
           tags: tags as unknown as Prisma.JsonArray,
           contentRating,
           price,
           currency,
           salePrice,
           saleEndDate,
-
           apkUrl,
           iconUrl,
           screenshots: screenshotUrls as unknown as Prisma.JsonArray,
@@ -321,14 +315,11 @@ export async function POST(req: NextRequest) {
           trailerUrl,
           trailerVideoUrl,
           promoVideoUrl,
-
           sizeBytes,
-          sha256: null,
           minApiLevel,
           targetApiLevel,
           targetDevices: targetDevices as unknown as Prisma.JsonArray,
           permissions: permissions as unknown as Prisma.JsonArray,
-
           features: features as unknown as Prisma.JsonArray,
           whatsNew,
           languages: languages as unknown as Prisma.JsonArray,
@@ -338,39 +329,121 @@ export async function POST(req: NextRequest) {
           discordUrl,
           twitterUrl,
           youtubeUrl,
-
           requiresHandTracking,
           requiresPassthrough,
           requiresControllers,
           comfortLevel,
           playArea,
           playerModes: playerModes as unknown as Prisma.JsonArray,
-
           estimatedPlayTime,
           ageRating,
           containsAds,
           hasInAppPurchases,
           inAppPurchaseInfo,
-
           developerNotes,
           credits,
           acknowledgments,
-
           status: AppStatus.IN_REVIEW,
         },
       });
 
-      await tx.appBuild.create({
+      // 2. Create AppDraft (identical copy for editing)
+      await tx.appDraft.create({
         data: {
           appId: createdApp.id,
-          version,
-          buildNumber: 1,
-          apkUrl,
-          channel: ReleaseChannel.ALPHA,
-          isActive: true,
-          sizeBytes,
+          name,
+          summary,
+          description,
+          category: categoryStr as Category,
+          subcategory,
+          tags: tags as unknown as Prisma.JsonArray,
+          contentRating,
+          price,
+          currency,
+          salePrice,
+          saleEndDate,
+          iconUrl,
+          screenshots: screenshotUrls as unknown as Prisma.JsonArray,
+          heroImageUrl,
+          trailerUrl,
+          trailerVideoUrl,
+          promoVideoUrl,
+          minApiLevel,
+          targetApiLevel,
+          targetDevices: targetDevices as unknown as Prisma.JsonArray,
+          permissions: permissions as unknown as Prisma.JsonArray,
+          features: features as unknown as Prisma.JsonArray,
+          whatsNew,
+          languages: languages as unknown as Prisma.JsonArray,
+          privacyPolicyUrl,
+          supportUrl,
+          supportEmail,
+          discordUrl,
+          twitterUrl,
+          youtubeUrl,
+          estimatedPlayTime,
+          ageRating,
+          containsAds,
+          hasInAppPurchases,
+          inAppPurchaseInfo,
+          developerNotes,
+          credits,
+          acknowledgments,
+          requiresHandTracking,
+          requiresPassthrough,
+          requiresControllers,
+          comfortLevel,
+          playArea,
+          playerModes: playerModes as unknown as Prisma.JsonArray,
+        },
+      });
+
+      // 3. Create Artifact
+      const artifact = await tx.artifact.create({
+        data: {
+          appId: createdApp.id,
+          versionString: version,
+          versionCode: 10001, // Simple starting version code or derived from input? Using placeholder
+          fileUrl: apkUrl,
+          fileSize: sizeBytes,
+          minApiLevel,
+        },
+      });
+
+      // 4. Create Release Channels
+      const channels = [
+        ReleaseChannelKey.PRODUCTION,
+        ReleaseChannelKey.ALPHA,
+        ReleaseChannelKey.BETA,
+        ReleaseChannelKey.RC
+      ];
+
+      const createdChannels: Record<string, any> = {};
+
+      for (const key of channels) {
+        createdChannels[key] = await tx.releaseChannel.create({
+          data: {
+            appId: createdApp.id,
+            key,
+          },
+        });
+      }
+
+      // 5. Create Release for ALPHA channel
+      const release = await tx.release.create({
+        data: {
+          channelId: createdChannels[ReleaseChannelKey.ALPHA].id,
+          artifactId: artifact.id,
+          status: 'ACTIVE', // ReleaseStatus.ACTIVE
+          rolloutPercentage: 100,
           releaseNotes,
         },
+      });
+
+      // 6. Set as current release for Alpha
+      await tx.releaseChannel.update({
+        where: { id: createdChannels[ReleaseChannelKey.ALPHA].id },
+        data: { currentReleaseId: release.id },
       });
 
       return createdApp;

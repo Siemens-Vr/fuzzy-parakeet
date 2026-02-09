@@ -78,6 +78,7 @@ model Reviewer {
   createdAt  DateTime    @default(now())
   
   reviews    AppReview[]
+  submissions Submission[]
 }
 
 model App {
@@ -167,27 +168,155 @@ model App {
   wishlistCount   Int         @default(0)
   
   // Relations
-  builds          AppBuild[]
   reviews         AppReview[]
   analytics       Analytics[]
   transactions    Transaction[]
   purchases       Purchase[]
   userReviews     UserReview[]
+
+  // Meta-style Workflow Relations
+  draft           AppDraft? 
+  channels        ReleaseChannel[]
+  submissions     Submission[]
+  artifacts       Artifact[]
 }
 
-model AppBuild {
-  id            String         @id @default(cuid())
-  appId         String
-  app           App            @relation(fields: [appId], references: [id])
-  version       String
-  buildNumber   Int
-  apkUrl        String
-  releaseNotes  String?
-  channel       ReleaseChannel @default(ALPHA)
-  isActive      Boolean        @default(false)
-  sizeBytes     BigInt?
-  sha256        String?
-  uploadedAt    DateTime       @default(now())
+// STAGING: Editable metadata ("WIP" version)
+model AppDraft {
+  id              String   @id @default(cuid())
+  appId           String   @unique
+  app             App      @relation(fields: [appId], references: [id])
+  
+  // Mirrors App metadata fields (nullable for draft state)
+  name            String?
+  summary         String?     
+  description     String?
+  category        Category?
+  subcategory     String?
+  tags            Json?        
+  contentRating   ContentRating?
+  
+  // Pricing
+  price           Float?       
+  currency        String?
+  salePrice       Float?
+  saleEndDate     DateTime?
+  
+  // Media Assets
+  iconUrl         String?
+  screenshots     Json?
+  heroImageUrl    String?
+  trailerUrl      String?
+  trailerVideoUrl String?
+  promoVideoUrl   String?
+  
+  // Technical Details 
+  minApiLevel     Int?
+  targetApiLevel  Int?
+  targetDevices   Json?
+  permissions     Json?
+  requiresHandTracking Boolean?
+  requiresPassthrough  Boolean?
+  requiresControllers  Boolean?
+  comfortLevel    ComfortLevel?
+  playArea        PlayArea?
+  playerModes     Json?
+  
+  // Additional
+  features        Json?
+  whatsNew        String?
+  languages       Json?
+  privacyPolicyUrl String?
+  supportUrl      String?
+  supportEmail    String?
+  discordUrl      String?
+  twitterUrl      String?
+  youtubeUrl      String?
+  estimatedPlayTime String?
+  ageRating       String?
+  containsAds     Boolean?
+  hasInAppPurchases Boolean?
+  inAppPurchaseInfo String?
+  developerNotes  String?
+  credits         String?
+  acknowledgments String?
+
+  updatedAt       DateTime @updatedAt
+}
+
+// BINARY: Immutable uploaded file
+model Artifact {
+  id              String   @id @default(cuid())
+  appId           String
+  app             App      @relation(fields: [appId], references: [id])
+  
+  versionCode     Int      // e.g., 104
+  versionString   String   // "1.0.4"
+  fileUrl         String
+  fileSize        BigInt
+  fileHash        String?  // SHA256
+  minApiLevel     Int      @default(29)
+  
+  // Relations
+  releases        Release[] 
+  
+  createdAt       DateTime @default(now())
+}
+
+// CHANNEL: Distribution track (Production, Alpha, Beta)
+model ReleaseChannel {
+  id          String    @id @default(cuid())
+  appId       String
+  app         App       @relation(fields: [appId], references: [id])
+  key         ReleaseChannelKey // PRODUCTION, ALPHA, BETA, RC
+
+  // The currently active release for this channel
+  currentReleaseId String? 
+  currentRelease   Release? @relation("ChannelCurrent", fields: [currentReleaseId], references: [id])
+  
+  releases    Release[] @relation("ChannelReleases")
+
+  @@unique([appId, key])
+}
+
+// RELEASE: Deployment of an Artifact to a Channel
+model Release {
+  id              String @id @default(cuid())
+  channelId       String
+  channel         ReleaseChannel @relation("ChannelReleases", fields: [channelId], references: [id])
+  
+  artifactId      String
+  artifact        Artifact @relation(fields: [artifactId], references: [id])
+  
+  // Rollout control
+  status          ReleaseStatus @default(ACTIVE)
+  rolloutPercentage Int         @default(100)
+  
+  // Context
+  releaseNotes    String?
+  deployedAt      DateTime @default(now())
+  
+  // Reverse relation for "current" - required for One-to-One / One-to-Many setup
+  activeForChannels ReleaseChannel[] @relation("ChannelCurrent")
+}
+
+// SUBMISSION: Review Request
+model Submission {
+  id              String   @id @default(cuid())
+  appId           String
+  app             App      @relation(fields: [appId], references: [id])
+  
+  // What is being changed?
+  targetReleaseId String?  // If set, this release wants to go to Production
+  includeDraft    Boolean  @default(false) // If true, apply AppDraft to App on approval
+  
+  status          SubmissionStatus @default(PENDING)
+  
+  adminNotes      String?
+  submittedAt     DateTime @default(now())
+  reviewedAt      DateTime?
+  reviewerId      String?
+  reviewer        Reviewer? @relation(fields: [reviewerId], references: [id])
 }
 
 model AppReview {
@@ -391,13 +520,6 @@ enum PlayArea {
   ROOMSCALE
 }
 
-enum ReleaseChannel {
-  ALPHA
-  BETA
-  RC
-  PRODUCTION
-}
-
 enum TransactionType {
   PURCHASE
   REFUND
@@ -419,6 +541,28 @@ enum PurchaseStatus {
   COMPLETED
   FAILED
   REFUNDED
+  CANCELLED
+}
+
+enum ReleaseChannelKey {
+  ALPHA
+  BETA
+  RC
+  PRODUCTION
+}
+
+enum ReleaseStatus {
+  ACTIVE
+  ROLLED_OUT
+  HALTED
+  ARCHIVED
+}
+
+enum SubmissionStatus {
+  PENDING
+  IN_REVIEW
+  APPROVED
+  REJECTED
   CANCELLED
 }
 

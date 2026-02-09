@@ -81,16 +81,6 @@ export const PlayArea = {
 export type PlayArea = (typeof PlayArea)[keyof typeof PlayArea]
 
 
-export const ReleaseChannel = {
-  ALPHA: 'ALPHA',
-  BETA: 'BETA',
-  RC: 'RC',
-  PRODUCTION: 'PRODUCTION'
-} as const
-
-export type ReleaseChannel = (typeof ReleaseChannel)[keyof typeof ReleaseChannel]
-
-
 export const TransactionType = {
   PURCHASE: 'PURCHASE',
   REFUND: 'REFUND',
@@ -122,6 +112,37 @@ export const PurchaseStatus = {
 } as const
 
 export type PurchaseStatus = (typeof PurchaseStatus)[keyof typeof PurchaseStatus]
+
+
+export const ReleaseChannelKey = {
+  ALPHA: 'ALPHA',
+  BETA: 'BETA',
+  RC: 'RC',
+  PRODUCTION: 'PRODUCTION'
+} as const
+
+export type ReleaseChannelKey = (typeof ReleaseChannelKey)[keyof typeof ReleaseChannelKey]
+
+
+export const ReleaseStatus = {
+  ACTIVE: 'ACTIVE',
+  ROLLED_OUT: 'ROLLED_OUT',
+  HALTED: 'HALTED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ReleaseStatus = (typeof ReleaseStatus)[keyof typeof ReleaseStatus]
+
+
+export const SubmissionStatus = {
+  PENDING: 'PENDING',
+  IN_REVIEW: 'IN_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type SubmissionStatus = (typeof SubmissionStatus)[keyof typeof SubmissionStatus]
 
 
 export const PayoutStatus = {

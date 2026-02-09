@@ -218,6 +218,7 @@ export type ReviewerWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Reviewer"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reviews?: Prisma.AppReviewListRelationFilter
+  submissions?: Prisma.SubmissionListRelationFilter
 }
 
 export type ReviewerOrderByWithRelationInput = {
@@ -228,6 +229,7 @@ export type ReviewerOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   reviews?: Prisma.AppReviewOrderByRelationAggregateInput
+  submissions?: Prisma.SubmissionOrderByRelationAggregateInput
 }
 
 export type ReviewerWhereUniqueInput = Prisma.AtLeast<{
@@ -241,6 +243,7 @@ export type ReviewerWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Reviewer"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reviews?: Prisma.AppReviewListRelationFilter
+  submissions?: Prisma.SubmissionListRelationFilter
 }, "id" | "userId">
 
 export type ReviewerOrderByWithAggregationInput = {
@@ -274,6 +277,7 @@ export type ReviewerCreateInput = {
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReviewerInput
   reviews?: Prisma.AppReviewCreateNestedManyWithoutReviewerInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutReviewerInput
 }
 
 export type ReviewerUncheckedCreateInput = {
@@ -283,6 +287,7 @@ export type ReviewerUncheckedCreateInput = {
   level?: number
   createdAt?: Date | string
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutReviewerInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type ReviewerUpdateInput = {
@@ -292,6 +297,7 @@ export type ReviewerUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReviewerNestedInput
   reviews?: Prisma.AppReviewUpdateManyWithoutReviewerNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutReviewerNestedInput
 }
 
 export type ReviewerUncheckedUpdateInput = {
@@ -301,6 +307,7 @@ export type ReviewerUncheckedUpdateInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type ReviewerCreateManyInput = {
@@ -408,6 +415,22 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type ReviewerCreateNestedOneWithoutSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.ReviewerCreateWithoutSubmissionsInput, Prisma.ReviewerUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.ReviewerCreateOrConnectWithoutSubmissionsInput
+  connect?: Prisma.ReviewerWhereUniqueInput
+}
+
+export type ReviewerUpdateOneWithoutSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ReviewerCreateWithoutSubmissionsInput, Prisma.ReviewerUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.ReviewerCreateOrConnectWithoutSubmissionsInput
+  upsert?: Prisma.ReviewerUpsertWithoutSubmissionsInput
+  disconnect?: Prisma.ReviewerWhereInput | boolean
+  delete?: Prisma.ReviewerWhereInput | boolean
+  connect?: Prisma.ReviewerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ReviewerUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.ReviewerUpdateWithoutSubmissionsInput>, Prisma.ReviewerUncheckedUpdateWithoutSubmissionsInput>
+}
+
 export type ReviewerCreateNestedOneWithoutReviewsInput = {
   create?: Prisma.XOR<Prisma.ReviewerCreateWithoutReviewsInput, Prisma.ReviewerUncheckedCreateWithoutReviewsInput>
   connectOrCreate?: Prisma.ReviewerCreateOrConnectWithoutReviewsInput
@@ -428,6 +451,7 @@ export type ReviewerCreateWithoutUserInput = {
   level?: number
   createdAt?: Date | string
   reviews?: Prisma.AppReviewCreateNestedManyWithoutReviewerInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutReviewerInput
 }
 
 export type ReviewerUncheckedCreateWithoutUserInput = {
@@ -436,6 +460,7 @@ export type ReviewerUncheckedCreateWithoutUserInput = {
   level?: number
   createdAt?: Date | string
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutReviewerInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type ReviewerCreateOrConnectWithoutUserInput = {
@@ -460,10 +485,64 @@ export type ReviewerUpdateWithoutUserInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.AppReviewUpdateManyWithoutReviewerNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutReviewerNestedInput
 }
 
 export type ReviewerUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutReviewerNestedInput
+}
+
+export type ReviewerCreateWithoutSubmissionsInput = {
+  id?: string
+  department: string
+  level?: number
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutReviewerInput
+  reviews?: Prisma.AppReviewCreateNestedManyWithoutReviewerInput
+}
+
+export type ReviewerUncheckedCreateWithoutSubmissionsInput = {
+  id?: string
+  userId: string
+  department: string
+  level?: number
+  createdAt?: Date | string
+  reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutReviewerInput
+}
+
+export type ReviewerCreateOrConnectWithoutSubmissionsInput = {
+  where: Prisma.ReviewerWhereUniqueInput
+  create: Prisma.XOR<Prisma.ReviewerCreateWithoutSubmissionsInput, Prisma.ReviewerUncheckedCreateWithoutSubmissionsInput>
+}
+
+export type ReviewerUpsertWithoutSubmissionsInput = {
+  update: Prisma.XOR<Prisma.ReviewerUpdateWithoutSubmissionsInput, Prisma.ReviewerUncheckedUpdateWithoutSubmissionsInput>
+  create: Prisma.XOR<Prisma.ReviewerCreateWithoutSubmissionsInput, Prisma.ReviewerUncheckedCreateWithoutSubmissionsInput>
+  where?: Prisma.ReviewerWhereInput
+}
+
+export type ReviewerUpdateToOneWithWhereWithoutSubmissionsInput = {
+  where?: Prisma.ReviewerWhereInput
+  data: Prisma.XOR<Prisma.ReviewerUpdateWithoutSubmissionsInput, Prisma.ReviewerUncheckedUpdateWithoutSubmissionsInput>
+}
+
+export type ReviewerUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutReviewerNestedInput
+  reviews?: Prisma.AppReviewUpdateManyWithoutReviewerNestedInput
+}
+
+export type ReviewerUncheckedUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -476,6 +555,7 @@ export type ReviewerCreateWithoutReviewsInput = {
   level?: number
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReviewerInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutReviewerInput
 }
 
 export type ReviewerUncheckedCreateWithoutReviewsInput = {
@@ -484,6 +564,7 @@ export type ReviewerUncheckedCreateWithoutReviewsInput = {
   department: string
   level?: number
   createdAt?: Date | string
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type ReviewerCreateOrConnectWithoutReviewsInput = {
@@ -508,6 +589,7 @@ export type ReviewerUpdateWithoutReviewsInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReviewerNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutReviewerNestedInput
 }
 
 export type ReviewerUncheckedUpdateWithoutReviewsInput = {
@@ -516,6 +598,7 @@ export type ReviewerUncheckedUpdateWithoutReviewsInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 
@@ -525,10 +608,12 @@ export type ReviewerUncheckedUpdateWithoutReviewsInput = {
 
 export type ReviewerCountOutputType = {
   reviews: number
+  submissions: number
 }
 
 export type ReviewerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reviews?: boolean | ReviewerCountOutputTypeCountReviewsArgs
+  submissions?: boolean | ReviewerCountOutputTypeCountSubmissionsArgs
 }
 
 /**
@@ -548,6 +633,13 @@ export type ReviewerCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AppReviewWhereInput
 }
 
+/**
+ * ReviewerCountOutputType without action
+ */
+export type ReviewerCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubmissionWhereInput
+}
+
 
 export type ReviewerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -557,6 +649,7 @@ export type ReviewerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.Reviewer$reviewsArgs<ExtArgs>
+  submissions?: boolean | Prisma.Reviewer$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.ReviewerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reviewer"]>
 
@@ -590,6 +683,7 @@ export type ReviewerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type ReviewerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.Reviewer$reviewsArgs<ExtArgs>
+  submissions?: boolean | Prisma.Reviewer$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.ReviewerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ReviewerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -604,6 +698,7 @@ export type $ReviewerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     reviews: Prisma.$AppReviewPayload<ExtArgs>[]
+    submissions: Prisma.$SubmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1007,6 +1102,7 @@ export interface Prisma__ReviewerClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reviews<T extends Prisma.Reviewer$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Reviewer$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submissions<T extends Prisma.Reviewer$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Reviewer$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1458,6 +1554,30 @@ export type Reviewer$reviewsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.AppReviewScalarFieldEnum | Prisma.AppReviewScalarFieldEnum[]
+}
+
+/**
+ * Reviewer.submissions
+ */
+export type Reviewer$submissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Submission
+   */
+  select?: Prisma.SubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Submission
+   */
+  omit?: Prisma.SubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubmissionInclude<ExtArgs> | null
+  where?: Prisma.SubmissionWhereInput
+  orderBy?: Prisma.SubmissionOrderByWithRelationInput | Prisma.SubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.SubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubmissionScalarFieldEnum | Prisma.SubmissionScalarFieldEnum[]
 }
 
 /**

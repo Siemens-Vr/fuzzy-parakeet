@@ -55,7 +55,11 @@ export const ModelName = {
   Developer: 'Developer',
   Reviewer: 'Reviewer',
   App: 'App',
-  AppBuild: 'AppBuild',
+  AppDraft: 'AppDraft',
+  Artifact: 'Artifact',
+  ReleaseChannel: 'ReleaseChannel',
+  Release: 'Release',
+  Submission: 'Submission',
   AppReview: 'AppReview',
   UserReview: 'UserReview',
   Analytics: 'Analytics',
@@ -204,21 +208,110 @@ export const AppScalarFieldEnum = {
 export type AppScalarFieldEnum = (typeof AppScalarFieldEnum)[keyof typeof AppScalarFieldEnum]
 
 
-export const AppBuildScalarFieldEnum = {
+export const AppDraftScalarFieldEnum = {
   id: 'id',
   appId: 'appId',
-  version: 'version',
-  buildNumber: 'buildNumber',
-  apkUrl: 'apkUrl',
-  releaseNotes: 'releaseNotes',
-  channel: 'channel',
-  isActive: 'isActive',
-  sizeBytes: 'sizeBytes',
-  sha256: 'sha256',
-  uploadedAt: 'uploadedAt'
+  name: 'name',
+  summary: 'summary',
+  description: 'description',
+  category: 'category',
+  subcategory: 'subcategory',
+  tags: 'tags',
+  contentRating: 'contentRating',
+  price: 'price',
+  currency: 'currency',
+  salePrice: 'salePrice',
+  saleEndDate: 'saleEndDate',
+  iconUrl: 'iconUrl',
+  screenshots: 'screenshots',
+  heroImageUrl: 'heroImageUrl',
+  trailerUrl: 'trailerUrl',
+  trailerVideoUrl: 'trailerVideoUrl',
+  promoVideoUrl: 'promoVideoUrl',
+  minApiLevel: 'minApiLevel',
+  targetApiLevel: 'targetApiLevel',
+  targetDevices: 'targetDevices',
+  permissions: 'permissions',
+  requiresHandTracking: 'requiresHandTracking',
+  requiresPassthrough: 'requiresPassthrough',
+  requiresControllers: 'requiresControllers',
+  comfortLevel: 'comfortLevel',
+  playArea: 'playArea',
+  playerModes: 'playerModes',
+  features: 'features',
+  whatsNew: 'whatsNew',
+  languages: 'languages',
+  privacyPolicyUrl: 'privacyPolicyUrl',
+  supportUrl: 'supportUrl',
+  supportEmail: 'supportEmail',
+  discordUrl: 'discordUrl',
+  twitterUrl: 'twitterUrl',
+  youtubeUrl: 'youtubeUrl',
+  estimatedPlayTime: 'estimatedPlayTime',
+  ageRating: 'ageRating',
+  containsAds: 'containsAds',
+  hasInAppPurchases: 'hasInAppPurchases',
+  inAppPurchaseInfo: 'inAppPurchaseInfo',
+  developerNotes: 'developerNotes',
+  credits: 'credits',
+  acknowledgments: 'acknowledgments',
+  updatedAt: 'updatedAt'
 } as const
 
-export type AppBuildScalarFieldEnum = (typeof AppBuildScalarFieldEnum)[keyof typeof AppBuildScalarFieldEnum]
+export type AppDraftScalarFieldEnum = (typeof AppDraftScalarFieldEnum)[keyof typeof AppDraftScalarFieldEnum]
+
+
+export const ArtifactScalarFieldEnum = {
+  id: 'id',
+  appId: 'appId',
+  versionCode: 'versionCode',
+  versionString: 'versionString',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  fileHash: 'fileHash',
+  minApiLevel: 'minApiLevel',
+  createdAt: 'createdAt'
+} as const
+
+export type ArtifactScalarFieldEnum = (typeof ArtifactScalarFieldEnum)[keyof typeof ArtifactScalarFieldEnum]
+
+
+export const ReleaseChannelScalarFieldEnum = {
+  id: 'id',
+  appId: 'appId',
+  key: 'key',
+  currentReleaseId: 'currentReleaseId'
+} as const
+
+export type ReleaseChannelScalarFieldEnum = (typeof ReleaseChannelScalarFieldEnum)[keyof typeof ReleaseChannelScalarFieldEnum]
+
+
+export const ReleaseScalarFieldEnum = {
+  id: 'id',
+  channelId: 'channelId',
+  artifactId: 'artifactId',
+  status: 'status',
+  rolloutPercentage: 'rolloutPercentage',
+  releaseNotes: 'releaseNotes',
+  deployedAt: 'deployedAt'
+} as const
+
+export type ReleaseScalarFieldEnum = (typeof ReleaseScalarFieldEnum)[keyof typeof ReleaseScalarFieldEnum]
+
+
+export const SubmissionScalarFieldEnum = {
+  id: 'id',
+  appId: 'appId',
+  targetReleaseId: 'targetReleaseId',
+  includeDraft: 'includeDraft',
+  status: 'status',
+  adminNotes: 'adminNotes',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  reviewerId: 'reviewerId'
+} as const
+
+export type SubmissionScalarFieldEnum = (typeof SubmissionScalarFieldEnum)[keyof typeof SubmissionScalarFieldEnum]
 
 
 export const AppReviewScalarFieldEnum = {

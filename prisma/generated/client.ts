@@ -60,10 +60,30 @@ export type Reviewer = Prisma.ReviewerModel
  */
 export type App = Prisma.AppModel
 /**
- * Model AppBuild
+ * Model AppDraft
  * 
  */
-export type AppBuild = Prisma.AppBuildModel
+export type AppDraft = Prisma.AppDraftModel
+/**
+ * Model Artifact
+ * 
+ */
+export type Artifact = Prisma.ArtifactModel
+/**
+ * Model ReleaseChannel
+ * 
+ */
+export type ReleaseChannel = Prisma.ReleaseChannelModel
+/**
+ * Model Release
+ * 
+ */
+export type Release = Prisma.ReleaseModel
+/**
+ * Model Submission
+ * 
+ */
+export type Submission = Prisma.SubmissionModel
 /**
  * Model AppReview
  * 

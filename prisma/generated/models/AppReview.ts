@@ -489,10 +489,6 @@ export type EnumReviewStatusFieldUpdateOperationsInput = {
   set?: $Enums.ReviewStatus
 }
 
-export type NullableBoolFieldUpdateOperationsInput = {
-  set?: boolean | null
-}
-
 export type AppReviewCreateWithoutReviewerInput = {
   id?: string
   status: $Enums.ReviewStatus

@@ -422,7 +422,7 @@ export default function NewAppPage() {
             <div className="flex items-center justify-center gap-4">
               <div className="text-4xl mb-2">📦</div>
               <div className="text-left">
-                <div className="font-medium">{formData.apkFile.name}</div>
+                <div className="font-medium text-primary">{formData.apkFile.name}</div>
                 <div className="text-sm text-secondary">{formatFileSize(formData.apkFile.size)}</div>
               </div>
               <button type="button" onClick={() => handleFileChange('apkFile', null)} className="ml-4 text-red-500 hover:text-red-700">Remove</button>
@@ -457,7 +457,7 @@ export default function NewAppPage() {
             <div className="flex items-center justify-center gap-4">
               <img src={URL.createObjectURL(formData.iconFile)} alt="App icon preview" className="w-24 h-24 rounded-xl object-cover" />
               <div className="text-left">
-                <div className="font-medium">{formData.iconFile.name}</div>
+                <div className="font-medium text-primary">{formData.iconFile.name}</div>
                 <div className="text-sm text-secondary">{formatFileSize(formData.iconFile.size)}</div>
                 <button type="button" onClick={() => handleFileChange('iconFile', null)} className="text-red-500 hover:text-red-700 text-sm mt-1">Remove</button>
               </div>
@@ -533,7 +533,7 @@ export default function NewAppPage() {
             <div className="flex items-center justify-center gap-4">
               <div className="text-4xl">🎬</div>
               <div className="text-left">
-                <div className="font-medium">{formData.trailerVideoFile.name}</div>
+                <div className="font-medium text-primary">{formData.trailerVideoFile.name}</div>
                 <div className="text-sm text-secondary">{formatFileSize(formData.trailerVideoFile.size)}</div>
               </div>
               <button type="button" onClick={() => handleFileChange('trailerVideoFile', null)} className="ml-4 text-red-500 hover:text-red-700">Remove</button>
@@ -569,7 +569,7 @@ export default function NewAppPage() {
   // Step 5: Content
   const renderStep5 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Content & Comfort Settings</h2>
+      <h2 className="text-xl font-semibold text-primary">Content & Comfort Settings</h2>
       <p className="helper-text text-secondary">Help users understand what to expect from your app.</p>
 
       <div>
@@ -578,7 +578,7 @@ export default function NewAppPage() {
           {CONTENT_RATINGS.map(rating => (
             <label key={rating.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.contentRating === rating.value ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="radio" name="contentRating" value={rating.value} checked={formData.contentRating === rating.value} onChange={(e) => updateField('contentRating', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
-              <div><div className="font-medium">{rating.label}</div><div className="text-sm text-secondary">{rating.description}</div></div>
+              <div><div className="font-medium text-primary">{rating.label}</div><div className="text-sm text-secondary">{rating.description}</div></div>
             </label>
           ))}
         </div>
@@ -591,7 +591,7 @@ export default function NewAppPage() {
           {COMFORT_LEVELS.map(level => (
             <label key={level.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.comfortLevel === level.value ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="radio" name="comfortLevel" value={level.value} checked={formData.comfortLevel === level.value} onChange={(e) => updateField('comfortLevel', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
-              <div><div className="font-medium">{level.label}</div><div className="text-sm text-secondary">{level.description}</div></div>
+              <div><div className="font-medium text-primary">{level.label}</div><div className="text-sm text-secondary">{level.description}</div></div>
             </label>
           ))}
         </div>
@@ -604,7 +604,7 @@ export default function NewAppPage() {
           {PLAY_AREAS.map(area => (
             <label key={area.value} className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playArea === area.value ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="radio" name="playArea" value={area.value} checked={formData.playArea === area.value} onChange={(e) => updateField('playArea', e.target.value)} className="w-4 h-4 mt-0.5 text-blue-600 focus:ring-blue-500" />
-              <div><div className="font-medium">{area.label}</div><div className="text-sm text-secondary">{area.description}</div></div>
+              <div><div className="font-medium text-primary">{area.label}</div><div className="text-sm text-secondary">{area.description}</div></div>
             </label>
           ))}
         </div>
@@ -617,7 +617,7 @@ export default function NewAppPage() {
           {PLAYER_MODES.map(mode => (
             <label key={mode.value} className={`flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${formData.playerModes.includes(mode.value) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="checkbox" checked={formData.playerModes.includes(mode.value)} onChange={(e) => e.target.checked ? updateField('playerModes', [...formData.playerModes, mode.value]) : updateField('playerModes', formData.playerModes.filter(m => m !== mode.value))} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-              <span>{mode.label}</span>
+              <span className="text-primary">{mode.label}</span>
             </label>
           ))}
         </div>
@@ -644,7 +644,7 @@ export default function NewAppPage() {
   // Step 6: Features
   const renderStep6 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Features & Languages</h2>
+      <h2 className="text-xl text-primary font-semibold">Features & Languages</h2>
       <p className="helper-text text-secondary">Highlight key features and supported languages.</p>
 
       <div>
@@ -653,7 +653,7 @@ export default function NewAppPage() {
           {COMMON_FEATURES.map(feature => (
             <label key={feature} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors text-sm ${formData.features.includes(feature) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="checkbox" checked={formData.features.includes(feature)} onChange={() => toggleFeature(feature)} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-              <span>{feature}</span>
+              <span className="text-primary">{feature}</span>
             </label>
           ))}
         </div>
@@ -686,7 +686,7 @@ export default function NewAppPage() {
           {LANGUAGES.map(lang => (
             <label key={lang.value} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-colors ${formData.languages.includes(lang.value) ? 'border-primary bg-primary/20' : 'border-border hover:border-medium'}`}>
               <input type="checkbox" checked={formData.languages.includes(lang.value)} onChange={(e) => e.target.checked ? updateField('languages', [...formData.languages, lang.value]) : updateField('languages', formData.languages.filter(l => l !== lang.value))} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-              <span>{lang.label}</span>
+              <span className="text-primary">{lang.label}</span>
             </label>
           ))}
         </div>

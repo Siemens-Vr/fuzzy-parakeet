@@ -677,12 +677,15 @@ export type AppWhereInput = {
   viewCount?: Prisma.IntFilter<"App"> | number
   wishlistCount?: Prisma.IntFilter<"App"> | number
   developer?: Prisma.XOR<Prisma.DeveloperScalarRelationFilter, Prisma.DeveloperWhereInput>
-  builds?: Prisma.AppBuildListRelationFilter
   reviews?: Prisma.AppReviewListRelationFilter
   analytics?: Prisma.AnalyticsListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   purchases?: Prisma.PurchaseListRelationFilter
   userReviews?: Prisma.UserReviewListRelationFilter
+  draft?: Prisma.XOR<Prisma.AppDraftNullableScalarRelationFilter, Prisma.AppDraftWhereInput> | null
+  channels?: Prisma.ReleaseChannelListRelationFilter
+  submissions?: Prisma.SubmissionListRelationFilter
+  artifacts?: Prisma.ArtifactListRelationFilter
 }
 
 export type AppOrderByWithRelationInput = {
@@ -748,12 +751,15 @@ export type AppOrderByWithRelationInput = {
   viewCount?: Prisma.SortOrder
   wishlistCount?: Prisma.SortOrder
   developer?: Prisma.DeveloperOrderByWithRelationInput
-  builds?: Prisma.AppBuildOrderByRelationAggregateInput
   reviews?: Prisma.AppReviewOrderByRelationAggregateInput
   analytics?: Prisma.AnalyticsOrderByRelationAggregateInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   purchases?: Prisma.PurchaseOrderByRelationAggregateInput
   userReviews?: Prisma.UserReviewOrderByRelationAggregateInput
+  draft?: Prisma.AppDraftOrderByWithRelationInput
+  channels?: Prisma.ReleaseChannelOrderByRelationAggregateInput
+  submissions?: Prisma.SubmissionOrderByRelationAggregateInput
+  artifacts?: Prisma.ArtifactOrderByRelationAggregateInput
 }
 
 export type AppWhereUniqueInput = Prisma.AtLeast<{
@@ -822,12 +828,15 @@ export type AppWhereUniqueInput = Prisma.AtLeast<{
   viewCount?: Prisma.IntFilter<"App"> | number
   wishlistCount?: Prisma.IntFilter<"App"> | number
   developer?: Prisma.XOR<Prisma.DeveloperScalarRelationFilter, Prisma.DeveloperWhereInput>
-  builds?: Prisma.AppBuildListRelationFilter
   reviews?: Prisma.AppReviewListRelationFilter
   analytics?: Prisma.AnalyticsListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   purchases?: Prisma.PurchaseListRelationFilter
   userReviews?: Prisma.UserReviewListRelationFilter
+  draft?: Prisma.XOR<Prisma.AppDraftNullableScalarRelationFilter, Prisma.AppDraftWhereInput> | null
+  channels?: Prisma.ReleaseChannelListRelationFilter
+  submissions?: Prisma.SubmissionListRelationFilter
+  artifacts?: Prisma.ArtifactListRelationFilter
 }, "id" | "slug">
 
 export type AppOrderByWithAggregationInput = {
@@ -1028,12 +1037,15 @@ export type AppCreateInput = {
   viewCount?: number
   wishlistCount?: number
   developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
-  builds?: Prisma.AppBuildCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
 export type AppUncheckedCreateInput = {
@@ -1098,12 +1110,15 @@ export type AppUncheckedCreateInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildUncheckedCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
 export type AppUpdateInput = {
@@ -1168,12 +1183,15 @@ export type AppUpdateInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
   developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
-  builds?: Prisma.AppBuildUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateInput = {
@@ -1238,12 +1256,15 @@ export type AppUncheckedUpdateInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUncheckedUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppCreateManyInput = {
@@ -1756,18 +1777,60 @@ export type EnumAppStatusFieldUpdateOperationsInput = {
   set?: $Enums.AppStatus
 }
 
-export type AppCreateNestedOneWithoutBuildsInput = {
-  create?: Prisma.XOR<Prisma.AppCreateWithoutBuildsInput, Prisma.AppUncheckedCreateWithoutBuildsInput>
-  connectOrCreate?: Prisma.AppCreateOrConnectWithoutBuildsInput
+export type AppCreateNestedOneWithoutDraftInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutDraftInput, Prisma.AppUncheckedCreateWithoutDraftInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutDraftInput
   connect?: Prisma.AppWhereUniqueInput
 }
 
-export type AppUpdateOneRequiredWithoutBuildsNestedInput = {
-  create?: Prisma.XOR<Prisma.AppCreateWithoutBuildsInput, Prisma.AppUncheckedCreateWithoutBuildsInput>
-  connectOrCreate?: Prisma.AppCreateOrConnectWithoutBuildsInput
-  upsert?: Prisma.AppUpsertWithoutBuildsInput
+export type AppUpdateOneRequiredWithoutDraftNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutDraftInput, Prisma.AppUncheckedCreateWithoutDraftInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutDraftInput
+  upsert?: Prisma.AppUpsertWithoutDraftInput
   connect?: Prisma.AppWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AppUpdateToOneWithWhereWithoutBuildsInput, Prisma.AppUpdateWithoutBuildsInput>, Prisma.AppUncheckedUpdateWithoutBuildsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppUpdateToOneWithWhereWithoutDraftInput, Prisma.AppUpdateWithoutDraftInput>, Prisma.AppUncheckedUpdateWithoutDraftInput>
+}
+
+export type AppCreateNestedOneWithoutArtifactsInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutArtifactsInput, Prisma.AppUncheckedCreateWithoutArtifactsInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutArtifactsInput
+  connect?: Prisma.AppWhereUniqueInput
+}
+
+export type AppUpdateOneRequiredWithoutArtifactsNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutArtifactsInput, Prisma.AppUncheckedCreateWithoutArtifactsInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutArtifactsInput
+  upsert?: Prisma.AppUpsertWithoutArtifactsInput
+  connect?: Prisma.AppWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppUpdateToOneWithWhereWithoutArtifactsInput, Prisma.AppUpdateWithoutArtifactsInput>, Prisma.AppUncheckedUpdateWithoutArtifactsInput>
+}
+
+export type AppCreateNestedOneWithoutChannelsInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutChannelsInput, Prisma.AppUncheckedCreateWithoutChannelsInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutChannelsInput
+  connect?: Prisma.AppWhereUniqueInput
+}
+
+export type AppUpdateOneRequiredWithoutChannelsNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutChannelsInput, Prisma.AppUncheckedCreateWithoutChannelsInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutChannelsInput
+  upsert?: Prisma.AppUpsertWithoutChannelsInput
+  connect?: Prisma.AppWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppUpdateToOneWithWhereWithoutChannelsInput, Prisma.AppUpdateWithoutChannelsInput>, Prisma.AppUncheckedUpdateWithoutChannelsInput>
+}
+
+export type AppCreateNestedOneWithoutSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutSubmissionsInput, Prisma.AppUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutSubmissionsInput
+  connect?: Prisma.AppWhereUniqueInput
+}
+
+export type AppUpdateOneRequiredWithoutSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutSubmissionsInput, Prisma.AppUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutSubmissionsInput
+  upsert?: Prisma.AppUpsertWithoutSubmissionsInput
+  connect?: Prisma.AppWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.AppUpdateWithoutSubmissionsInput>, Prisma.AppUncheckedUpdateWithoutSubmissionsInput>
 }
 
 export type AppCreateNestedOneWithoutReviewsInput = {
@@ -1901,12 +1964,15 @@ export type AppCreateWithoutDeveloperInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
 export type AppUncheckedCreateWithoutDeveloperInput = {
@@ -1970,12 +2036,15 @@ export type AppUncheckedCreateWithoutDeveloperInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildUncheckedCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
 export type AppCreateOrConnectWithoutDeveloperInput = {
@@ -2071,7 +2140,7 @@ export type AppScalarWhereInput = {
   wishlistCount?: Prisma.IntFilter<"App"> | number
 }
 
-export type AppCreateWithoutBuildsInput = {
+export type AppCreateWithoutDraftInput = {
   id?: string
   slug: string
   name: string
@@ -2138,9 +2207,12 @@ export type AppCreateWithoutBuildsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
-export type AppUncheckedCreateWithoutBuildsInput = {
+export type AppUncheckedCreateWithoutDraftInput = {
   id?: string
   slug: string
   name: string
@@ -2207,25 +2279,28 @@ export type AppUncheckedCreateWithoutBuildsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
-export type AppCreateOrConnectWithoutBuildsInput = {
+export type AppCreateOrConnectWithoutDraftInput = {
   where: Prisma.AppWhereUniqueInput
-  create: Prisma.XOR<Prisma.AppCreateWithoutBuildsInput, Prisma.AppUncheckedCreateWithoutBuildsInput>
+  create: Prisma.XOR<Prisma.AppCreateWithoutDraftInput, Prisma.AppUncheckedCreateWithoutDraftInput>
 }
 
-export type AppUpsertWithoutBuildsInput = {
-  update: Prisma.XOR<Prisma.AppUpdateWithoutBuildsInput, Prisma.AppUncheckedUpdateWithoutBuildsInput>
-  create: Prisma.XOR<Prisma.AppCreateWithoutBuildsInput, Prisma.AppUncheckedCreateWithoutBuildsInput>
+export type AppUpsertWithoutDraftInput = {
+  update: Prisma.XOR<Prisma.AppUpdateWithoutDraftInput, Prisma.AppUncheckedUpdateWithoutDraftInput>
+  create: Prisma.XOR<Prisma.AppCreateWithoutDraftInput, Prisma.AppUncheckedCreateWithoutDraftInput>
   where?: Prisma.AppWhereInput
 }
 
-export type AppUpdateToOneWithWhereWithoutBuildsInput = {
+export type AppUpdateToOneWithWhereWithoutDraftInput = {
   where?: Prisma.AppWhereInput
-  data: Prisma.XOR<Prisma.AppUpdateWithoutBuildsInput, Prisma.AppUncheckedUpdateWithoutBuildsInput>
+  data: Prisma.XOR<Prisma.AppUpdateWithoutDraftInput, Prisma.AppUncheckedUpdateWithoutDraftInput>
 }
 
-export type AppUpdateWithoutBuildsInput = {
+export type AppUpdateWithoutDraftInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2292,9 +2367,12 @@ export type AppUpdateWithoutBuildsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
-export type AppUncheckedUpdateWithoutBuildsInput = {
+export type AppUncheckedUpdateWithoutDraftInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2361,6 +2439,921 @@ export type AppUncheckedUpdateWithoutBuildsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
+}
+
+export type AppCreateWithoutArtifactsInput = {
+  id?: string
+  slug: string
+  name: string
+  version: string
+  summary: string
+  description: string
+  category: $Enums.Category
+  subcategory?: string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: $Enums.ContentRating
+  price?: number
+  currency?: string
+  salePrice?: number | null
+  saleEndDate?: Date | string | null
+  apkUrl?: string | null
+  iconUrl?: string | null
+  screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: string | null
+  trailerUrl?: string | null
+  trailerVideoUrl?: string | null
+  promoVideoUrl?: string | null
+  sizeBytes: bigint | number
+  sha256?: string | null
+  minApiLevel?: number
+  targetApiLevel?: number | null
+  targetDevices: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: string | null
+  supportUrl?: string | null
+  supportEmail?: string | null
+  discordUrl?: string | null
+  twitterUrl?: string | null
+  youtubeUrl?: string | null
+  requiresHandTracking?: boolean
+  requiresPassthrough?: boolean
+  requiresControllers?: boolean
+  comfortLevel?: $Enums.ComfortLevel
+  playArea?: $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: string | null
+  ageRating?: string | null
+  containsAds?: boolean
+  hasInAppPurchases?: boolean
+  inAppPurchaseInfo?: string | null
+  developerNotes?: string | null
+  credits?: string | null
+  acknowledgments?: string | null
+  status?: $Enums.AppStatus
+  publishedAt?: Date | string | null
+  lastUpdated?: Date | string
+  createdAt?: Date | string
+  rating?: number | null
+  ratingCount?: number
+  downloads?: number
+  revenue?: number
+  viewCount?: number
+  wishlistCount?: number
+  developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
+  reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
+  analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
+  purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
+  userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+}
+
+export type AppUncheckedCreateWithoutArtifactsInput = {
+  id?: string
+  slug: string
+  name: string
+  developerId: string
+  version: string
+  summary: string
+  description: string
+  category: $Enums.Category
+  subcategory?: string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: $Enums.ContentRating
+  price?: number
+  currency?: string
+  salePrice?: number | null
+  saleEndDate?: Date | string | null
+  apkUrl?: string | null
+  iconUrl?: string | null
+  screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: string | null
+  trailerUrl?: string | null
+  trailerVideoUrl?: string | null
+  promoVideoUrl?: string | null
+  sizeBytes: bigint | number
+  sha256?: string | null
+  minApiLevel?: number
+  targetApiLevel?: number | null
+  targetDevices: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: string | null
+  supportUrl?: string | null
+  supportEmail?: string | null
+  discordUrl?: string | null
+  twitterUrl?: string | null
+  youtubeUrl?: string | null
+  requiresHandTracking?: boolean
+  requiresPassthrough?: boolean
+  requiresControllers?: boolean
+  comfortLevel?: $Enums.ComfortLevel
+  playArea?: $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: string | null
+  ageRating?: string | null
+  containsAds?: boolean
+  hasInAppPurchases?: boolean
+  inAppPurchaseInfo?: string | null
+  developerNotes?: string | null
+  credits?: string | null
+  acknowledgments?: string | null
+  status?: $Enums.AppStatus
+  publishedAt?: Date | string | null
+  lastUpdated?: Date | string
+  createdAt?: Date | string
+  rating?: number | null
+  ratingCount?: number
+  downloads?: number
+  revenue?: number
+  viewCount?: number
+  wishlistCount?: number
+  reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
+  analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
+  purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
+  userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+}
+
+export type AppCreateOrConnectWithoutArtifactsInput = {
+  where: Prisma.AppWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppCreateWithoutArtifactsInput, Prisma.AppUncheckedCreateWithoutArtifactsInput>
+}
+
+export type AppUpsertWithoutArtifactsInput = {
+  update: Prisma.XOR<Prisma.AppUpdateWithoutArtifactsInput, Prisma.AppUncheckedUpdateWithoutArtifactsInput>
+  create: Prisma.XOR<Prisma.AppCreateWithoutArtifactsInput, Prisma.AppUncheckedCreateWithoutArtifactsInput>
+  where?: Prisma.AppWhereInput
+}
+
+export type AppUpdateToOneWithWhereWithoutArtifactsInput = {
+  where?: Prisma.AppWhereInput
+  data: Prisma.XOR<Prisma.AppUpdateWithoutArtifactsInput, Prisma.AppUncheckedUpdateWithoutArtifactsInput>
+}
+
+export type AppUpdateWithoutArtifactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: Prisma.EnumContentRatingFieldUpdateOperationsInput | $Enums.ContentRating
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  salePrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  saleEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  apkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minApiLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  targetApiLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetDevices?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresHandTracking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresPassthrough?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresControllers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  comfortLevel?: Prisma.EnumComfortLevelFieldUpdateOperationsInput | $Enums.ComfortLevel
+  playArea?: Prisma.EnumPlayAreaFieldUpdateOperationsInput | $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ageRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containsAds?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasInAppPurchases?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inAppPurchaseInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  credits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acknowledgments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAppStatusFieldUpdateOperationsInput | $Enums.AppStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  ratingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  revenue?: Prisma.FloatFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
+  developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
+  reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
+  analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
+  purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
+  userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+}
+
+export type AppUncheckedUpdateWithoutArtifactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  developerId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: Prisma.EnumContentRatingFieldUpdateOperationsInput | $Enums.ContentRating
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  salePrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  saleEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  apkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minApiLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  targetApiLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetDevices?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresHandTracking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresPassthrough?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresControllers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  comfortLevel?: Prisma.EnumComfortLevelFieldUpdateOperationsInput | $Enums.ComfortLevel
+  playArea?: Prisma.EnumPlayAreaFieldUpdateOperationsInput | $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ageRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containsAds?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasInAppPurchases?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inAppPurchaseInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  credits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acknowledgments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAppStatusFieldUpdateOperationsInput | $Enums.AppStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  ratingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  revenue?: Prisma.FloatFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
+  reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
+  analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
+  purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
+  userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+}
+
+export type AppCreateWithoutChannelsInput = {
+  id?: string
+  slug: string
+  name: string
+  version: string
+  summary: string
+  description: string
+  category: $Enums.Category
+  subcategory?: string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: $Enums.ContentRating
+  price?: number
+  currency?: string
+  salePrice?: number | null
+  saleEndDate?: Date | string | null
+  apkUrl?: string | null
+  iconUrl?: string | null
+  screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: string | null
+  trailerUrl?: string | null
+  trailerVideoUrl?: string | null
+  promoVideoUrl?: string | null
+  sizeBytes: bigint | number
+  sha256?: string | null
+  minApiLevel?: number
+  targetApiLevel?: number | null
+  targetDevices: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: string | null
+  supportUrl?: string | null
+  supportEmail?: string | null
+  discordUrl?: string | null
+  twitterUrl?: string | null
+  youtubeUrl?: string | null
+  requiresHandTracking?: boolean
+  requiresPassthrough?: boolean
+  requiresControllers?: boolean
+  comfortLevel?: $Enums.ComfortLevel
+  playArea?: $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: string | null
+  ageRating?: string | null
+  containsAds?: boolean
+  hasInAppPurchases?: boolean
+  inAppPurchaseInfo?: string | null
+  developerNotes?: string | null
+  credits?: string | null
+  acknowledgments?: string | null
+  status?: $Enums.AppStatus
+  publishedAt?: Date | string | null
+  lastUpdated?: Date | string
+  createdAt?: Date | string
+  rating?: number | null
+  ratingCount?: number
+  downloads?: number
+  revenue?: number
+  viewCount?: number
+  wishlistCount?: number
+  developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
+  reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
+  analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
+  purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
+  userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
+}
+
+export type AppUncheckedCreateWithoutChannelsInput = {
+  id?: string
+  slug: string
+  name: string
+  developerId: string
+  version: string
+  summary: string
+  description: string
+  category: $Enums.Category
+  subcategory?: string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: $Enums.ContentRating
+  price?: number
+  currency?: string
+  salePrice?: number | null
+  saleEndDate?: Date | string | null
+  apkUrl?: string | null
+  iconUrl?: string | null
+  screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: string | null
+  trailerUrl?: string | null
+  trailerVideoUrl?: string | null
+  promoVideoUrl?: string | null
+  sizeBytes: bigint | number
+  sha256?: string | null
+  minApiLevel?: number
+  targetApiLevel?: number | null
+  targetDevices: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: string | null
+  supportUrl?: string | null
+  supportEmail?: string | null
+  discordUrl?: string | null
+  twitterUrl?: string | null
+  youtubeUrl?: string | null
+  requiresHandTracking?: boolean
+  requiresPassthrough?: boolean
+  requiresControllers?: boolean
+  comfortLevel?: $Enums.ComfortLevel
+  playArea?: $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: string | null
+  ageRating?: string | null
+  containsAds?: boolean
+  hasInAppPurchases?: boolean
+  inAppPurchaseInfo?: string | null
+  developerNotes?: string | null
+  credits?: string | null
+  acknowledgments?: string | null
+  status?: $Enums.AppStatus
+  publishedAt?: Date | string | null
+  lastUpdated?: Date | string
+  createdAt?: Date | string
+  rating?: number | null
+  ratingCount?: number
+  downloads?: number
+  revenue?: number
+  viewCount?: number
+  wishlistCount?: number
+  reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
+  analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
+  purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
+  userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
+}
+
+export type AppCreateOrConnectWithoutChannelsInput = {
+  where: Prisma.AppWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppCreateWithoutChannelsInput, Prisma.AppUncheckedCreateWithoutChannelsInput>
+}
+
+export type AppUpsertWithoutChannelsInput = {
+  update: Prisma.XOR<Prisma.AppUpdateWithoutChannelsInput, Prisma.AppUncheckedUpdateWithoutChannelsInput>
+  create: Prisma.XOR<Prisma.AppCreateWithoutChannelsInput, Prisma.AppUncheckedCreateWithoutChannelsInput>
+  where?: Prisma.AppWhereInput
+}
+
+export type AppUpdateToOneWithWhereWithoutChannelsInput = {
+  where?: Prisma.AppWhereInput
+  data: Prisma.XOR<Prisma.AppUpdateWithoutChannelsInput, Prisma.AppUncheckedUpdateWithoutChannelsInput>
+}
+
+export type AppUpdateWithoutChannelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: Prisma.EnumContentRatingFieldUpdateOperationsInput | $Enums.ContentRating
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  salePrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  saleEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  apkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minApiLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  targetApiLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetDevices?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresHandTracking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresPassthrough?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresControllers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  comfortLevel?: Prisma.EnumComfortLevelFieldUpdateOperationsInput | $Enums.ComfortLevel
+  playArea?: Prisma.EnumPlayAreaFieldUpdateOperationsInput | $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ageRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containsAds?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasInAppPurchases?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inAppPurchaseInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  credits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acknowledgments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAppStatusFieldUpdateOperationsInput | $Enums.AppStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  ratingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  revenue?: Prisma.FloatFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
+  developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
+  reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
+  analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
+  purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
+  userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
+}
+
+export type AppUncheckedUpdateWithoutChannelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  developerId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: Prisma.EnumContentRatingFieldUpdateOperationsInput | $Enums.ContentRating
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  salePrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  saleEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  apkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minApiLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  targetApiLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetDevices?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresHandTracking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresPassthrough?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresControllers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  comfortLevel?: Prisma.EnumComfortLevelFieldUpdateOperationsInput | $Enums.ComfortLevel
+  playArea?: Prisma.EnumPlayAreaFieldUpdateOperationsInput | $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ageRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containsAds?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasInAppPurchases?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inAppPurchaseInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  credits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acknowledgments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAppStatusFieldUpdateOperationsInput | $Enums.AppStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  ratingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  revenue?: Prisma.FloatFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
+  reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
+  analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
+  purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
+  userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
+}
+
+export type AppCreateWithoutSubmissionsInput = {
+  id?: string
+  slug: string
+  name: string
+  version: string
+  summary: string
+  description: string
+  category: $Enums.Category
+  subcategory?: string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: $Enums.ContentRating
+  price?: number
+  currency?: string
+  salePrice?: number | null
+  saleEndDate?: Date | string | null
+  apkUrl?: string | null
+  iconUrl?: string | null
+  screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: string | null
+  trailerUrl?: string | null
+  trailerVideoUrl?: string | null
+  promoVideoUrl?: string | null
+  sizeBytes: bigint | number
+  sha256?: string | null
+  minApiLevel?: number
+  targetApiLevel?: number | null
+  targetDevices: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: string | null
+  supportUrl?: string | null
+  supportEmail?: string | null
+  discordUrl?: string | null
+  twitterUrl?: string | null
+  youtubeUrl?: string | null
+  requiresHandTracking?: boolean
+  requiresPassthrough?: boolean
+  requiresControllers?: boolean
+  comfortLevel?: $Enums.ComfortLevel
+  playArea?: $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: string | null
+  ageRating?: string | null
+  containsAds?: boolean
+  hasInAppPurchases?: boolean
+  inAppPurchaseInfo?: string | null
+  developerNotes?: string | null
+  credits?: string | null
+  acknowledgments?: string | null
+  status?: $Enums.AppStatus
+  publishedAt?: Date | string | null
+  lastUpdated?: Date | string
+  createdAt?: Date | string
+  rating?: number | null
+  ratingCount?: number
+  downloads?: number
+  revenue?: number
+  viewCount?: number
+  wishlistCount?: number
+  developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
+  reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
+  analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
+  purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
+  userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
+}
+
+export type AppUncheckedCreateWithoutSubmissionsInput = {
+  id?: string
+  slug: string
+  name: string
+  developerId: string
+  version: string
+  summary: string
+  description: string
+  category: $Enums.Category
+  subcategory?: string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: $Enums.ContentRating
+  price?: number
+  currency?: string
+  salePrice?: number | null
+  saleEndDate?: Date | string | null
+  apkUrl?: string | null
+  iconUrl?: string | null
+  screenshots: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: string | null
+  trailerUrl?: string | null
+  trailerVideoUrl?: string | null
+  promoVideoUrl?: string | null
+  sizeBytes: bigint | number
+  sha256?: string | null
+  minApiLevel?: number
+  targetApiLevel?: number | null
+  targetDevices: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: string | null
+  supportUrl?: string | null
+  supportEmail?: string | null
+  discordUrl?: string | null
+  twitterUrl?: string | null
+  youtubeUrl?: string | null
+  requiresHandTracking?: boolean
+  requiresPassthrough?: boolean
+  requiresControllers?: boolean
+  comfortLevel?: $Enums.ComfortLevel
+  playArea?: $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: string | null
+  ageRating?: string | null
+  containsAds?: boolean
+  hasInAppPurchases?: boolean
+  inAppPurchaseInfo?: string | null
+  developerNotes?: string | null
+  credits?: string | null
+  acknowledgments?: string | null
+  status?: $Enums.AppStatus
+  publishedAt?: Date | string | null
+  lastUpdated?: Date | string
+  createdAt?: Date | string
+  rating?: number | null
+  ratingCount?: number
+  downloads?: number
+  revenue?: number
+  viewCount?: number
+  wishlistCount?: number
+  reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
+  analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
+  purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
+  userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
+}
+
+export type AppCreateOrConnectWithoutSubmissionsInput = {
+  where: Prisma.AppWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppCreateWithoutSubmissionsInput, Prisma.AppUncheckedCreateWithoutSubmissionsInput>
+}
+
+export type AppUpsertWithoutSubmissionsInput = {
+  update: Prisma.XOR<Prisma.AppUpdateWithoutSubmissionsInput, Prisma.AppUncheckedUpdateWithoutSubmissionsInput>
+  create: Prisma.XOR<Prisma.AppCreateWithoutSubmissionsInput, Prisma.AppUncheckedCreateWithoutSubmissionsInput>
+  where?: Prisma.AppWhereInput
+}
+
+export type AppUpdateToOneWithWhereWithoutSubmissionsInput = {
+  where?: Prisma.AppWhereInput
+  data: Prisma.XOR<Prisma.AppUpdateWithoutSubmissionsInput, Prisma.AppUncheckedUpdateWithoutSubmissionsInput>
+}
+
+export type AppUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: Prisma.EnumContentRatingFieldUpdateOperationsInput | $Enums.ContentRating
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  salePrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  saleEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  apkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minApiLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  targetApiLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetDevices?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresHandTracking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresPassthrough?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresControllers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  comfortLevel?: Prisma.EnumComfortLevelFieldUpdateOperationsInput | $Enums.ComfortLevel
+  playArea?: Prisma.EnumPlayAreaFieldUpdateOperationsInput | $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ageRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containsAds?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasInAppPurchases?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inAppPurchaseInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  credits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acknowledgments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAppStatusFieldUpdateOperationsInput | $Enums.AppStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  ratingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  revenue?: Prisma.FloatFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
+  developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
+  reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
+  analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
+  purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
+  userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
+}
+
+export type AppUncheckedUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  developerId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contentRating?: Prisma.EnumContentRatingFieldUpdateOperationsInput | $Enums.ContentRating
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  salePrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  saleEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  apkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  screenshots?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  heroImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trailerVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sha256?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minApiLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  targetApiLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  targetDevices?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  permissions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  whatsNew?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languages?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  privacyPolicyUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supportEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresHandTracking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresPassthrough?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresControllers?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  comfortLevel?: Prisma.EnumComfortLevelFieldUpdateOperationsInput | $Enums.ComfortLevel
+  playArea?: Prisma.EnumPlayAreaFieldUpdateOperationsInput | $Enums.PlayArea
+  playerModes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  estimatedPlayTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ageRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containsAds?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasInAppPurchases?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inAppPurchaseInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  credits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acknowledgments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAppStatusFieldUpdateOperationsInput | $Enums.AppStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  ratingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  revenue?: Prisma.FloatFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
+  reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
+  analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
+  purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
+  userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppCreateWithoutReviewsInput = {
@@ -2425,11 +3418,14 @@ export type AppCreateWithoutReviewsInput = {
   viewCount?: number
   wishlistCount?: number
   developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
-  builds?: Prisma.AppBuildCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
 export type AppUncheckedCreateWithoutReviewsInput = {
@@ -2494,11 +3490,14 @@ export type AppUncheckedCreateWithoutReviewsInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildUncheckedCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
 export type AppCreateOrConnectWithoutReviewsInput = {
@@ -2579,11 +3578,14 @@ export type AppUpdateWithoutReviewsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
   developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
-  builds?: Prisma.AppBuildUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateWithoutReviewsInput = {
@@ -2648,11 +3650,14 @@ export type AppUncheckedUpdateWithoutReviewsInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUncheckedUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppCreateWithoutUserReviewsInput = {
@@ -2717,11 +3722,14 @@ export type AppCreateWithoutUserReviewsInput = {
   viewCount?: number
   wishlistCount?: number
   developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
-  builds?: Prisma.AppBuildCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
 export type AppUncheckedCreateWithoutUserReviewsInput = {
@@ -2786,11 +3794,14 @@ export type AppUncheckedCreateWithoutUserReviewsInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildUncheckedCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
 export type AppCreateOrConnectWithoutUserReviewsInput = {
@@ -2871,11 +3882,14 @@ export type AppUpdateWithoutUserReviewsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
   developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
-  builds?: Prisma.AppBuildUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateWithoutUserReviewsInput = {
@@ -2940,11 +3954,14 @@ export type AppUncheckedUpdateWithoutUserReviewsInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUncheckedUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppCreateWithoutAnalyticsInput = {
@@ -3009,11 +4026,14 @@ export type AppCreateWithoutAnalyticsInput = {
   viewCount?: number
   wishlistCount?: number
   developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
-  builds?: Prisma.AppBuildCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
 export type AppUncheckedCreateWithoutAnalyticsInput = {
@@ -3078,11 +4098,14 @@ export type AppUncheckedCreateWithoutAnalyticsInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildUncheckedCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
 export type AppCreateOrConnectWithoutAnalyticsInput = {
@@ -3163,11 +4186,14 @@ export type AppUpdateWithoutAnalyticsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
   developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
-  builds?: Prisma.AppBuildUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateWithoutAnalyticsInput = {
@@ -3232,11 +4258,14 @@ export type AppUncheckedUpdateWithoutAnalyticsInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUncheckedUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppCreateWithoutTransactionsInput = {
@@ -3301,11 +4330,14 @@ export type AppCreateWithoutTransactionsInput = {
   viewCount?: number
   wishlistCount?: number
   developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
-  builds?: Prisma.AppBuildCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
 export type AppUncheckedCreateWithoutTransactionsInput = {
@@ -3370,11 +4402,14 @@ export type AppUncheckedCreateWithoutTransactionsInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildUncheckedCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
   purchases?: Prisma.PurchaseUncheckedCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
 export type AppCreateOrConnectWithoutTransactionsInput = {
@@ -3455,11 +4490,14 @@ export type AppUpdateWithoutTransactionsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
   developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
-  builds?: Prisma.AppBuildUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateWithoutTransactionsInput = {
@@ -3524,11 +4562,14 @@ export type AppUncheckedUpdateWithoutTransactionsInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUncheckedUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppCreateWithoutPurchasesInput = {
@@ -3593,11 +4634,14 @@ export type AppCreateWithoutPurchasesInput = {
   viewCount?: number
   wishlistCount?: number
   developer: Prisma.DeveloperCreateNestedOneWithoutAppsInput
-  builds?: Prisma.AppBuildCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutAppInput
 }
 
 export type AppUncheckedCreateWithoutPurchasesInput = {
@@ -3662,11 +4706,14 @@ export type AppUncheckedCreateWithoutPurchasesInput = {
   revenue?: number
   viewCount?: number
   wishlistCount?: number
-  builds?: Prisma.AppBuildUncheckedCreateNestedManyWithoutAppInput
   reviews?: Prisma.AppReviewUncheckedCreateNestedManyWithoutAppInput
   analytics?: Prisma.AnalyticsUncheckedCreateNestedManyWithoutAppInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAppInput
   userReviews?: Prisma.UserReviewUncheckedCreateNestedManyWithoutAppInput
+  draft?: Prisma.AppDraftUncheckedCreateNestedOneWithoutAppInput
+  channels?: Prisma.ReleaseChannelUncheckedCreateNestedManyWithoutAppInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutAppInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutAppInput
 }
 
 export type AppCreateOrConnectWithoutPurchasesInput = {
@@ -3747,11 +4794,14 @@ export type AppUpdateWithoutPurchasesInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
   developer?: Prisma.DeveloperUpdateOneRequiredWithoutAppsNestedInput
-  builds?: Prisma.AppBuildUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateWithoutPurchasesInput = {
@@ -3816,11 +4866,14 @@ export type AppUncheckedUpdateWithoutPurchasesInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUncheckedUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppCreateManyDeveloperInput = {
@@ -3947,12 +5000,15 @@ export type AppUpdateWithoutDeveloperInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateWithoutDeveloperInput = {
@@ -4016,12 +5072,15 @@ export type AppUncheckedUpdateWithoutDeveloperInput = {
   revenue?: Prisma.FloatFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   wishlistCount?: Prisma.IntFieldUpdateOperationsInput | number
-  builds?: Prisma.AppBuildUncheckedUpdateManyWithoutAppNestedInput
   reviews?: Prisma.AppReviewUncheckedUpdateManyWithoutAppNestedInput
   analytics?: Prisma.AnalyticsUncheckedUpdateManyWithoutAppNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAppNestedInput
   purchases?: Prisma.PurchaseUncheckedUpdateManyWithoutAppNestedInput
   userReviews?: Prisma.UserReviewUncheckedUpdateManyWithoutAppNestedInput
+  draft?: Prisma.AppDraftUncheckedUpdateOneWithoutAppNestedInput
+  channels?: Prisma.ReleaseChannelUncheckedUpdateManyWithoutAppNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutAppNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutAppNestedInput
 }
 
 export type AppUncheckedUpdateManyWithoutDeveloperInput = {
@@ -4093,21 +5152,25 @@ export type AppUncheckedUpdateManyWithoutDeveloperInput = {
  */
 
 export type AppCountOutputType = {
-  builds: number
   reviews: number
   analytics: number
   transactions: number
   purchases: number
   userReviews: number
+  channels: number
+  submissions: number
+  artifacts: number
 }
 
 export type AppCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  builds?: boolean | AppCountOutputTypeCountBuildsArgs
   reviews?: boolean | AppCountOutputTypeCountReviewsArgs
   analytics?: boolean | AppCountOutputTypeCountAnalyticsArgs
   transactions?: boolean | AppCountOutputTypeCountTransactionsArgs
   purchases?: boolean | AppCountOutputTypeCountPurchasesArgs
   userReviews?: boolean | AppCountOutputTypeCountUserReviewsArgs
+  channels?: boolean | AppCountOutputTypeCountChannelsArgs
+  submissions?: boolean | AppCountOutputTypeCountSubmissionsArgs
+  artifacts?: boolean | AppCountOutputTypeCountArtifactsArgs
 }
 
 /**
@@ -4118,13 +5181,6 @@ export type AppCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensio
    * Select specific fields to fetch from the AppCountOutputType
    */
   select?: Prisma.AppCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * AppCountOutputType without action
- */
-export type AppCountOutputTypeCountBuildsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AppBuildWhereInput
 }
 
 /**
@@ -4160,6 +5216,27 @@ export type AppCountOutputTypeCountPurchasesArgs<ExtArgs extends runtime.Types.E
  */
 export type AppCountOutputTypeCountUserReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserReviewWhereInput
+}
+
+/**
+ * AppCountOutputType without action
+ */
+export type AppCountOutputTypeCountChannelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReleaseChannelWhereInput
+}
+
+/**
+ * AppCountOutputType without action
+ */
+export type AppCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubmissionWhereInput
+}
+
+/**
+ * AppCountOutputType without action
+ */
+export type AppCountOutputTypeCountArtifactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ArtifactWhereInput
 }
 
 
@@ -4226,12 +5303,15 @@ export type AppSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   viewCount?: boolean
   wishlistCount?: boolean
   developer?: boolean | Prisma.DeveloperDefaultArgs<ExtArgs>
-  builds?: boolean | Prisma.App$buildsArgs<ExtArgs>
   reviews?: boolean | Prisma.App$reviewsArgs<ExtArgs>
   analytics?: boolean | Prisma.App$analyticsArgs<ExtArgs>
   transactions?: boolean | Prisma.App$transactionsArgs<ExtArgs>
   purchases?: boolean | Prisma.App$purchasesArgs<ExtArgs>
   userReviews?: boolean | Prisma.App$userReviewsArgs<ExtArgs>
+  draft?: boolean | Prisma.App$draftArgs<ExtArgs>
+  channels?: boolean | Prisma.App$channelsArgs<ExtArgs>
+  submissions?: boolean | Prisma.App$submissionsArgs<ExtArgs>
+  artifacts?: boolean | Prisma.App$artifactsArgs<ExtArgs>
   _count?: boolean | Prisma.AppCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["app"]>
 
@@ -4432,12 +5512,15 @@ export type AppSelectScalar = {
 export type AppOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "developerId" | "version" | "summary" | "description" | "category" | "subcategory" | "tags" | "contentRating" | "price" | "currency" | "salePrice" | "saleEndDate" | "apkUrl" | "iconUrl" | "screenshots" | "heroImageUrl" | "trailerUrl" | "trailerVideoUrl" | "promoVideoUrl" | "sizeBytes" | "sha256" | "minApiLevel" | "targetApiLevel" | "targetDevices" | "permissions" | "features" | "whatsNew" | "languages" | "privacyPolicyUrl" | "supportUrl" | "supportEmail" | "discordUrl" | "twitterUrl" | "youtubeUrl" | "requiresHandTracking" | "requiresPassthrough" | "requiresControllers" | "comfortLevel" | "playArea" | "playerModes" | "estimatedPlayTime" | "ageRating" | "containsAds" | "hasInAppPurchases" | "inAppPurchaseInfo" | "developerNotes" | "credits" | "acknowledgments" | "status" | "publishedAt" | "lastUpdated" | "createdAt" | "rating" | "ratingCount" | "downloads" | "revenue" | "viewCount" | "wishlistCount", ExtArgs["result"]["app"]>
 export type AppInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   developer?: boolean | Prisma.DeveloperDefaultArgs<ExtArgs>
-  builds?: boolean | Prisma.App$buildsArgs<ExtArgs>
   reviews?: boolean | Prisma.App$reviewsArgs<ExtArgs>
   analytics?: boolean | Prisma.App$analyticsArgs<ExtArgs>
   transactions?: boolean | Prisma.App$transactionsArgs<ExtArgs>
   purchases?: boolean | Prisma.App$purchasesArgs<ExtArgs>
   userReviews?: boolean | Prisma.App$userReviewsArgs<ExtArgs>
+  draft?: boolean | Prisma.App$draftArgs<ExtArgs>
+  channels?: boolean | Prisma.App$channelsArgs<ExtArgs>
+  submissions?: boolean | Prisma.App$submissionsArgs<ExtArgs>
+  artifacts?: boolean | Prisma.App$artifactsArgs<ExtArgs>
   _count?: boolean | Prisma.AppCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AppIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4451,12 +5534,15 @@ export type $AppPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name: "App"
   objects: {
     developer: Prisma.$DeveloperPayload<ExtArgs>
-    builds: Prisma.$AppBuildPayload<ExtArgs>[]
     reviews: Prisma.$AppReviewPayload<ExtArgs>[]
     analytics: Prisma.$AnalyticsPayload<ExtArgs>[]
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
     purchases: Prisma.$PurchasePayload<ExtArgs>[]
     userReviews: Prisma.$UserReviewPayload<ExtArgs>[]
+    draft: Prisma.$AppDraftPayload<ExtArgs> | null
+    channels: Prisma.$ReleaseChannelPayload<ExtArgs>[]
+    submissions: Prisma.$SubmissionPayload<ExtArgs>[]
+    artifacts: Prisma.$ArtifactPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4915,12 +6001,15 @@ readonly fields: AppFieldRefs;
 export interface Prisma__AppClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   developer<T extends Prisma.DeveloperDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DeveloperDefaultArgs<ExtArgs>>): Prisma.Prisma__DeveloperClient<runtime.Types.Result.GetResult<Prisma.$DeveloperPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  builds<T extends Prisma.App$buildsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$buildsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppBuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.App$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   analytics<T extends Prisma.App$analyticsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$analyticsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnalyticsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.App$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   purchases<T extends Prisma.App$purchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userReviews<T extends Prisma.App$userReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$userReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  draft<T extends Prisma.App$draftArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$draftArgs<ExtArgs>>): Prisma.Prisma__AppDraftClient<runtime.Types.Result.GetResult<Prisma.$AppDraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  channels<T extends Prisma.App$channelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$channelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReleaseChannelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submissions<T extends Prisma.App$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  artifacts<T extends Prisma.App$artifactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$artifactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5407,30 +6496,6 @@ export type AppDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * App.builds
- */
-export type App$buildsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AppBuild
-   */
-  select?: Prisma.AppBuildSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AppBuild
-   */
-  omit?: Prisma.AppBuildOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AppBuildInclude<ExtArgs> | null
-  where?: Prisma.AppBuildWhereInput
-  orderBy?: Prisma.AppBuildOrderByWithRelationInput | Prisma.AppBuildOrderByWithRelationInput[]
-  cursor?: Prisma.AppBuildWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AppBuildScalarFieldEnum | Prisma.AppBuildScalarFieldEnum[]
-}
-
-/**
  * App.reviews
  */
 export type App$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5548,6 +6613,97 @@ export type App$userReviewsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.UserReviewScalarFieldEnum | Prisma.UserReviewScalarFieldEnum[]
+}
+
+/**
+ * App.draft
+ */
+export type App$draftArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AppDraft
+   */
+  select?: Prisma.AppDraftSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AppDraft
+   */
+  omit?: Prisma.AppDraftOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppDraftInclude<ExtArgs> | null
+  where?: Prisma.AppDraftWhereInput
+}
+
+/**
+ * App.channels
+ */
+export type App$channelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReleaseChannel
+   */
+  select?: Prisma.ReleaseChannelSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReleaseChannel
+   */
+  omit?: Prisma.ReleaseChannelOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReleaseChannelInclude<ExtArgs> | null
+  where?: Prisma.ReleaseChannelWhereInput
+  orderBy?: Prisma.ReleaseChannelOrderByWithRelationInput | Prisma.ReleaseChannelOrderByWithRelationInput[]
+  cursor?: Prisma.ReleaseChannelWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReleaseChannelScalarFieldEnum | Prisma.ReleaseChannelScalarFieldEnum[]
+}
+
+/**
+ * App.submissions
+ */
+export type App$submissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Submission
+   */
+  select?: Prisma.SubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Submission
+   */
+  omit?: Prisma.SubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubmissionInclude<ExtArgs> | null
+  where?: Prisma.SubmissionWhereInput
+  orderBy?: Prisma.SubmissionOrderByWithRelationInput | Prisma.SubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.SubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubmissionScalarFieldEnum | Prisma.SubmissionScalarFieldEnum[]
+}
+
+/**
+ * App.artifacts
+ */
+export type App$artifactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Artifact
+   */
+  select?: Prisma.ArtifactSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Artifact
+   */
+  omit?: Prisma.ArtifactOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ArtifactInclude<ExtArgs> | null
+  where?: Prisma.ArtifactWhereInput
+  orderBy?: Prisma.ArtifactOrderByWithRelationInput | Prisma.ArtifactOrderByWithRelationInput[]
+  cursor?: Prisma.ArtifactWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ArtifactScalarFieldEnum | Prisma.ArtifactScalarFieldEnum[]
 }
 
 /**
