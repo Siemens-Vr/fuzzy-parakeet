@@ -516,242 +516,204 @@ html[data-theme="store"],
     /* Standardized width */
 }
 
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+/* ═══════════════════════════════════════════
+   SQ-CARD — SideQuest-inspired app card
+   ═══════════════════════════════════════════ */
+
+.sq-card {
+    position: relative;
+    width: 300px;
     border-radius: var(--r-lg);
     overflow: hidden;
-    position: relative;
-    transition: all var(--t-med) var(--ease);
-    height: 260px;
-    /* Standardized height */
-    width: 300px;
-    /* Standardized width */
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     display: flex;
     flex-direction: column;
     box-shadow: var(--card-shadow);
-    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.card:hover {
+.sq-card:hover {
     box-shadow: var(--shadow-lg), var(--glow-primary);
     border-color: var(--brand-primary);
     transform: translateY(-4px);
 }
 
-.card-image-wrapper {
+/* ── Media Container ── */
+.sq-card-media {
     position: relative;
     width: 100%;
-    aspect-ratio: 16/9;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--surface-2);
 }
 
-/* ── Trailer video overlay ── */
-.card-trailer-video {
+/* ── Skeleton Loader ── */
+.sq-card-skeleton {
     position: absolute;
     inset: 0;
+    background: linear-gradient(135deg, var(--surface-2) 0%, var(--surface-3, #1e293b) 100%);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* ── Poster (Static Image) ── */
+.sq-card-poster {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    z-index: 5;
+    display: block;
+}
+
+/* ── Video Preview Layer ── */
+.sq-card-video-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
     pointer-events: none;
 }
 
-.card-trailer-video.playing {
-    opacity: 1;
-}
-
-.card-trailer-indicator {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(6px);
-    border-radius: 50%;
-    color: #fff;
-    font-size: 10px;
-    z-index: 8;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.card:hover .card-trailer-indicator:not(.hidden) {
-    animation: pulse-indicator 1.5s ease-in-out infinite;
-}
-
-.card-trailer-indicator.hidden {
-    opacity: 0;
-    transform: scale(0.6);
-}
-
-@keyframes pulse-indicator {
-
-    0%,
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
-    }
-
-    50% {
-        transform: scale(1.1);
-        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
-    }
-}
-
-.card-image {
+.sq-card-video-layer video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s var(--ease);
+    display: block;
 }
 
-.card:hover .card-image {
-    transform: scale(1.08);
-}
-
-.card-rating {
+/* ── Bottom Gradient Overlay ── */
+.sq-card-gradient {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(0deg, rgba(10, 15, 29, 0.92) 0%, transparent 100%);
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* ── Rating Badge ── */
+.sq-card-rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(8px);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 999px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     color: #fff;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     z-index: 10;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.card-actions {
+/* ── Hover Content: Download Icon + Tags ── */
+.sq-card-hover-content {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 24px;
+    z-index: 8;
     display: flex;
-    gap: 16px;
-    justify-content: center;
-    background: linear-gradient(0deg, rgba(10, 15, 29, 0.95) 0%, transparent 100%);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s var(--ease);
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 14px;
     pointer-events: none;
-    z-index: 20;
 }
 
-.card:hover .card-actions {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-.card-action-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+.sq-card-dl-icon {
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--surface-1);
-    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.85);
+    background: transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.sq-card:hover .sq-card-dl-icon {
+    border-color: rgba(255, 255, 255, 0.8);
+    color: #fff;
+}
+
+.sq-card-tags {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.01em;
+}
+
+.sq-dot {
+    margin: 0 5px;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Touch Preview Button ── */
+.sq-card-preview-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 12;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 20px;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s var(--ease);
-    color: var(--text-primary);
 }
 
-.card-action-btn:hover {
-    background: var(--brand-primary);
-    border-color: var(--brand-primary);
-    transform: scale(1.15) rotate(5deg);
-    color: #000;
-}
-
-.card-separator {
-    height: 1px;
-    width: 100%;
-    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
-    margin: 0;
-}
-
-.card-content {
-    padding: 1.5rem;
-    flex: 1;
+/* ── Info Area (below media) ── */
+.sq-card-info {
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
 }
 
-.card-title {
-    font-size: 1.25rem;
+.sq-card-title {
+    font-size: 1rem;
     font-weight: 800;
     color: var(--text-primary);
     line-height: 1.3;
     letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.card-meta-row {
-    margin-top: auto;
+.sq-card-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text-secondary);
 }
 
-/* ── Card hover download button ── */
-.card-content-wrapper {
-    min-height: 72px;
-}
-
-.card-dl-icon {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    color: rgba(255, 255, 255, 0.85);
-    background: transparent;
-    cursor: pointer;
-    transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.card-dl-icon:hover {
-    border-color: #fff;
-    color: #fff;
-}
-
-.card-hover-tags {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 13px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.55);
-    letter-spacing: 0.01em;
-}
-
-.card-hover-dot {
-    margin: 0 6px;
-    color: rgba(255, 255, 255, 0.3);
+.sq-card-price {
+    text-transform: uppercase;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .empty-state {
