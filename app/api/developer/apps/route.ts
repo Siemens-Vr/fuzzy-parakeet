@@ -66,6 +66,7 @@ export async function GET(req: NextRequest) {
       orderBy: { lastUpdated: 'desc' },
       select: {
         id: true,
+        slug: true,
         name: true,
         status: true,
         downloads: true,
@@ -74,11 +75,15 @@ export async function GET(req: NextRequest) {
         lastUpdated: true,
         version: true,
         iconUrl: true,
+        summary: true,
+        trailerVideoUrl: true,
+        category: true,
       },
     });
 
     const rows = apps.map(a => ({
       id: a.id,
+      slug: a.slug,
       name: a.name,
       status: a.status,
       downloads: a.downloads ?? 0,
@@ -87,6 +92,9 @@ export async function GET(req: NextRequest) {
       lastUpdated: a.lastUpdated.toISOString(),
       version: a.version,
       iconUrl: a.iconUrl,
+      summary: a.summary,
+      trailerVideoUrl: a.trailerVideoUrl,
+      category: a.category,
     }));
     console.log(rows)
     return NextResponse.json(rows);

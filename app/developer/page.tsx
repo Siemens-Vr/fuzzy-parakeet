@@ -2,6 +2,14 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import {
+  Package,
+  Download,
+  DollarSign,
+  Users,
+  Star,
+  MessageSquare
+} from 'lucide-react';
 
 
 type DashboardStats = {
@@ -10,7 +18,7 @@ type DashboardStats = {
   totalRevenue: number;
   activeUsers: number;
   avgRating: number;
-  pendingReviews: number;
+  // pendingReviews: number;
 };
 
 type AppRow = {
@@ -99,7 +107,7 @@ export default function DeveloperDashboard() {
           border: '4px solid rgba(255,255,255,0.1)', borderTopColor: '#7c3aed',
           borderRadius: '999px', animation: 'spin 1s linear infinite'
         }} />
-        <div className="helper">Loading dashboard…</div>
+        <div className="helper-text">Loading dashboard…</div>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       </div>
     );
@@ -124,7 +132,7 @@ export default function DeveloperDashboard() {
         <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 8px', color: '#ef4444' }}>
           Unable to load dashboard
         </h2>
-        <p className="helper" style={{ marginBottom: 20 }}>{error}</p>
+        <p className="helper-text" style={{ marginBottom: 20 }}>{error}</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
           <button
             onClick={fetchData}
@@ -153,19 +161,60 @@ export default function DeveloperDashboard() {
       <div className="row" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <div>
           <h1 style={{ fontSize: 22, color: 'white', fontWeight: 800, margin: 0 }}>Welcome back!</h1>
-          <div className="helper">Here’s an overview of your app performance</div>
+          <div className="helper-text">Here’s an overview of your app performance</div>
         </div>
         <Link href="/developer/apps/new" className=" btn btn-primary">Submit new app</Link>
       </div>
 
       {stats && (
-        <div className="stat-grid">
-          <div className="stat"><div className="stat-label">Total Apps</div><div className="stat-value">{stats.totalApps}</div></div>
-          <div className="stat"><div className="stat-label">Downloads</div><div className="stat-value">{stats.totalDownloads.toLocaleString()}</div></div>
-          <div className="stat"><div className="stat-label">Revenue</div><div className="stat-value">${stats.totalRevenue.toFixed(2)}</div></div>
-          <div className="stat"><div className="stat-label">Active Users</div><div className="stat-value">{stats.activeUsers.toLocaleString()}</div></div>
-          <div className="stat"><div className="stat-label">Avg Rating</div><div className="stat-value">{stats.avgRating.toFixed(1)}</div></div>
-          <div className="stat"><div className="stat-label">Pending Reviews</div><div className="stat-value">{stats.pendingReviews}</div></div>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <div className="stat-label">Total Apps</div>
+              <Package size={20} className="text-secondary" style={{ opacity: 0.6 }} />
+            </div>
+            <div className="stat-value">{stats.totalApps}</div>
+          </div>
+
+          <div className="stat-card">
+            <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <div className="stat-label">Downloads</div>
+              <Download size={20} className="text-secondary" style={{ opacity: 0.6 }} />
+            </div>
+            <div className="stat-value">{stats.totalDownloads.toLocaleString()}</div>
+          </div>
+
+          <div className="stat-card">
+            <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <div className="stat-label">Revenue</div>
+              <DollarSign size={20} className="text-secondary" style={{ opacity: 0.6 }} />
+            </div>
+            <div className="stat-value">${stats.totalRevenue.toFixed(2)}</div>
+          </div>
+
+          <div className="stat-card">
+            <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <div className="stat-label">Active Users</div>
+              <Users size={20} className="text-secondary" style={{ opacity: 0.6 }} />
+            </div>
+            <div className="stat-value">{stats.activeUsers.toLocaleString()}</div>
+          </div>
+
+          <div className="stat-card">
+            <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <div className="stat-label">Avg Rating</div>
+              <Star size={20} className="text-secondary" style={{ opacity: 0.6 }} />
+            </div>
+            <div className="stat-value">{stats.avgRating.toFixed(1)}</div>
+          </div>
+
+          {/* <div className="stat-card">
+            <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+              <div className="stat-label">Pending Reviews</div>
+              <MessageSquare size={20} className="text-secondary" style={{ opacity: 0.6 }} />
+            </div>
+            <div className="stat-value">{stats.pendingReviews}</div>
+          </div> */}
         </div>
       )}
 
@@ -184,7 +233,7 @@ export default function DeveloperDashboard() {
             </select>
           </div>
           <div className="row" style={{ alignItems: 'center' }}>
-            <span className="helper">Sort</span>
+            <span className="helper-text">Sort</span>
             <select value={sort} onChange={e => setSort(e.target.value as any)} className="select">
               <option value="updated">Last updated</option>
               <option value="name">Name</option>
@@ -211,7 +260,7 @@ export default function DeveloperDashboard() {
                 <td>{app.downloads.toLocaleString()}</td>
                 <td>${app.revenue.toFixed(2)}</td>
                 <td>{app.rating.toFixed(1)}</td>
-                <td className="helper">{new Date(app.lastUpdated).toLocaleDateString()}</td>
+                <td className="helper-text">{new Date(app.lastUpdated).toLocaleDateString()}</td>
                 <td style={{ textAlign: 'right' }}>
                   <div className="row" style={{ justifyContent: 'flex-end' }}>
                     <Link className="btn-outline" href={`/developer/apps/${app.id}/edit`}>Edit</Link>

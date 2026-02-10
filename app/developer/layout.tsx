@@ -191,7 +191,8 @@ function DeveloperLayoutInner({ children }: { children: ReactNode }) {
           <Link href="/developer/apps/new">📤 Submit App</Link>
           <Link href="/developer/builds">🔨 Builds</Link>
           <Link href="/developer/payouts">💳 Payouts</Link>
-          <Link href="/developer/profile">👤 Profile</Link>
+          <Link href="/developer/profile">👤 Public Profile</Link>
+          <Link href="/developer/settings">⚙️ Settings</Link>
         </nav>
       </aside>
 

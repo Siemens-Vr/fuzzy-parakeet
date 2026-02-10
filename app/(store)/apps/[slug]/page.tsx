@@ -549,38 +549,21 @@ export default function AppDetailsPage() {
           />
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to bottom, rgba(0,102,204,0.7) 0%, rgba(0,102,204,0.85) 50%, var(--app-bg) 100%)' }}
+            // style={{ background: 'linear-gradient(to bottom, rgba(0,102,204,0.7) 0%, rgba(0,102,204,0.85) 50%, var(--app-bg) 100%)' }}
           />
         </div>
 
         {/* Hero Content */}
         <div className="relative max-w-7xl mx-auto px-4 pt-8 pb-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-white/70 mb-6">
-            <Link href="/" className="hover:text-white">
-              Home
-            </Link>
-            <span>/</span>
-            <Link href="/apps" className="hover:text-white">
-              Apps
-            </Link>
-            <span>/</span>
-            <Link
-              href={`/apps?category=${app.category}`}
-              className="hover:text-white capitalize"
-            >
-              {app.category.toLowerCase()}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{app.name}</span>
-          </nav>
+         
 
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Left: App Info */}
             <div className="flex-1">
               <div className="flex items-start gap-6">
                 {/* App Icon */}
-                <div className="w-32 h-32 rounded-[var(--r-lg)] bg-[var(--surface-2)] overflow-hidden shadow-[var(--shadow-lg)] flex-shrink-0 border-2 border-white/20">
+                {/* <div className="w-32 h-32 rounded-[var(--r-lg)] bg-[var(--surface-2)] overflow-hidden shadow-[var(--shadow-lg)] flex-shrink-0 border-2 border-white/20">
                   {app.iconUrl ? (
                     <img
                       src={app.iconUrl}
@@ -595,11 +578,11 @@ export default function AppDetailsPage() {
                       {app.name[0]}
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 {/* App Details */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
+                  {/* <div className="flex items-center gap-2 mb-1">
                     <span
                       className={`px-2 py-0.5 rounded text-xs font-medium ${CONTENT_RATING_INFO[app.contentRating]?.color ||
                         'bg-white/20 text-white'
@@ -612,12 +595,12 @@ export default function AppDetailsPage() {
                         -{discountPercent}%
                       </span>
                     )}
-                  </div>
+                  </div> */}
 
-                  <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2 truncate">
+                  {/* <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2 truncate">
                     {app.name}
-                  </h1>
-
+                  </h1> */}
+{/* 
                   <div className="flex items-center gap-3 mb-3">
                     <Link
                       href={`/developer/${app.developer.id}`}
@@ -626,12 +609,12 @@ export default function AppDetailsPage() {
                       {app.developer.organizationName}
                       {app.developer.isVerified && <VerifiedIcon />}
                     </Link>
-                  </div>
+                  </div> */}
 
                   <p className="text-white/90 text-lg mb-4">{app.summary}</p>
 
                   {/* Stats Row */}
-                  <div className="flex flex-wrap items-center gap-6 text-sm">
+                  {/* <div className="flex flex-wrap items-center gap-6 text-sm">
                     <div className="flex items-center gap-1">
                       <div className="flex">
                         {[1, 2, 3, 4, 5].map((i) => (
@@ -653,12 +636,12 @@ export default function AppDetailsPage() {
                       <span>{formatNumber(app.downloads)} downloads</span>
                     </div>
                     <div className="text-white/80">{formatFileSize(app.sizeBytes)}</div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
               {/* Tags */}
-              {app.tags && app.tags.length > 0 && (
+              {/* {app.tags && app.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-6">
                   {app.tags.map((tag) => (
                     <Link
@@ -670,7 +653,7 @@ export default function AppDetailsPage() {
                     </Link>
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Right: Purchase / Download / Sideload Card */}

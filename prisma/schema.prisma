@@ -41,6 +41,12 @@ model Developer {
   isVerified              Boolean   @default(false)
   verificationDocs        Json?
   
+  // Profile & Settings
+  bio                     String?
+  logoUrl                 String?
+  socialLinks             Json?     @default("{}") // { discord, twitter, youtube }
+  preferences             Json?     @default("{}") // { timezone, notifications, twoFactor }
+  
   // Payment Integration Fields
   payoutMethod            PayoutMethod?
   payoutCurrency          String    @default("USD")
@@ -586,4 +592,32 @@ enum PayoutMethod {
   MOBILE_MONEY
   STRIPE_CONNECT
   PAYPAL
+}
+
+// BLOG / ARTICLES
+model Article {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  excerpt       String
+  content       String   // Markdown support
+  coverImageUrl String
+  
+  category      String   // 'News', 'Case Study', 'Education', etc.
+  tags          Json     @default("[]")
+  
+  // Author info (simplified for now to avoid User relation complexity if not needed)
+  authorName    String
+  authorAvatarUrl String?
+  
+  publishedAt   DateTime @default(now())
+  readTime      String   // e.g. "5 min"
+  
+  views         Int      @default(0)
+  likes         Int      @default(0)
+  
+  featured      Boolean  @default(false)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

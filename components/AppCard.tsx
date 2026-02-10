@@ -138,9 +138,61 @@ export default function AppCard({ app }: { app: AppMeta }) {
             </div>
           )}
 
-          {/* Download icon + tags — visible on hover */}
+          {/* Touch-device preview button (no hover) */}
+          {isTouchDevice && app.trailerVideoUrl && (
+            <button
+              className="sq-card-preview-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (videoRef.current) {
+                  if (videoRef.current.paused) {
+                    videoRef.current.play().catch(() => { });
+                  } else {
+                    videoRef.current.pause();
+                    videoRef.current.currentTime = 0;
+                  }
+                }
+              }}
+            >
+              ▶ Preview
+            </button>
+          )}
+        </div>
+
+        {/* ─── Info Area ─── */}
+        <div className="sq-card-info" style={{ position: 'relative', overflow: 'hidden' }}>
+          {/* Normal state: Title + Meta */}
+          <motion.div
+            animate={{
+              opacity: isHovered ? 0 : 1,
+              y: isHovered ? -10 : 0,
+            }}
+            transition={{ duration: SQ_DURATION, ease: SQ_EASE }}
+          >
+            <div className="sq-card-title">{app.name}</div>
+            <div className="sq-card-meta">
+              <span className="sq-card-price">FREE</span>
+              <span className="sq-card-reviews">
+                {app.downloads ? `${Math.floor(app.downloads / 1000)}k` : '0'} Reviews
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Hover state: Download icon + Tags */}
           <motion.div
             className="sq-card-hover-content"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              pointerEvents: isHovered ? 'auto' : 'none',
+            }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{
               opacity: isHovered ? 1 : 0,
               y: isHovered ? 0 : 10,
@@ -166,38 +218,6 @@ export default function AppCard({ app }: { app: AppMeta }) {
               )}
             </div>
           </motion.div>
-
-          {/* Touch-device preview button (no hover) */}
-          {isTouchDevice && app.trailerVideoUrl && (
-            <button
-              className="sq-card-preview-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (videoRef.current) {
-                  if (videoRef.current.paused) {
-                    videoRef.current.play().catch(() => { });
-                  } else {
-                    videoRef.current.pause();
-                    videoRef.current.currentTime = 0;
-                  }
-                }
-              }}
-            >
-              ▶ Preview
-            </button>
-          )}
-        </div>
-
-        {/* ─── Info Area ─── */}
-        <div className="sq-card-info">
-          <div className="sq-card-title">{app.name}</div>
-          <div className="sq-card-meta">
-            <span className="sq-card-price">FREE</span>
-            <span className="sq-card-reviews">
-              {app.downloads ? `${Math.floor(app.downloads / 1000)}k` : '0'} Reviews
-            </span>
-          </div>
         </div>
       </motion.div>
     </Link>
